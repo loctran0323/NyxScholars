@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 
 const navLinks = [
   { href: "/services", label: "Services" },
@@ -18,7 +19,9 @@ const navLinks = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -30,6 +33,20 @@ export default function Navbar() {
     setMobileOpen(false);
     document.body.style.overflow = "";
   }, [pathname]);
+
+  useEffect(() => {
+    const client = getSupabaseBrowserClient();
+    if (!client) return;
+    const auth = client.auth;
+
+    void auth.getSession().then((res: { data: { session: unknown } }) => setIsLoggedIn(!!res.data.session));
+
+    const { data: { subscription } } = auth.onAuthStateChange(
+      (_event: unknown, session: unknown) => setIsLoggedIn(!!session)
+    );
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const toggleMobile = () => {
     const next = !mobileOpen;
@@ -84,7 +101,23 @@ export default function Navbar() {
         </div>
 
         {/* CTA */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-3">
+          {isLoggedIn ? (
+            <Link
+              href="/portal"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/[0.07] border border-white/[0.1] text-[#c8d0de] text-[13px] font-medium hover:border-white/[0.18] hover:text-[#f0ece3] transition-all"
+            >
+              <LayoutDashboard size={14} />
+              My Portal
+            </Link>
+          ) : (
+            <Link
+              href="/portal/login"
+              className="px-4 py-2 rounded-lg text-[#8d9ab0] text-[13px] font-medium hover:text-[#f0ece3] transition-colors"
+            >
+              Sign In
+            </Link>
+          )}
           <Link
             href="/apply"
             className="px-4 py-2 rounded-lg bg-gradient-to-b from-[#e0b55c] to-[#c99438] text-black text-[13px] font-bold hover:from-[#eac068] hover:to-[#d4a045] transition-all shadow-lg shadow-[#d4a853]/20 hover:shadow-[#d4a853]/35"
@@ -138,7 +171,23 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
-              <div className="pt-3">
+              <div className="pt-3 space-y-2">
+                {isLoggedIn ? (
+                  <Link
+                    href="/portal"
+                    className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-white/[0.07] border border-white/[0.1] text-[#c8d0de] text-[14px] font-medium"
+                  >
+                    <LayoutDashboard size={15} />
+                    My Portal
+                  </Link>
+                ) : (
+                  <Link
+                    href="/portal/login"
+                    className="flex items-center justify-center w-full py-3 rounded-xl bg-white/[0.05] border border-white/[0.08] text-[#8d9ab0] text-[14px] font-medium"
+                  >
+                    Sign In
+                  </Link>
+                )}
                 <Link
                   href="/apply"
                   className="flex items-center justify-center w-full py-3 rounded-xl bg-gradient-to-b from-[#e0b55c] to-[#c99438] text-black text-[14px] font-bold"

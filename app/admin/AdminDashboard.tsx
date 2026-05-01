@@ -1,6 +1,7 @@
 import { getServiceRoleClient } from "@/lib/supabase";
 import { Lead } from "@/types/lead";
 import AdminLeadTable from "@/components/shared/AdminLeadTable";
+import AdminPortalSection from "@/components/shared/AdminPortalSection";
 
 async function getLeads(): Promise<Lead[]> {
   const client = getServiceRoleClient();
@@ -53,6 +54,7 @@ export default async function AdminDashboard() {
         )}
 
         <AdminLeadTable leads={leads} />
+        <AdminPortalSection />
       </div>
     </div>
   );
