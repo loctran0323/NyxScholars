@@ -17,14 +17,25 @@ export async function GET() {
   const client = getServiceRoleClient();
   if (!client) return NextResponse.json({ error: "Not configured" }, { status: 503 });
 
-  const { data, error } = await client
+  const { data: sessions, error } = await client
     .from("sessions")
-    .select("*, profiles(full_name, grade, target_test)")
+    .select("*")
     .order("created_at", { ascending: false });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  return NextResponse.json({ sessions: data ?? [] });
+  const studentIds = [...new Set((sessions ?? []).map((s) => s.student_id))];
+  const { data: profiles } = studentIds.length > 0
+    ? await client.from("profiles").select("id, full_name, grade, target_test").in("id", studentIds)
+    : { data: [] };
+
+  const profileMap = Object.fromEntries((profiles ?? []).map((p) => [p.id, p]));
+  const sessionsWithProfiles = (sessions ?? []).map((s) => ({
+    ...s,
+    profiles: profileMap[s.student_id] ?? null,
+  }));
+
+  return NextResponse.json({ sessions: sessionsWithProfiles });
 }
 
 export async function PATCH(request: NextRequest) {

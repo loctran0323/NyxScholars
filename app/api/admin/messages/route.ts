@@ -17,15 +17,25 @@ export async function GET() {
   const client = getServiceRoleClient();
   if (!client) return NextResponse.json({ error: "Not configured" }, { status: 503 });
 
-  // Get all messages grouped by student
   const { data: messages, error } = await client
     .from("messages")
-    .select("*, profiles(full_name)")
+    .select("*")
     .order("created_at", { ascending: true });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  return NextResponse.json({ messages: messages ?? [] });
+  const studentIds = [...new Set((messages ?? []).map((m) => m.student_id))];
+  const { data: profiles } = studentIds.length > 0
+    ? await client.from("profiles").select("id, full_name").in("id", studentIds)
+    : { data: [] };
+
+  const profileMap = Object.fromEntries((profiles ?? []).map((p) => [p.id, p]));
+  const messagesWithProfiles = (messages ?? []).map((m) => ({
+    ...m,
+    profiles: profileMap[m.student_id] ?? null,
+  }));
+
+  return NextResponse.json({ messages: messagesWithProfiles });
 }
 
 export async function POST(request: NextRequest) {
