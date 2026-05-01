@@ -44,9 +44,8 @@ const services = [
   {
     icon: Award,
     label: "Admissions Consulting",
-    desc: "Essay review, school list strategy, interview prep. Coming soon.",
-    href: "/services#admissions",
-    soon: true,
+    desc: "Essay review, brainstorming, school list strategy, and interview prep from students who just got in.",
+    href: "/college-admissions",
   },
 ];
 
@@ -83,7 +82,7 @@ export default function HomePage() {
           >
             <span className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-[#d4a853]/25 bg-[#d4a853]/8 text-[#d4a853] text-[12.5px] font-semibold tracking-wide">
               <span className="w-1.5 h-1.5 rounded-full bg-[#d4a853] animate-pulse" />
-              Ivy League+ Tutors · SAT · ACT · AP
+              Ivy League+ Tutors · SAT · ACT · AP · Admissions
             </span>
           </motion.div>
 
@@ -262,32 +261,17 @@ export default function HomePage() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {services.map(({ icon: Icon, label, desc, href, soon }) => (
+            {services.map(({ icon: Icon, label, desc, href }) => (
               <Link key={label} href={href} className="group">
-                <div className={`relative h-full rounded-2xl border p-6 transition-all duration-300 card-hover ${
-                  soon
-                    ? "border-white/[0.05] bg-[#0f1521]/60 opacity-60 pointer-events-none"
-                    : "border-white/[0.07] bg-[#0f1521]"
-                }`}>
-                  {soon && (
-                    <span className="absolute top-4 right-4 text-[11px] font-bold px-2.5 py-1 rounded-full bg-[#d4a853]/10 text-[#d4a853] border border-[#d4a853]/20">
-                      Soon
-                    </span>
-                  )}
-
-                  {/* Icon */}
+                <div className="relative h-full rounded-2xl border border-white/[0.07] bg-[#0f1521] p-6 transition-all duration-300 card-hover">
                   <div className="w-11 h-11 rounded-xl mb-5 flex items-center justify-center bg-gradient-to-br from-[#d4a853]/15 to-[#d4a853]/5 border border-[#d4a853]/10 group-hover:from-[#d4a853]/25 group-hover:to-[#d4a853]/10 transition-all">
                     <Icon size={20} className="text-[#d4a853]" />
                   </div>
-
                   <h3 className="text-[#f0ece3] font-semibold text-[16px] mb-2.5">{label}</h3>
                   <p className="text-[#8d9ab0] text-[13.5px] leading-relaxed">{desc}</p>
-
-                  {!soon && (
-                    <div className="mt-5 flex items-center gap-1 text-[#d4a853] text-[13px] font-medium opacity-0 group-hover:opacity-100 transition-all group-hover:gap-1.5">
-                      Learn more <ArrowRight size={12} />
-                    </div>
-                  )}
+                  <div className="mt-5 flex items-center gap-1 text-[#d4a853] text-[13px] font-medium opacity-0 group-hover:opacity-100 transition-all group-hover:gap-1.5">
+                    Learn more <ArrowRight size={12} />
+                  </div>
                 </div>
               </Link>
             ))}

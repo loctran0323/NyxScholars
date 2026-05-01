@@ -22,7 +22,12 @@ const SUBJECTS = [
   "AP History",
   "AP Statistics",
   "Other AP Course",
-  "College Essay",
+  "College Essay Review",
+  "Brainstorming Session",
+  "School List Strategy",
+  "Activity List Review",
+  "Interview Preparation",
+  "Full Application Strategy",
   "Other",
 ];
 
@@ -150,8 +155,13 @@ export default function SchedulePage() {
                   <option key={s} value={s}>{s}</option>
                 ))}
               </optgroup>
+              <optgroup label="College Admissions">
+                {["College Essay Review", "Brainstorming Session", "School List Strategy", "Activity List Review", "Interview Preparation", "Full Application Strategy"].map((s) => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </optgroup>
               <optgroup label="Other">
-                {SUBJECTS.filter((s) => !s.includes("SAT") && !s.includes("ACT") && !s.includes("AP")).map((s) => (
+                {["Other"].map((s) => (
                   <option key={s} value={s}>{s}</option>
                 ))}
               </optgroup>

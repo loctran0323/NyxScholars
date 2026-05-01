@@ -146,43 +146,44 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Admissions — Coming Soon */}
+      {/* Admissions */}
       <section className="py-16 px-5 sm:px-8 max-w-7xl mx-auto" id="admissions">
-        <div className="relative rounded-2xl border border-[#d4a853]/20 bg-gradient-to-br from-[#0f1521] to-[#0b0f1a] p-8 overflow-hidden">
-          <div className="pointer-events-none absolute inset-0 rounded-2xl" style={{ background: "radial-gradient(ellipse 60% 80% at 100% 50%, rgba(212,168,83,0.07) 0%, transparent 60%)" }} />
-
-          <div className="relative">
-            <div className="flex flex-wrap items-start gap-4 mb-6">
-              <div className="w-11 h-11 rounded-xl bg-[#d4a853]/10 border border-[#d4a853]/15 flex items-center justify-center shrink-0">
-                <Award size={20} className="text-[#d4a853]" />
-              </div>
-              <div>
-                <div className="flex items-center gap-3">
-                  <h2 className="text-[1.5rem] font-bold text-[#f0ece3]">College Admissions Consulting</h2>
-                  <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-[#d4a853]/10 text-[#d4a853] border border-[#d4a853]/20 shrink-0">Coming Soon</span>
-                </div>
-                <p className="text-[#8d9ab0] text-[13px] mt-0.5">From students who just navigated the process firsthand.</p>
-              </div>
-            </div>
-            <p className="text-[#8d9ab0] text-[15px] leading-[1.8] mb-6 max-w-2xl">
-              College admissions consulting is coming soon. We&apos;ll offer application strategy, essay review, and
-              school list guidance — delivered by students who recently completed the full process at top universities.
-            </p>
-            <div className="grid sm:grid-cols-2 gap-2.5 mb-8 max-w-xl">
-              {["Essay review and feedback", "School list strategy", "Activity list review", "Interview preparation"].map((f) => (
-                <div key={f} className="flex items-center gap-2.5 text-[#8d9ab0] text-[13.5px]">
-                  <div className="w-1 h-1 rounded-full bg-[#d4a853]/50 shrink-0" />
-                  {f}
-                </div>
-              ))}
-            </div>
-            <Link
-              href="/apply"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-white/10 text-[#c8d0de] font-semibold text-[13.5px] hover:border-white/20 hover:bg-white/[0.04] transition-all"
-            >
-              Join the Waitlist <ArrowRight size={15} />
-            </Link>
+        <div className="flex items-center gap-4 mb-10">
+          <div className="w-11 h-11 rounded-xl bg-[#d4a853]/10 border border-[#d4a853]/15 flex items-center justify-center shrink-0">
+            <Award size={20} className="text-[#d4a853]" />
           </div>
+          <div>
+            <h2 className="text-[1.5rem] font-bold text-[#f0ece3]">College Admissions Consulting</h2>
+            <p className="text-[#8d9ab0] text-[13px] mt-0.5">From students who just navigated the process firsthand.</p>
+          </div>
+        </div>
+        <p className="text-[#8d9ab0] text-[15px] leading-[1.8] mb-8 max-w-2xl">
+          Essay review, brainstorming sessions, school list strategy, and interview prep — all delivered by students
+          who recently completed the full admissions process at Princeton, Harvard, Yale, MIT, Stanford, and more.
+        </p>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+          {[
+            { label: "Essay Review & Feedback", desc: "Line-level notes on voice, structure, and impact — plus exactly how to fix it." },
+            { label: "Brainstorming Sessions", desc: "Find the right angle for your personal statement and supplementals." },
+            { label: "School List Strategy", desc: "Build a balanced, data-grounded list of reach, target, and likely schools." },
+            { label: "Activity List Review", desc: "Frame your extracurriculars with the clarity and impact they deserve." },
+            { label: "Interview Preparation", desc: "Mock interviews with real feedback from students who've done them." },
+            { label: "Full Application Strategy", desc: "End-to-end support from first draft to final submission." },
+          ].map(({ label, desc }) => (
+            <div key={label} className="p-5 rounded-xl border border-white/[0.07] bg-[#0f1521] hover:border-[#d4a853]/25 transition-colors">
+              <h3 className="text-[#f0ece3] font-semibold text-[14.5px] mb-1.5">{label}</h3>
+              <p className="text-[#8d9ab0] text-[13px] leading-relaxed">{desc}</p>
+            </div>
+          ))}
+        </div>
+        <div className="flex flex-wrap gap-3">
+          <InquireButton href="/apply?service=College+Admissions" label="Book a Consultation" />
+          <Link
+            href="/college-admissions"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-white/10 text-[#c8d0de] font-semibold text-[13.5px] hover:border-white/20 hover:bg-white/[0.04] transition-all"
+          >
+            Learn More <ArrowRight size={15} />
+          </Link>
         </div>
       </section>
 

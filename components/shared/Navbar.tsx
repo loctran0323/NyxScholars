@@ -11,6 +11,7 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 const navLinks = [
   { href: "/services", label: "Services" },
   { href: "/sat-act", label: "SAT / ACT" },
+  { href: "/college-admissions", label: "Admissions" },
   { href: "/tutors", label: "Tutors" },
   { href: "/pricing", label: "Pricing" },
   { href: "/faq", label: "FAQ" },
