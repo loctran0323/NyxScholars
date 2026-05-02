@@ -11,3 +11,4 @@ export { PhotoFrame } from "./PhotoFrame";
 export { PlotEmbed } from "./PlotEmbed";
 export { HeroFrame } from "./HeroFrame";
 export { NyxMark, NyxLockup } from "./NyxMark";
+export { Drift, Arc, BlobGlow, SignatureLine } from "./Decoration";

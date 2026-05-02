@@ -1,5 +1,6 @@
 import {
-  Section, Eyebrow, Heading, Text, CTA, Card,
+  Eyebrow, Text, CTA,
+  Drift, Arc, BlobGlow, SignatureLine,
 } from "@/components/system";
 import FAQAccordion from "@/components/shared/FAQAccordion";
 
@@ -22,30 +23,54 @@ const faqs = [
 
 export default function FaqPage() {
   return (
-    <>
-      <Section spacing="loose" glow="top" className="pt-[120px] md:pt-[140px]">
-        <div className="max-w-3xl mx-auto">
-          <Eyebrow color="brass" className="mb-5">FAQ</Eyebrow>
-          <Heading level={1} className="mb-6">Questions, plainly answered.</Heading>
+    <div className="relative overflow-hidden">
+      <section className="relative pt-[120px] md:pt-[160px] pb-20">
+        <Drift density="med" seed={33} />
+        <BlobGlow position="top-right" color="gold" size="lg" intensity={0.10} />
+
+        <div className="relative max-w-3xl mx-auto px-5 sm:px-8 text-center">
+          <Eyebrow color="brass" className="mb-6 mx-auto">FAQ</Eyebrow>
+          <h1
+            className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.05] tracking-[-0.02em] mb-8 mx-auto"
+            style={{ fontSize: "clamp(2.4rem, 5vw, 4.2rem)" }}
+          >
+            Questions,{" "}
+            <span className="font-[family-name:var(--font-cormorant)] italic">plainly answered.</span>
+          </h1>
           <Text variant="lead">If something here doesn&apos;t cover your case, the consultation is free.</Text>
+          <SignatureLine width={180} className="mt-10 mx-auto" />
         </div>
-      </Section>
+      </section>
 
-      <Section spacing="tight">
-        <div className="max-w-3xl mx-auto">
-          <Card variant="default" className="px-6 sm:px-8">
+      <Arc direction="up" intensity="subtle" />
+
+      <section className="relative py-16 md:py-24">
+        <div className="relative max-w-3xl mx-auto px-5 sm:px-8">
+          <div className="bg-[var(--surface-elevated)]/70 backdrop-blur-sm border border-[var(--border)] rounded-[28px] px-6 sm:px-10 py-2">
             <FAQAccordion items={faqs} />
-          </Card>
+          </div>
         </div>
-      </Section>
+      </section>
 
-      <Section variant="elevated" spacing="default" bordered>
-        <div className="max-w-2xl mx-auto text-center">
-          <Heading level={3} className="mb-3">Still have a question?</Heading>
-          <Text variant="body" className="mb-8">The fastest way to get answers is the free consultation. No commitment.</Text>
+      <Arc direction="up" intensity="medium" color="accent" />
+
+      <section className="relative py-28 md:py-32 overflow-hidden">
+        <Drift density="low" seed={77} />
+        <BlobGlow position="center" color="gold" size="lg" intensity={0.10} />
+        <div className="relative max-w-2xl mx-auto px-5 text-center">
+          <h2
+            className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.05] mb-6 tracking-[-0.015em]"
+            style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)" }}
+          >
+            Still have a{" "}
+            <span className="font-[family-name:var(--font-cormorant)] italic">question?</span>
+          </h2>
+          <Text variant="body" className="mb-10">
+            The fastest way to get answers is the free consultation. No commitment.
+          </Text>
           <CTA href="/apply" size="lg">Book free consultation</CTA>
         </div>
-      </Section>
-    </>
+      </section>
+    </div>
   );
 }
