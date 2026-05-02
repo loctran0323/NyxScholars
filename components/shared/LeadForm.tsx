@@ -98,9 +98,9 @@ export default function LeadForm() {
         <div className="w-16 h-16 rounded-full bg-amber-500/10 flex items-center justify-center mx-auto mb-6">
           <CheckCircle2 size={32} className="text-amber-400" />
         </div>
-        <h3 className="text-2xl font-bold text-[#f0ede6] mb-3">Inquiry Received</h3>
-        <p className="text-[#8896a7] leading-relaxed max-w-md mx-auto">
-          Thanks — your inquiry was received. Nyx Scholars will reach out soon to help match you with the right tutor.
+        <h3 className="text-2xl font-semibold text-[var(--text-1)] mb-3 font-[family-name:var(--font-fraunces)]">Inquiry received</h3>
+        <p className="text-[var(--text-2)] leading-relaxed max-w-md mx-auto">
+          Thanks — we got it. Nyx will reach out soon to help match you with the right plan or mentor.
         </p>
       </motion.div>
     );
@@ -212,7 +212,7 @@ export default function LeadForm() {
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="test_date">Test Date</Label>
-          <Input id="test_date" type="date" {...register("test_date")} className="text-[#f0ede6]" />
+          <Input id="test_date" type="date" {...register("test_date")} className="text-[var(--text-1)]" />
         </div>
       </div>
 
@@ -255,7 +255,7 @@ export default function LeadForm() {
       </div>
 
       {/* Consent */}
-      <div className="flex items-start gap-3 p-4 rounded-xl border border-[#2a3a52] bg-[#0f1623]">
+      <div className="flex items-start gap-3 p-4 rounded-xl border border-[var(--border)] bg-[var(--bg-2)]">
         <Checkbox
           id="consent"
           onCheckedChange={(checked) =>
@@ -263,7 +263,7 @@ export default function LeadForm() {
           }
         />
         <Label htmlFor="consent" className="leading-relaxed cursor-pointer">
-          I understand Nyx Scholars will contact me about tutoring options.
+          I understand Nyx will contact me about prep options.
         </Label>
       </div>
       {errors.consent && (
@@ -287,8 +287,8 @@ export default function LeadForm() {
         )}
       </Button>
 
-      <p className="text-[#4a5a6a] text-xs text-center">
-        Nyx Scholars does not guarantee test score increases or admissions outcomes.
+      <p className="text-[var(--text-3)] text-xs text-center">
+        Nyx does not guarantee test score increases or admissions outcomes.
       </p>
     </form>
   );
