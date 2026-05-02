@@ -6,6 +6,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
+  Compass,
   CalendarPlus,
   Calendar,
   BookOpen,
@@ -20,20 +21,21 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import type { Profile, PlanType } from "@/types/portal";
 
 const allNavItems = [
-  { href: "/portal",           label: "Dashboard",         icon: LayoutDashboard, exact: true,  plans: ["session", "monthly", "counseling"] },
-  { href: "/portal/schedule",  label: "Schedule Session",  icon: CalendarPlus,    exact: false, plans: ["session", "monthly", "counseling"] },
-  { href: "/portal/sessions",  label: "My Sessions",       icon: Calendar,        exact: false, plans: ["session", "monthly", "counseling"] },
-  { href: "/portal/materials", label: "Practice Materials",icon: BookOpen,        exact: false, plans: ["monthly", "counseling", "session"] },
-  { href: "/portal/messages",  label: "Messages",          icon: MessageSquare,   exact: false, plans: ["session", "monthly", "counseling"] },
-  { href: "/portal/profile",   label: "Profile",           icon: User,            exact: false, plans: ["session", "monthly", "counseling"] },
+  { href: "/portal",              label: "Dashboard",        icon: LayoutDashboard, exact: true,  plans: ["session", "monthly", "counseling"] },
+  { href: "/portal/consultation", label: "Consultation",     icon: Compass,         exact: false, plans: ["session", "monthly", "counseling"] },
+  { href: "/portal/schedule",     label: "Schedule Session", icon: CalendarPlus,    exact: false, plans: ["session", "monthly", "counseling"] },
+  { href: "/portal/sessions",     label: "My Sessions",      icon: Calendar,        exact: false, plans: ["session", "monthly", "counseling"] },
+  { href: "/portal/materials",    label: "Materials",        icon: BookOpen,        exact: false, plans: ["session", "monthly", "counseling"] },
+  { href: "/portal/messages",     label: "Messages",         icon: MessageSquare,   exact: false, plans: ["session", "monthly", "counseling"] },
+  { href: "/portal/profile",      label: "Profile",          icon: User,            exact: false, plans: ["session", "monthly", "counseling"] },
 ];
 
 function planLabel(plan: PlanType | null): string {
   switch (plan) {
-    case "session":   return "Session Plan";
-    case "monthly":   return "Scholar Plan";
-    case "counseling": return "Admissions Plan";
-    default:          return "Student";
+    case "session":    return "Session Plan";
+    case "monthly":    return "Scholar Plan";
+    case "counseling": return "Constellation Plan";
+    default:           return "Student";
   }
 }
 
@@ -58,16 +60,16 @@ function NavItem({
       href={href}
       onClick={onClick}
       className={cn(
-        "flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13.5px] font-medium transition-all",
+        "flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13.5px] font-medium transition-all border",
         isActive
-          ? "bg-[#d4a853]/10 text-[#d4a853] border border-[#d4a853]/15"
-          : "text-[#8d9ab0] hover:text-[#c8d0de] hover:bg-white/[0.04] border border-transparent"
+          ? "bg-[var(--accent-dim)] text-[var(--accent)] border-[var(--border-accent)]"
+          : "text-[var(--text-2)] hover:text-[var(--text-1)] hover:bg-white/[0.04] border-transparent"
       )}
     >
       <Icon size={16} className="shrink-0" />
       <span className="flex-1">{label}</span>
       {label === "Messages" && unreadCount && unreadCount > 0 ? (
-        <span className="w-5 h-5 rounded-full bg-[#d4a853] text-black text-[10px] font-bold flex items-center justify-center">
+        <span className="w-5 h-5 rounded-full bg-[var(--accent)] text-black text-[10px] font-bold flex items-center justify-center">
           {unreadCount > 9 ? "9+" : unreadCount}
         </span>
       ) : null}
@@ -82,9 +84,7 @@ function SidebarContent({
   const router = useRouter();
   const plan = profile?.plan ?? null;
 
-  const visibleNav = allNavItems.filter((item) =>
-    !plan || item.plans.includes(plan)
-  );
+  const visibleNav = allNavItems.filter((item) => !plan || item.plans.includes(plan));
 
   const handleSignOut = async () => {
     const supabase = getSupabaseBrowserClient();
@@ -98,44 +98,40 @@ function SidebarContent({
 
   return (
     <>
-      {/* Logo */}
-      <div className="px-5 h-[68px] flex items-center border-b border-white/[0.06] shrink-0">
+      <div className="px-5 h-[68px] flex items-center border-b border-[var(--border)] shrink-0">
         <Link href="/" className="flex items-center gap-2.5">
           <div className="relative w-7 h-7 flex items-center justify-center shrink-0">
-            <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[#d4a853] to-[#a07830]" />
+            <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[var(--accent-bright)] to-[#a98842]" />
             <span className="relative text-black font-black text-xs">N</span>
           </div>
-          <span className="font-semibold text-[15px] text-[#f0ece3]">
-            Nyx<span className="text-[#d4a853]"> Scholars</span>
+          <span className="font-[family-name:var(--font-fraunces)] font-medium text-[16px] text-[var(--text-1)]">
+            Nyx
           </span>
         </Link>
       </div>
 
-      {/* User info */}
-      <div className="px-4 py-4 border-b border-white/[0.06] shrink-0">
-        <div className="flex items-center gap-3 px-2 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.05]">
-          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#d4a853]/20 to-[#a07830]/10 border border-[#d4a853]/20 flex items-center justify-center shrink-0">
-            <span className="text-[12px] font-bold text-[#d4a853]">{initials}</span>
+      <div className="px-4 py-4 border-b border-[var(--border)] shrink-0">
+        <div className="flex items-center gap-3 px-2 py-2.5 rounded-xl bg-white/[0.03] border border-[var(--border)]">
+          <div className="w-9 h-9 rounded-full bg-[var(--accent-dim)] border border-[var(--border-accent)] flex items-center justify-center shrink-0">
+            <span className="text-[12px] font-bold text-[var(--accent)]">{initials}</span>
           </div>
           <div className="min-w-0">
-            <p className="text-[13px] font-semibold text-[#f0ece3] truncate">{displayName}</p>
-            <p className="text-[11px] text-[#4e5d72] truncate">{planLabel(plan)}</p>
+            <p className="text-[13px] font-semibold text-[var(--text-1)] truncate">{displayName}</p>
+            <p className="text-[11px] text-[var(--text-3)] truncate">{planLabel(plan)}</p>
           </div>
         </div>
       </div>
 
-      {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
         {visibleNav.map((item) => (
           <NavItem key={item.href} {...item} unreadCount={unreadCount} onClick={onNavClick} />
         ))}
       </nav>
 
-      {/* Bottom */}
-      <div className="px-3 py-4 border-t border-white/[0.06] space-y-1 shrink-0">
+      <div className="px-3 py-4 border-t border-[var(--border)] space-y-1 shrink-0">
         <button
           onClick={handleSignOut}
-          className="flex items-center gap-3 px-3 py-2.5 w-full rounded-xl text-[13.5px] font-medium text-[#8d9ab0] hover:text-red-400 hover:bg-red-500/[0.05] transition-all"
+          className="flex items-center gap-3 px-3 py-2.5 w-full rounded-xl text-[13.5px] font-medium text-[var(--text-2)] hover:text-red-400 hover:bg-red-500/[0.05] transition-all"
         >
           <LogOut size={16} className="shrink-0" />
           Sign Out
@@ -150,31 +146,29 @@ export function PortalSidebar(props: PortalSidebarProps) {
 
   return (
     <>
-      {/* Desktop sidebar */}
-      <aside className="hidden md:flex flex-col w-64 min-h-screen bg-[#0b0f1a] border-r border-white/[0.06] shrink-0">
+      <aside className="hidden md:flex flex-col w-64 min-h-screen bg-[var(--bg-2)] border-r border-[var(--border)] shrink-0">
         <SidebarContent {...props} />
       </aside>
 
-      {/* Mobile top bar */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-40 h-14 bg-[#0b0f1a]/95 backdrop-blur-xl border-b border-white/[0.06] flex items-center justify-between px-4">
+      <div className="md:hidden fixed top-0 left-0 right-0 z-40 h-14 bg-[var(--bg-2)]/95 backdrop-blur-xl border-b border-[var(--border)] flex items-center justify-between px-4">
         <Link href="/portal" className="flex items-center gap-2">
           <div className="relative w-6 h-6 flex items-center justify-center">
-            <div className="absolute inset-0 rounded-md bg-gradient-to-br from-[#d4a853] to-[#a07830]" />
+            <div className="absolute inset-0 rounded-md bg-gradient-to-br from-[var(--accent-bright)] to-[#a98842]" />
             <span className="relative text-black font-black text-[10px]">N</span>
           </div>
-          <span className="font-semibold text-[14px] text-[#f0ece3]">
-            Nyx<span className="text-[#d4a853]"> Scholars</span>
+          <span className="font-[family-name:var(--font-fraunces)] font-medium text-[14px] text-[var(--text-1)]">
+            Nyx
           </span>
         </Link>
         <div className="flex items-center gap-2">
           {props.unreadCount ? (
-            <span className="w-5 h-5 rounded-full bg-[#d4a853] text-black text-[10px] font-bold flex items-center justify-center">
+            <span className="w-5 h-5 rounded-full bg-[var(--accent)] text-black text-[10px] font-bold flex items-center justify-center">
               {props.unreadCount > 9 ? "9+" : props.unreadCount}
             </span>
           ) : null}
           <button
             onClick={() => setMobileOpen(true)}
-            className="w-9 h-9 rounded-lg flex items-center justify-center text-[#8d9ab0] hover:text-[#f0ece3] hover:bg-white/[0.07] transition-colors"
+            className="w-9 h-9 rounded-lg flex items-center justify-center text-[var(--text-2)] hover:text-[var(--text-1)] hover:bg-white/[0.06] transition-colors"
           >
             <Menu size={18} />
           </button>
@@ -186,12 +180,12 @@ export function PortalSidebar(props: PortalSidebarProps) {
       )}
 
       <aside className={cn(
-        "md:hidden fixed top-0 left-0 bottom-0 z-50 w-72 bg-[#0b0f1a] border-r border-white/[0.06] flex flex-col transition-transform duration-300",
+        "md:hidden fixed top-0 left-0 bottom-0 z-50 w-72 bg-[var(--bg-2)] border-r border-[var(--border)] flex flex-col transition-transform duration-300",
         mobileOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         <button
           onClick={() => setMobileOpen(false)}
-          className="absolute top-4 right-4 w-8 h-8 rounded-lg flex items-center justify-center text-[#8d9ab0] hover:text-[#f0ece3] hover:bg-white/[0.07] transition-colors"
+          className="absolute top-4 right-4 w-8 h-8 rounded-lg flex items-center justify-center text-[var(--text-2)] hover:text-[var(--text-1)] hover:bg-white/[0.06] transition-colors"
         >
           <X size={16} />
         </button>
