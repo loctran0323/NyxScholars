@@ -33,14 +33,14 @@ const SERVICE_COLORS: Record<string, string> = {
   SAT: "text-blue-400 bg-blue-400/10",
   ACT: "text-violet-400 bg-violet-400/10",
   AP: "text-emerald-400 bg-emerald-400/10",
-  "College Admissions": "text-[#d4a853] bg-[#d4a853]/10",
+  "College Admissions": "text-[var(--accent)] bg-[var(--accent)]/10",
 };
 
 function serviceColor(service: string) {
   for (const [key, cls] of Object.entries(SERVICE_COLORS)) {
     if (service?.toLowerCase().includes(key.toLowerCase())) return cls;
   }
-  return "text-[#8d9ab0] bg-white/[0.06]";
+  return "text-[var(--text-2)] bg-white/[0.06]";
 }
 
 export default function AdminLeadTable({ leads }: AdminLeadTableProps) {
@@ -49,7 +49,7 @@ export default function AdminLeadTable({ leads }: AdminLeadTableProps) {
   if (leads.length === 0) {
     return (
       <div className="py-16 text-center">
-        <p className="text-[#4e5d72] text-[14px]">No consultation requests yet.</p>
+        <p className="text-[var(--text-3)] text-[14px]">No consultation requests yet.</p>
         <p className="text-[#2e3a4a] text-[13px] mt-1">Submissions will appear here.</p>
       </div>
     );
@@ -66,14 +66,14 @@ export default function AdminLeadTable({ leads }: AdminLeadTableProps) {
             className="w-full flex items-center gap-4 py-3.5 px-4 -mx-4 rounded-xl hover:bg-white/[0.03] transition-colors text-left group"
           >
             {/* Avatar */}
-            <div className="w-9 h-9 rounded-full bg-[#d4a853]/10 border border-[#d4a853]/20 flex items-center justify-center shrink-0">
-              <span className="text-[11px] font-bold text-[#d4a853]">{initials(lead.student_name)}</span>
+            <div className="w-9 h-9 rounded-full bg-[var(--accent)]/10 border border-[var(--border-accent)] flex items-center justify-center shrink-0">
+              <span className="text-[11px] font-bold text-[var(--accent)]">{initials(lead.student_name)}</span>
             </div>
 
             {/* Name + email */}
             <div className="flex-1 min-w-0">
-              <p className="text-[#f0ece3] text-[14px] font-medium truncate">{lead.student_name}</p>
-              <p className="text-[#4e5d72] text-[12px] truncate">{lead.email}</p>
+              <p className="text-[var(--text-1)] text-[14px] font-medium truncate">{lead.student_name}</p>
+              <p className="text-[var(--text-3)] text-[12px] truncate">{lead.email}</p>
             </div>
 
             {/* Service badge */}
@@ -85,11 +85,11 @@ export default function AdminLeadTable({ leads }: AdminLeadTableProps) {
 
             {/* Grade */}
             {lead.grade && (
-              <span className="hidden md:block text-[#4e5d72] text-[12px] shrink-0">{lead.grade}</span>
+              <span className="hidden md:block text-[var(--text-3)] text-[12px] shrink-0">{lead.grade}</span>
             )}
 
             {/* Date */}
-            <span className="text-[#4e5d72] text-[12px] shrink-0">{formatDateShort(lead.created_at)}</span>
+            <span className="text-[var(--text-3)] text-[12px] shrink-0">{formatDateShort(lead.created_at)}</span>
           </button>
         ))}
       </div>
@@ -110,20 +110,20 @@ export default function AdminLeadTable({ leads }: AdminLeadTableProps) {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="bg-[#0f1521] px-6 pt-6 pb-5">
+            <div className="bg-[var(--surface)] px-6 pt-6 pb-5">
               <div className="flex items-start justify-between mb-1">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#d4a853]/10 border border-[#d4a853]/20 flex items-center justify-center shrink-0">
-                    <span className="text-[12px] font-bold text-[#d4a853]">{initials(selected.student_name)}</span>
+                  <div className="w-10 h-10 rounded-full bg-[var(--accent)]/10 border border-[var(--border-accent)] flex items-center justify-center shrink-0">
+                    <span className="text-[12px] font-bold text-[var(--accent)]">{initials(selected.student_name)}</span>
                   </div>
                   <div>
-                    <h2 className="text-[17px] font-bold text-[#f0ece3]">{selected.student_name}</h2>
-                    {selected.grade && <p className="text-[#8d9ab0] text-[12px]">{selected.grade}</p>}
+                    <h2 className="text-[17px] font-bold text-[var(--text-1)]">{selected.student_name}</h2>
+                    {selected.grade && <p className="text-[var(--text-2)] text-[12px]">{selected.grade}</p>}
                   </div>
                 </div>
                 <button
                   onClick={() => setSelected(null)}
-                  className="w-7 h-7 rounded-lg flex items-center justify-center text-[#4e5d72] hover:text-[#f0ece3] hover:bg-white/[0.06] transition-colors"
+                  className="w-7 h-7 rounded-lg flex items-center justify-center text-[var(--text-3)] hover:text-[var(--text-1)] hover:bg-white/[0.06] transition-colors"
                 >
                   <X size={14} />
                 </button>
@@ -137,25 +137,25 @@ export default function AdminLeadTable({ leads }: AdminLeadTableProps) {
             </div>
 
             {/* Contact row */}
-            <div className="bg-[#0b0f1a] px-6 py-4 flex flex-wrap gap-4 border-y border-white/[0.04]">
-              <a href={`mailto:${selected.email}`} className="flex items-center gap-2 text-[#8d9ab0] hover:text-[#f0ece3] text-[13px] transition-colors">
+            <div className="bg-[var(--bg-2)] px-6 py-4 flex flex-wrap gap-4 border-y border-white/[0.04]">
+              <a href={`mailto:${selected.email}`} className="flex items-center gap-2 text-[var(--text-2)] hover:text-[var(--text-1)] text-[13px] transition-colors">
                 <Mail size={12} />
                 {selected.email}
               </a>
               {selected.phone && (
-                <a href={`tel:${selected.phone}`} className="flex items-center gap-2 text-[#8d9ab0] hover:text-[#f0ece3] text-[13px] transition-colors">
+                <a href={`tel:${selected.phone}`} className="flex items-center gap-2 text-[var(--text-2)] hover:text-[var(--text-1)] text-[13px] transition-colors">
                   <Phone size={12} />
                   {selected.phone}
                 </a>
               )}
-              <span className="flex items-center gap-2 text-[#4e5d72] text-[13px]">
+              <span className="flex items-center gap-2 text-[var(--text-3)] text-[13px]">
                 <Calendar size={12} />
                 {formatDate(selected.created_at)}
               </span>
             </div>
 
             {/* Details */}
-            <div className="bg-[#0f1521] px-6 py-5 space-y-3 max-h-64 overflow-y-auto">
+            <div className="bg-[var(--surface)] px-6 py-5 space-y-3 max-h-64 overflow-y-auto">
               {[
                 ["Parent / Guardian", selected.parent_name],
                 ["AP Subject", selected.ap_subject],
@@ -169,8 +169,8 @@ export default function AdminLeadTable({ leads }: AdminLeadTableProps) {
                 .filter(([, v]) => Boolean(v))
                 .map(([label, value]) => (
                   <div key={label} className="flex gap-4">
-                    <dt className="text-[#4e5d72] text-[12px] font-medium shrink-0 w-36 pt-0.5">{label}</dt>
-                    <dd className="text-[#c8d0de] text-[13px] leading-relaxed">{value}</dd>
+                    <dt className="text-[var(--text-3)] text-[12px] font-medium shrink-0 w-36 pt-0.5">{label}</dt>
+                    <dd className="text-[var(--text-1)] text-[13px] leading-relaxed">{value}</dd>
                   </div>
                 ))}
             </div>

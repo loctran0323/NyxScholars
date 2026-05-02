@@ -19,7 +19,7 @@ function statusBadge(status: string) {
     case "confirmed":  return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-400/10 text-blue-400">Confirmed</span>;
     case "completed":  return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-400/10 text-emerald-400">Completed</span>;
     case "cancelled":  return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-400/10 text-red-400">Cancelled</span>;
-    default:           return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#d4a853]/10 text-[#d4a853]">Pending</span>;
+    default:           return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[var(--accent)]/10 text-[var(--accent)]">Pending</span>;
   }
 }
 
@@ -64,7 +64,7 @@ function SessionDetail({ session, onBack, onUpdate }: {
     <div>
       <button
         onClick={onBack}
-        className="flex items-center gap-1.5 text-[#8d9ab0] hover:text-[#f0ece3] text-[13px] transition-colors mb-6"
+        className="flex items-center gap-1.5 text-[var(--text-2)] hover:text-[var(--text-1)] text-[13px] transition-colors mb-6"
       >
         <ArrowLeft size={13} />
         Back to sessions
@@ -72,12 +72,12 @@ function SessionDetail({ session, onBack, onUpdate }: {
 
       {/* Header */}
       <div className="flex items-start gap-4 mb-8">
-        <div className="w-11 h-11 rounded-full bg-[#d4a853]/10 border border-[#d4a853]/20 flex items-center justify-center shrink-0">
-          <span className="text-[12px] font-bold text-[#d4a853]">{initials(session.profiles?.full_name ?? null)}</span>
+        <div className="w-11 h-11 rounded-full bg-[var(--accent)]/10 border border-[var(--border-accent)] flex items-center justify-center shrink-0">
+          <span className="text-[12px] font-bold text-[var(--accent)]">{initials(session.profiles?.full_name ?? null)}</span>
         </div>
         <div>
-          <h3 className="text-[17px] font-bold text-[#f0ece3]">{studentName}</h3>
-          <p className="text-[#8d9ab0] text-[13px]">
+          <h3 className="text-[17px] font-bold text-[var(--text-1)]">{studentName}</h3>
+          <p className="text-[var(--text-2)] text-[13px]">
             {session.subject} · {format(new Date(session.scheduled_at), "MMM d, h:mm a")} · {session.duration_minutes} min
           </p>
           <div className="mt-2">{statusBadge(session.status)}</div>
@@ -88,15 +88,15 @@ function SessionDetail({ session, onBack, onUpdate }: {
       {(session.profiles?.grade || session.profiles?.target_test || session.student_notes) && (
         <div className="mb-6 space-y-2">
           {session.profiles?.grade && (
-            <p className="text-[13px] text-[#8d9ab0]"><span className="text-[#4e5d72]">Grade</span> · {session.profiles.grade}</p>
+            <p className="text-[13px] text-[var(--text-2)]"><span className="text-[var(--text-3)]">Grade</span> · {session.profiles.grade}</p>
           )}
           {session.profiles?.target_test && (
-            <p className="text-[13px] text-[#8d9ab0]"><span className="text-[#4e5d72]">Target test</span> · {session.profiles.target_test}</p>
+            <p className="text-[13px] text-[var(--text-2)]"><span className="text-[var(--text-3)]">Target test</span> · {session.profiles.target_test}</p>
           )}
           {session.student_notes && (
-            <div className="mt-3 p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.05]">
-              <p className="text-[11px] text-[#4e5d72] font-medium uppercase tracking-wide mb-1.5">Student Notes</p>
-              <p className="text-[#c8d0de] text-[13px] leading-relaxed">{session.student_notes}</p>
+            <div className="mt-3 p-3.5 rounded-xl bg-white/[0.03] border border-[var(--border)]">
+              <p className="text-[11px] text-[var(--text-3)] font-medium uppercase tracking-wide mb-1.5">Student Notes</p>
+              <p className="text-[var(--text-1)] text-[13px] leading-relaxed">{session.student_notes}</p>
             </div>
           )}
         </div>
@@ -105,33 +105,33 @@ function SessionDetail({ session, onBack, onUpdate }: {
       {/* Editable fields */}
       <div className="space-y-4 mb-6">
         <div>
-          <label className="block text-[11px] text-[#4e5d72] font-medium uppercase tracking-wide mb-1.5">Tutor Name</label>
+          <label className="block text-[11px] text-[var(--text-3)] font-medium uppercase tracking-wide mb-1.5">Tutor Name</label>
           <input
             type="text"
             value={tutorName}
             onChange={(e) => setTutorName(e.target.value)}
             placeholder="Assign a tutor"
-            className="w-full h-9 px-3 rounded-lg bg-[#0b0f1a] border border-white/[0.07] text-[13px] text-[#f0ece3] placeholder:text-[#2e3a4a] focus:outline-none focus:ring-1 focus:ring-[#d4a853]/40 transition-all"
+            className="w-full h-9 px-3 rounded-lg bg-[var(--bg-2)] border border-[var(--border)] text-[13px] text-[var(--text-1)] placeholder:text-[#2e3a4a] focus:outline-none focus:ring-1 focus:ring-[#d4a853]/40 transition-all"
           />
         </div>
         <div>
-          <label className="block text-[11px] text-[#4e5d72] font-medium uppercase tracking-wide mb-1.5">Meeting Link</label>
+          <label className="block text-[11px] text-[var(--text-3)] font-medium uppercase tracking-wide mb-1.5">Meeting Link</label>
           <input
             type="url"
             value={meetingLink}
             onChange={(e) => setMeetingLink(e.target.value)}
             placeholder="https://zoom.us/j/..."
-            className="w-full h-9 px-3 rounded-lg bg-[#0b0f1a] border border-white/[0.07] text-[13px] text-[#f0ece3] placeholder:text-[#2e3a4a] focus:outline-none focus:ring-1 focus:ring-[#d4a853]/40 transition-all"
+            className="w-full h-9 px-3 rounded-lg bg-[var(--bg-2)] border border-[var(--border)] text-[13px] text-[var(--text-1)] placeholder:text-[#2e3a4a] focus:outline-none focus:ring-1 focus:ring-[#d4a853]/40 transition-all"
           />
         </div>
         <div>
-          <label className="block text-[11px] text-[#4e5d72] font-medium uppercase tracking-wide mb-1.5">Note to Student</label>
+          <label className="block text-[11px] text-[var(--text-3)] font-medium uppercase tracking-wide mb-1.5">Note to Student</label>
           <textarea
             value={adminNotes}
             onChange={(e) => setAdminNotes(e.target.value)}
             rows={2}
             placeholder="Visible to student in their portal…"
-            className="w-full px-3 py-2 rounded-lg bg-[#0b0f1a] border border-white/[0.07] text-[13px] text-[#f0ece3] placeholder:text-[#2e3a4a] focus:outline-none focus:ring-1 focus:ring-[#d4a853]/40 transition-all resize-none"
+            className="w-full px-3 py-2 rounded-lg bg-[var(--bg-2)] border border-[var(--border)] text-[13px] text-[var(--text-1)] placeholder:text-[#2e3a4a] focus:outline-none focus:ring-1 focus:ring-[#d4a853]/40 transition-all resize-none"
           />
         </div>
       </div>
@@ -168,7 +168,7 @@ function SessionDetail({ session, onBack, onUpdate }: {
         <button
           onClick={() => patch()}
           disabled={saving}
-          className="ml-auto px-4 py-2 rounded-lg bg-[#d4a853]/10 text-[#d4a853] text-[13px] font-medium hover:bg-[#d4a853]/15 transition-colors disabled:opacity-50"
+          className="ml-auto px-4 py-2 rounded-lg bg-[var(--accent)]/10 text-[var(--accent)] text-[13px] font-medium hover:bg-[var(--accent)]/15 transition-colors disabled:opacity-50"
         >
           {saving ? "Saving…" : savedKey > 0 ? "Saved ✓" : "Save Changes"}
         </button>
@@ -210,7 +210,7 @@ function MessageThread({ studentId, studentName, messages, onBack, onReply }: {
     <div className="flex flex-col h-full">
       <button
         onClick={onBack}
-        className="flex items-center gap-1.5 text-[#8d9ab0] hover:text-[#f0ece3] text-[13px] transition-colors mb-6 shrink-0"
+        className="flex items-center gap-1.5 text-[var(--text-2)] hover:text-[var(--text-1)] text-[13px] transition-colors mb-6 shrink-0"
       >
         <ArrowLeft size={13} />
         Back to messages
@@ -218,12 +218,12 @@ function MessageThread({ studentId, studentName, messages, onBack, onReply }: {
 
       {/* Header */}
       <div className="flex items-center gap-3 mb-6 shrink-0">
-        <div className="w-9 h-9 rounded-full bg-[#d4a853]/10 border border-[#d4a853]/20 flex items-center justify-center">
-          <span className="text-[11px] font-bold text-[#d4a853]">{initials(studentName)}</span>
+        <div className="w-9 h-9 rounded-full bg-[var(--accent)]/10 border border-[var(--border-accent)] flex items-center justify-center">
+          <span className="text-[11px] font-bold text-[var(--accent)]">{initials(studentName)}</span>
         </div>
         <div>
-          <p className="text-[15px] font-semibold text-[#f0ece3]">{studentName}</p>
-          <p className="text-[#4e5d72] text-[12px]">{messages.length} message{messages.length !== 1 ? "s" : ""}</p>
+          <p className="text-[15px] font-semibold text-[var(--text-1)]">{studentName}</p>
+          <p className="text-[var(--text-3)] text-[12px]">{messages.length} message{messages.length !== 1 ? "s" : ""}</p>
         </div>
       </div>
 
@@ -234,11 +234,11 @@ function MessageThread({ studentId, studentName, messages, onBack, onReply }: {
             <div className={cn(
               "max-w-[75%] px-3.5 py-2.5 rounded-2xl text-[13px] leading-relaxed",
               msg.sender === "nyx"
-                ? "bg-[#d4a853]/15 text-[#f0ece3] rounded-br-md"
-                : "bg-white/[0.06] text-[#c8d0de] rounded-bl-md"
+                ? "bg-[var(--accent)]/15 text-[var(--text-1)] rounded-br-md"
+                : "bg-white/[0.06] text-[var(--text-1)] rounded-bl-md"
             )}>
               {msg.content}
-              <p className={cn("text-[10px] mt-1", msg.sender === "nyx" ? "text-[#d4a853]/50" : "text-[#4e5d72]")}>
+              <p className={cn("text-[10px] mt-1", msg.sender === "nyx" ? "text-[var(--accent)]/50" : "text-[var(--text-3)]")}>
                 {format(new Date(msg.created_at), "h:mm a")}
               </p>
             </div>
@@ -254,13 +254,13 @@ function MessageThread({ studentId, studentName, messages, onBack, onReply }: {
           value={reply}
           onChange={(e) => setReply(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send()}
-          placeholder="Reply as Nyx Scholars…"
-          className="flex-1 h-9 px-3.5 rounded-xl bg-[#0b0f1a] border border-white/[0.07] text-[13px] text-[#f0ece3] placeholder:text-[#2e3a4a] focus:outline-none focus:ring-1 focus:ring-[#d4a853]/40 transition-all"
+          placeholder="Reply as Nyx…"
+          className="flex-1 h-9 px-3.5 rounded-xl bg-[var(--bg-2)] border border-[var(--border)] text-[13px] text-[var(--text-1)] placeholder:text-[#2e3a4a] focus:outline-none focus:ring-1 focus:ring-[#d4a853]/40 transition-all"
         />
         <button
           onClick={send}
           disabled={!reply.trim() || sending}
-          className="w-9 h-9 rounded-xl bg-[#d4a853]/15 text-[#d4a853] flex items-center justify-center hover:bg-[#d4a853]/25 transition-colors disabled:opacity-40"
+          className="w-9 h-9 rounded-xl bg-[var(--accent)]/15 text-[var(--accent)] flex items-center justify-center hover:bg-[var(--accent)]/25 transition-colors disabled:opacity-40"
         >
           <Send size={13} />
         </button>
@@ -307,12 +307,12 @@ function StudentRow({ student, onSave }: { student: StudentRecord; onSave: () =>
   return (
     <div className="py-4 px-4 -mx-4 rounded-xl hover:bg-white/[0.02] transition-colors">
       <div className="flex items-center gap-3 mb-3">
-        <div className="w-8 h-8 rounded-full bg-[#d4a853]/10 border border-[#d4a853]/20 flex items-center justify-center shrink-0">
-          <span className="text-[10px] font-bold text-[#d4a853]">{initials(student.full_name)}</span>
+        <div className="w-8 h-8 rounded-full bg-[var(--accent)]/10 border border-[var(--border-accent)] flex items-center justify-center shrink-0">
+          <span className="text-[10px] font-bold text-[var(--accent)]">{initials(student.full_name)}</span>
         </div>
         <div className="min-w-0">
-          <p className="text-[#f0ece3] text-[13px] font-medium">{displayName}</p>
-          <p className="text-[#4e5d72] text-[11px]">{student.email}{student.grade ? ` · Grade ${student.grade}` : ""}</p>
+          <p className="text-[var(--text-1)] text-[13px] font-medium">{displayName}</p>
+          <p className="text-[var(--text-3)] text-[11px]">{student.email}{student.grade ? ` · Grade ${student.grade}` : ""}</p>
         </div>
         {student.plan && student.plan_status === "active" && (
           <span className="ml-auto px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-400/10 text-emerald-400">Active</span>
@@ -321,7 +321,7 @@ function StudentRow({ student, onSave }: { student: StudentRecord; onSave: () =>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         <select value={plan} onChange={(e) => setPlan(e.target.value)}
-          className="h-8 px-2 rounded-lg bg-[#0b0f1a] border border-white/[0.07] text-[12px] text-[#f0ece3] focus:outline-none focus:ring-1 focus:ring-[#d4a853]/40">
+          className="h-8 px-2 rounded-lg bg-[var(--bg-2)] border border-[var(--border)] text-[12px] text-[var(--text-1)] focus:outline-none focus:ring-1 focus:ring-[#d4a853]/40">
           <option value="">No plan</option>
           <option value="session">Session</option>
           <option value="monthly">Scholar Monthly</option>
@@ -329,7 +329,7 @@ function StudentRow({ student, onSave }: { student: StudentRecord; onSave: () =>
         </select>
 
         <select value={planStatus} onChange={(e) => setPlanStatus(e.target.value)}
-          className="h-8 px-2 rounded-lg bg-[#0b0f1a] border border-white/[0.07] text-[12px] text-[#f0ece3] focus:outline-none focus:ring-1 focus:ring-[#d4a853]/40">
+          className="h-8 px-2 rounded-lg bg-[var(--bg-2)] border border-[var(--border)] text-[12px] text-[var(--text-1)] focus:outline-none focus:ring-1 focus:ring-[#d4a853]/40">
           <option value="">No status</option>
           <option value="active">Active</option>
           <option value="paused">Paused</option>
@@ -338,7 +338,7 @@ function StudentRow({ student, onSave }: { student: StudentRecord; onSave: () =>
 
         {plan === "session" ? (
           <select value={planSubject} onChange={(e) => setPlanSubject(e.target.value)}
-            className="h-8 px-2 rounded-lg bg-[#0b0f1a] border border-white/[0.07] text-[12px] text-[#f0ece3] focus:outline-none focus:ring-1 focus:ring-[#d4a853]/40">
+            className="h-8 px-2 rounded-lg bg-[var(--bg-2)] border border-[var(--border)] text-[12px] text-[var(--text-1)] focus:outline-none focus:ring-1 focus:ring-[#d4a853]/40">
             <option value="">Subject category</option>
             <option value="SAT">SAT</option>
             <option value="ACT">ACT</option>
@@ -349,12 +349,12 @@ function StudentRow({ student, onSave }: { student: StudentRecord; onSave: () =>
           <label className="flex items-center gap-2 h-8 px-2 cursor-pointer">
             <input type="checkbox" checked={counseling} onChange={(e) => setCounseling(e.target.checked)}
               className="w-3.5 h-3.5 accent-amber-400" />
-            <span className="text-[12px] text-[#8d9ab0]">+ Counseling add-on</span>
+            <span className="text-[12px] text-[var(--text-2)]">+ Counseling add-on</span>
           </label>
         )}
 
         <button onClick={handleSave} disabled={saving}
-          className="h-8 px-3 rounded-lg bg-[#d4a853]/10 text-[#d4a853] text-[12px] font-medium hover:bg-[#d4a853]/20 transition-colors disabled:opacity-50">
+          className="h-8 px-3 rounded-lg bg-[var(--accent)]/10 text-[var(--accent)] text-[12px] font-medium hover:bg-[var(--accent)]/20 transition-colors disabled:opacity-50">
           {saving ? "Saving…" : saved ? "Saved ✓" : "Save"}
         </button>
       </div>
@@ -405,7 +405,7 @@ export default function AdminPortalSection() {
   return (
     <section>
       {/* Section tabs */}
-      <div className="flex items-center gap-0 mb-8 border-b border-white/[0.05]">
+      <div className="flex items-center gap-0 mb-8 border-b border-[var(--border)]">
         {(["sessions", "messages", "students"] as const).map((t) => {
           const badge = t === "sessions" ? pendingCount : t === "messages" ? unreadCount : noplanCount;
           return (
@@ -414,17 +414,17 @@ export default function AdminPortalSection() {
               onClick={() => { setTab(t); setActiveSession(null); setActiveStudentId(null); }}
               className={cn(
                 "relative px-1 pb-3 mr-6 text-[14px] font-medium transition-colors capitalize flex items-center gap-2",
-                tab === t ? "text-[#f0ece3]" : "text-[#4e5d72] hover:text-[#8d9ab0]"
+                tab === t ? "text-[var(--text-1)]" : "text-[var(--text-3)] hover:text-[var(--text-2)]"
               )}
             >
               {t}
               {badge > 0 && (
-                <span className="w-4 h-4 rounded-full bg-[#d4a853] text-black text-[9px] font-bold flex items-center justify-center">
+                <span className="w-4 h-4 rounded-full bg-[var(--accent)] text-black text-[9px] font-bold flex items-center justify-center">
                   {badge}
                 </span>
               )}
               {tab === t && (
-                <span className="absolute bottom-0 left-0 right-0 h-px bg-[#d4a853]" />
+                <span className="absolute bottom-0 left-0 right-0 h-px bg-[var(--accent)]" />
               )}
             </button>
           );
@@ -433,7 +433,7 @@ export default function AdminPortalSection() {
 
       {loading ? (
         <div className="py-16 text-center">
-          <p className="text-[#4e5d72] text-[13px]">Loading…</p>
+          <p className="text-[var(--text-3)] text-[13px]">Loading…</p>
         </div>
       ) : tab === "sessions" ? (
         activeSession ? (
@@ -444,7 +444,7 @@ export default function AdminPortalSection() {
           />
         ) : sessions.length === 0 ? (
           <div className="py-16 text-center">
-            <p className="text-[#4e5d72] text-[14px]">No session requests yet.</p>
+            <p className="text-[var(--text-3)] text-[14px]">No session requests yet.</p>
             <p className="text-[#2e3a4a] text-[13px] mt-1">Student bookings will appear here.</p>
           </div>
         ) : (
@@ -456,20 +456,20 @@ export default function AdminPortalSection() {
                 className="w-full flex items-center gap-4 py-3.5 px-4 -mx-4 rounded-xl hover:bg-white/[0.03] transition-colors text-left group"
               >
                 {/* Avatar */}
-                <div className="w-9 h-9 rounded-full bg-[#d4a853]/10 border border-[#d4a853]/20 flex items-center justify-center shrink-0">
-                  <span className="text-[11px] font-bold text-[#d4a853]">{initials(s.profiles?.full_name ?? null)}</span>
+                <div className="w-9 h-9 rounded-full bg-[var(--accent)]/10 border border-[var(--border-accent)] flex items-center justify-center shrink-0">
+                  <span className="text-[11px] font-bold text-[var(--accent)]">{initials(s.profiles?.full_name ?? null)}</span>
                 </div>
 
                 {/* Info */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-[#f0ece3] text-[14px] font-medium">{s.profiles?.full_name ?? "Unknown Student"}</p>
-                  <p className="text-[#4e5d72] text-[12px]">
+                  <p className="text-[var(--text-1)] text-[14px] font-medium">{s.profiles?.full_name ?? "Unknown Student"}</p>
+                  <p className="text-[var(--text-3)] text-[12px]">
                     {s.subject} · {format(new Date(s.scheduled_at), "MMM d, h:mm a")}
                   </p>
                 </div>
 
                 {statusBadge(s.status)}
-                <ChevronRight size={14} className="text-[#2e3a4a] group-hover:text-[#8d9ab0] transition-colors shrink-0" />
+                <ChevronRight size={14} className="text-[#2e3a4a] group-hover:text-[var(--text-2)] transition-colors shrink-0" />
               </button>
             ))}
           </div>
@@ -485,7 +485,7 @@ export default function AdminPortalSection() {
           />
         ) : Object.keys(byStudent).length === 0 ? (
           <div className="py-16 text-center">
-            <p className="text-[#4e5d72] text-[14px]">No student messages yet.</p>
+            <p className="text-[var(--text-3)] text-[14px]">No student messages yet.</p>
             <p className="text-[#2e3a4a] text-[13px] mt-1">Messages from the portal will appear here.</p>
           </div>
         ) : (
@@ -499,20 +499,20 @@ export default function AdminPortalSection() {
                   className="w-full flex items-center gap-4 py-3.5 px-4 -mx-4 rounded-xl hover:bg-white/[0.03] transition-colors text-left group"
                 >
                   <div className="relative shrink-0">
-                    <div className="w-9 h-9 rounded-full bg-[#d4a853]/10 border border-[#d4a853]/20 flex items-center justify-center">
-                      <span className="text-[11px] font-bold text-[#d4a853]">{initials(name)}</span>
+                    <div className="w-9 h-9 rounded-full bg-[var(--accent)]/10 border border-[var(--border-accent)] flex items-center justify-center">
+                      <span className="text-[11px] font-bold text-[var(--accent)]">{initials(name)}</span>
                     </div>
                     {unread > 0 && (
-                      <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-[#d4a853] text-black text-[8px] font-bold flex items-center justify-center">
+                      <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-[var(--accent)] text-black text-[8px] font-bold flex items-center justify-center">
                         {unread}
                       </span>
                     )}
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <p className="text-[#f0ece3] text-[14px] font-medium">{name}</p>
+                    <p className="text-[var(--text-1)] text-[14px] font-medium">{name}</p>
                     {last && (
-                      <p className="text-[#4e5d72] text-[12px] truncate">
+                      <p className="text-[var(--text-3)] text-[12px] truncate">
                         {last.sender === "nyx" ? "You: " : ""}{last.content}
                       </p>
                     )}
@@ -520,7 +520,7 @@ export default function AdminPortalSection() {
 
                   <div className="flex items-center gap-3 shrink-0">
                     {last && <span className="text-[#2e3a4a] text-[11px]">{format(new Date(last.created_at), "MMM d")}</span>}
-                    <ChevronRight size={14} className="text-[#2e3a4a] group-hover:text-[#8d9ab0] transition-colors" />
+                    <ChevronRight size={14} className="text-[#2e3a4a] group-hover:text-[var(--text-2)] transition-colors" />
                   </div>
                 </button>
               );
@@ -530,7 +530,7 @@ export default function AdminPortalSection() {
       ) : /* students tab */
         students.length === 0 ? (
           <div className="py-16 text-center">
-            <p className="text-[#4e5d72] text-[14px]">No registered students yet.</p>
+            <p className="text-[var(--text-3)] text-[14px]">No registered students yet.</p>
           </div>
         ) : (
           <div className="divide-y divide-white/[0.04]">
