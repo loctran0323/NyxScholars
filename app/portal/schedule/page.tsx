@@ -6,7 +6,7 @@ import Link from "next/link";
 import { CalendarPlus, CheckCircle, Lock, ArrowLeft, ShieldCheck, Sparkles, Video } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
-import { TUTORS, type Tutor } from "@/lib/mock/tutors";
+import { TUTORS, HOURLY_RATE_USD, type Tutor } from "@/lib/mock/tutors";
 import { getAvailability, type DayAvailability, type Slot } from "@/lib/mock/availability";
 import type { Profile, PlanType } from "@/types/portal";
 
@@ -155,7 +155,7 @@ function TutorBookingFlow({ tutor }: { tutor: Tutor }) {
 
   const isTrial = selectedSlot?.isTrial === true;
   const sessionLengthMins = isTrial ? 30 : duration;
-  const cost = isTrial ? 0 : Math.round((tutor.rateUSD / 60) * duration);
+  const cost = isTrial ? 0 : Math.round((HOURLY_RATE_USD / 60) * duration);
 
   async function bookTrial() {
     if (!selectedSlot) return;
@@ -307,7 +307,7 @@ function TutorBookingFlow({ tutor }: { tutor: Tutor }) {
           <div className="text-right">
             <p className="font-mono text-[9px] tracking-[0.22em] text-[var(--text-3)]">RATE</p>
             <p className="font-mono text-[18px] text-[var(--text-1)]">
-              ${tutor.rateUSD}<span className="text-[12px] text-[var(--text-3)]">/hr</span>
+              ${HOURLY_RATE_USD}<span className="text-[12px] text-[var(--text-3)]">/hr</span>
             </p>
             <p className="font-mono text-[10px] tracking-[0.16em] text-[#7dd3fc] mt-1">
               FREE 30-MIN TRIAL
@@ -322,7 +322,7 @@ function TutorBookingFlow({ tutor }: { tutor: Tutor }) {
         </p>
         <div className="mt-5 grid grid-cols-3 gap-4 pt-5" style={{ borderTop: "1px solid var(--border)" }}>
           <Stat icon={ShieldCheck} label="VETTED" value="1500+ SAT" />
-          <Stat icon={Sparkles}    label="STUDENTS" value={`${tutor.studentsTaught}`} />
+          <Stat icon={Sparkles}    label="TEACHES"  value={tutor.tags.slice(0, 2).join(", ")} />
           <Stat icon={Video}       label="FORMAT" value="Online video" />
         </div>
       </div>
@@ -406,7 +406,7 @@ function TutorBookingFlow({ tutor }: { tutor: Tutor }) {
               >
                 {d} minutes
                 <span className="block font-mono text-[11px] text-[var(--text-3)] mt-0.5">
-                  ${Math.round((tutor.rateUSD / 60) * d)}
+                  ${Math.round((HOURLY_RATE_USD / 60) * d)}
                 </span>
               </button>
             ))}

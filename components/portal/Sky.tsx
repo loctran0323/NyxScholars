@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { CONSTELLATIONS, ALL_SKILLS, levelFor, PLAYER, type Constellation, type FlatSkill, type SkyLevel } from "@/lib/mock/constellations";
+import { CONSTELLATIONS, ALL_SKILLS, levelFor, type Constellation, type FlatSkill, type SkyLevel } from "@/lib/mock/constellations";
 
 const NIGHT_2 = "#0c1124";
 const NIGHT_3 = "#141a30";
@@ -214,26 +214,6 @@ export function Sky({ hoveredId, setHoveredId, selectedId, setSelectedId }: SkyP
         <LegendDot color={MOON_HI}    label="RADIANT"  glow strong />
       </div>
 
-      <div className="absolute bottom-5 right-7 flex items-center gap-3.5">
-        <div className="text-right">
-          <div className="font-mono text-[9px] tracking-[0.28em]" style={{ color: TEXT_DIM }}>RANK</div>
-          <div className="italic" style={{ fontFamily: "var(--font-fraunces)", fontSize: 16, color: TEXT }}>
-            {PLAYER.rank}
-          </div>
-        </div>
-        <div
-          className="grid place-items-center"
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: "50%",
-            border: `1px solid ${MOON_DIM}`,
-            background: NIGHT_2,
-          }}
-        >
-          <span style={{ fontFamily: "var(--font-fraunces)", fontSize: 16, color: MOON }}>{PLAYER.level}</span>
-        </div>
-      </div>
     </div>
   );
 }

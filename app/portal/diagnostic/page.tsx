@@ -7,7 +7,7 @@ import {
   DIAGNOSTIC_QUESTIONS, POST_DIAGNOSTIC_SKILLS,
   type DiagnosticQuestion, type DiagnosticAnswer,
 } from "@/lib/mock/diagnostic";
-import { matchTutors, type Tutor } from "@/lib/mock/tutors";
+import { matchTutors, HOURLY_RATE_USD, type Tutor } from "@/lib/mock/tutors";
 
 const NIGHT = "#070914";
 const NIGHT_2 = "#0c1124";
@@ -697,9 +697,8 @@ function Results({
             transition: "all 0.7s ease-out",
           }}
         >
-          Starting score{" "}
-          <span style={{ fontStyle: "italic", color: MOON }}>{score}</span>
-          <span className="ml-2" style={{ fontSize: 22, color: TEXT_DIM }}>± {ciScore}</span>
+          Estimated range{" "}
+          <span style={{ fontStyle: "italic", color: MOON }}>~{score}</span>
         </h1>
         <p
           className="mt-3"
@@ -709,7 +708,7 @@ function Results({
             transition: "opacity 0.7s 0.2s",
           }}
         >
-          80% confidence. We&rsquo;ll refine this with your tutor.
+          Rough estimate from {answers.length} answered questions. Your tutor will refine this in your first session.
         </p>
       </div>
 
@@ -837,12 +836,12 @@ function TutorMatchCard({ tutor, weakSkills }: { tutor: Tutor; weakSkills: strin
       <div className="mt-auto pt-3" style={{ borderTop: `1px solid ${LINE}` }}>
         <div className="flex justify-between items-baseline mb-3">
           <div>
-            <div className="font-mono" style={{ fontSize: 9, color: TEXT_DIM, letterSpacing: 2 }}>STUDENTS</div>
-            <div style={{ fontFamily: "var(--font-fraunces)", fontSize: 16, color: TEXT }}>{tutor.studentsTaught}</div>
+            <div className="font-mono" style={{ fontSize: 9, color: TEXT_DIM, letterSpacing: 2 }}>AVAILABLE</div>
+            <div style={{ fontFamily: "var(--font-fraunces)", fontSize: 13, color: TEXT, lineHeight: 1.3 }}>{tutor.availability.split(" · ")[0]}</div>
           </div>
           <div className="text-right">
             <div className="font-mono" style={{ fontSize: 9, color: TEXT_DIM, letterSpacing: 2 }}>RATE</div>
-            <div style={{ fontFamily: "var(--font-fraunces)", fontSize: 16, color: TEXT }}>${tutor.rateUSD}<span style={{ fontSize: 11, color: TEXT_DIM }}>/hr</span></div>
+            <div style={{ fontFamily: "var(--font-fraunces)", fontSize: 16, color: TEXT }}>${HOURLY_RATE_USD}<span style={{ fontSize: 11, color: TEXT_DIM }}>/hr</span></div>
           </div>
         </div>
         <Link

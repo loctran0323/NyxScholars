@@ -2,8 +2,8 @@
 
 import type { ReactNode } from "react";
 import {
-  CONSTELLATIONS, ALL_SKILLS, levelFor, PLAYER, ACHIEVEMENTS, DAILY_PLAN, SCORE_HISTORY, SCORE_TARGET, ACTIVITY,
-  type Constellation, type Achievement, type SkyLevel,
+  CONSTELLATIONS, levelFor, DAILY_PLAN, SCORE_HISTORY, SCORE_TARGET, ACTIVITY,
+  type Constellation, type SkyLevel,
 } from "@/lib/mock/constellations";
 
 const NIGHT = "#070914";
@@ -27,61 +27,51 @@ function levelColor(lvl: SkyLevel): string {
 }
 
 /* ───────────────────────────────────────────────────────────
- * PlayerHeader — gamification strip at the top of the dashboard.
- * Avatar, name, rank, level, XP bar, stardust, streak, days-left,
- * and the "Begin session" CTA.
+ * StudentHeader — calm, factual top strip. Replaces the prior
+ * gamified PlayerHeader (XP/Stardust/Streak removed — those felt
+ * Duolingo-cosplay on a real human-tutor product).
  * ─────────────────────────────────────────────────────────── */
-export function PlayerHeader({ onBegin }: { onBegin?: () => void }) {
-  const pct = (PLAYER.xpInLevel / PLAYER.xpToLevel) * 100;
+export function StudentHeader({
+  studentName,
+  studentInitials,
+  tutorName,
+  packageLabel,
+  nextSession,
+  onBegin,
+}: {
+  studentName: string;
+  studentInitials: string;
+  tutorName: string;
+  packageLabel: string;
+  nextSession: string;
+  onBegin?: () => void;
+}) {
   return (
     <div
-      className="flex items-center gap-6 px-7 py-4 border-b"
+      className="flex items-center gap-5 px-7 py-4 border-b"
       style={{ background: NIGHT, borderColor: LINE }}
     >
       <div
         className="grid place-items-center shrink-0"
         style={{
-          width: 36,
-          height: 36,
-          borderRadius: "50%",
-          background: NIGHT_3,
-          border: `1px solid ${MOON_DIM}`,
-          fontFamily: "var(--font-fraunces)",
-          fontSize: 13,
-          color: TEXT,
+          width: 36, height: 36, borderRadius: "50%",
+          background: NIGHT_3, border: `1px solid ${MOON_DIM}`,
+          fontFamily: "var(--font-fraunces)", fontSize: 13, color: TEXT,
         }}
       >
-        {PLAYER.initials}
+        {studentInitials}
       </div>
 
-      <div className="flex-1 min-w-0 flex flex-col gap-1">
-        <div className="flex justify-between items-baseline gap-3">
-          <div className="min-w-0 truncate">
-            <span style={{ fontSize: 13, color: TEXT }}>{PLAYER.name}</span>
-            <span className="ml-3" style={{ fontSize: 10, letterSpacing: 3, color: MOON }}>
-              {PLAYER.rank.toUpperCase()} · LV {PLAYER.level}
-            </span>
-          </div>
-          <div className="hidden sm:block font-mono" style={{ fontSize: 10, color: TEXT_DIM, letterSpacing: 1 }}>
-            {PLAYER.xpInLevel} / {PLAYER.xpToLevel} XP TO LV {PLAYER.level + 1}
-          </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-baseline gap-3 flex-wrap">
+          <span style={{ fontSize: 13, color: TEXT }}>{studentName}</span>
+          <span className="font-mono" style={{ fontSize: 10, letterSpacing: 3, color: MOON }}>
+            WITH {tutorName.toUpperCase()} · {packageLabel.toUpperCase()}
+          </span>
         </div>
-        <div className="h-[3px] rounded-sm overflow-hidden" style={{ background: NIGHT_3 }}>
-          <div
-            className="h-full"
-            style={{
-              width: `${pct}%`,
-              background: `linear-gradient(90deg, ${MOON_DIM}, ${MOON} 50%, ${MOON_HI})`,
-              boxShadow: `0 0 6px ${MOON}`,
-            }}
-          />
+        <div className="mt-1 font-mono" style={{ fontSize: 11, color: TEXT_DIM, letterSpacing: 1 }}>
+          NEXT SESSION · {nextSession.toUpperCase()}
         </div>
-      </div>
-
-      <div className="hidden md:flex items-center gap-6">
-        <Stat label="STARDUST" value={PLAYER.totalStardust.toLocaleString()} />
-        <Stat label="STREAK" value={`${PLAYER.streak}D`} accent />
-        <Stat label="DAYS LEFT" value={`${PLAYER.daysLeft}`} />
       </div>
 
       <button
@@ -97,26 +87,14 @@ export function PlayerHeader({ onBegin }: { onBegin?: () => void }) {
           border: "none",
         }}
       >
-        BEGIN SESSION →
+        OPEN NEXT SESSION →
       </button>
-    </div>
-  );
-}
-
-function Stat({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
-  return (
-    <div className="text-center min-w-[68px]">
-      <div className="font-mono" style={{ fontSize: 9, letterSpacing: 3, color: TEXT_DIM }}>{label}</div>
-      <div className="mt-0.5" style={{ fontFamily: "var(--font-fraunces)", fontSize: 17, color: accent ? MOON : TEXT }}>
-        {value}
-      </div>
     </div>
   );
 }
 
 /* ───────────────────────────────────────────────────────────
  * Card primitives matching the dashboard-v2 card style.
- * Sharp corners, hairline border, NIGHT_2 background.
  * ─────────────────────────────────────────────────────────── */
 export function SkyCard({ children, className }: { children: ReactNode; className?: string }) {
   return (
@@ -145,22 +123,48 @@ export function CardHeader({ title, right }: { title: string; right?: ReactNode 
 }
 
 /* ───────────────────────────────────────────────────────────
- * DailyPlanCard — today's session plan with reasoning.
+ * NextSessionCard — the most important card on the dashboard.
+ * What is your tutor doing with you next.
  * ─────────────────────────────────────────────────────────── */
-export function DailyPlanCard({ todayLabel = "TODAY · MAY 02" }: { todayLabel?: string }) {
+export function NextSessionCard({
+  tutorName,
+  whenLabel,
+  topic,
+  whyLine,
+}: {
+  tutorName: string;
+  whenLabel: string;
+  topic: string;
+  whyLine: string;
+}) {
   return (
     <SkyCard>
-      <CardHeader title={todayLabel} right={<span style={{ color: MOON }}>+85 XP AVAILABLE</span>} />
-      <div
-        className="mt-2.5 leading-[1.25]"
+      <CardHeader title="NEXT SESSION" right={whenLabel.toUpperCase()} />
+      <p
+        className="mt-3 leading-[1.25]"
         style={{ fontFamily: "var(--font-fraunces)", fontSize: 22, color: TEXT }}
       >
-        24 minutes to ignite{" "}
-        <span style={{ fontStyle: "italic", color: MOON }}>Trigonometry</span>.
-      </div>
-      <div className="mt-4">
+        {topic}
+      </p>
+      <p className="mt-3 text-[13px] leading-[1.65]" style={{ color: TEXT_DIM }}>
+        With <span style={{ color: TEXT }}>{tutorName}</span> · {whyLine}
+      </p>
+    </SkyCard>
+  );
+}
+
+/* ───────────────────────────────────────────────────────────
+ * AssignedDrillsCard — what your tutor wants you to do
+ * before/after the session. Replaces the prior "DailyPlanCard"
+ * which framed it as engine-generated.
+ * ─────────────────────────────────────────────────────────── */
+export function AssignedDrillsCard({ assignedBy = "Loc" }: { assignedBy?: string }) {
+  return (
+    <SkyCard>
+      <CardHeader title="ASSIGNED" right={`BY ${assignedBy.toUpperCase()}`} />
+      <ul className="mt-3">
         {DAILY_PLAN.map((t, i) => (
-          <div
+          <li
             key={i}
             className="grid items-center gap-3 py-3"
             style={{
@@ -181,23 +185,25 @@ export function DailyPlanCard({ todayLabel = "TODAY · MAY 02" }: { todayLabel?:
             <div className="font-mono tabular-nums" style={{ fontSize: 11, color: TEXT_DIM }}>
               {t.minutes} min
             </div>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </SkyCard>
   );
 }
 
 /* ───────────────────────────────────────────────────────────
- * ProjectedScoreCard — Fraunces big number, sparkline, target line.
+ * EstimatedRangeCard — replaces the prior ProjectedScoreCard.
+ * Calmer copy: "estimated SAT range" not "projected score" with
+ * fake confidence intervals. Sparkline kept because it's real data.
  * ─────────────────────────────────────────────────────────── */
-export function ProjectedScoreCard() {
+export function EstimatedRangeCard() {
   const current = SCORE_HISTORY[SCORE_HISTORY.length - 1];
   const minS = Math.min(...SCORE_HISTORY) - 40;
   const maxS = SCORE_TARGET + 20;
   const range = maxS - minS;
   const w = 280;
-  const h = 100;
+  const h = 80;
   const points: [number, number][] = SCORE_HISTORY.map((s, i) => [
     (i / (SCORE_HISTORY.length - 1)) * w,
     h - ((s - minS) / range) * h,
@@ -207,20 +213,19 @@ export function ProjectedScoreCard() {
 
   return (
     <SkyCard>
-      <CardHeader title="PROJECTED SCORE" right="JUN 7 · 36 DAYS" />
+      <CardHeader title="ESTIMATED RANGE" right="UPDATED EACH SESSION" />
       <div className="flex items-baseline gap-2 mt-3">
-        <div style={{ fontFamily: "var(--font-fraunces)", fontSize: 56, color: TEXT, lineHeight: 1 }}>
-          {current}
+        <div style={{ fontFamily: "var(--font-fraunces)", fontSize: 44, color: TEXT, lineHeight: 1 }}>
+          ~{current}
         </div>
-        <div style={{ fontSize: 12, color: TEXT_DIM }}>± 40</div>
       </div>
-      <div className="mt-1" style={{ fontSize: 11, color: TEXT_DIM }}>
-        80% confidence · target {SCORE_TARGET}
+      <div className="mt-1" style={{ fontSize: 11, color: TEXT_DIM, lineHeight: 1.6 }}>
+        From your intake plus {SCORE_HISTORY.length - 1} sessions. Target {SCORE_TARGET}.
       </div>
-      <svg width={w} height={h + 12} className="mt-4 block" style={{ width: "100%", maxWidth: w }}>
+      <svg width="100%" height={h + 6} viewBox={`0 0 ${w} ${h + 6}`} className="mt-4 block">
         <defs>
-          <linearGradient id="ps-fill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={MOON} stopOpacity="0.3" />
+          <linearGradient id="er-fill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={MOON} stopOpacity="0.25" />
             <stop offset="100%" stopColor={MOON} stopOpacity="0" />
           </linearGradient>
         </defs>
@@ -230,22 +235,17 @@ export function ProjectedScoreCard() {
         </text>
         <path
           d={`M 0 ${h} L ${points.map((p) => p.join(",")).join(" L ")} L ${w} ${h} Z`}
-          fill="url(#ps-fill)"
+          fill="url(#er-fill)"
         />
-        <polyline points={points.map((p) => p.join(",")).join(" ")} fill="none" stroke={MOON} strokeWidth="1.2" />
+        <polyline points={points.map((p) => p.join(",")).join(" ")} fill="none" stroke={MOON} strokeWidth="1.4" />
         <circle cx={last[0]} cy={last[1]} r="3" fill={MOON_HI} />
-        <circle cx={last[0]} cy={last[1]} r="6" fill={MOON} opacity="0.3" />
       </svg>
-      <div className="mt-1 pt-2.5" style={{ borderTop: `1px solid ${LINE}`, fontSize: 11, color: TEXT_DIM, lineHeight: 1.5 }}>
-        At your current pace, you&apos;ll reach {SCORE_TARGET} in <span style={{ color: TEXT }}>~5 weeks</span>.
-      </div>
     </SkyCard>
   );
 }
 
 /* ───────────────────────────────────────────────────────────
- * Tiny inline constellation glyph — reused in the list card and
- * potentially elsewhere.
+ * Tiny inline constellation glyph
  * ─────────────────────────────────────────────────────────── */
 function ConstellationMiniGlyph({ c }: { c: Constellation }) {
   return (
@@ -281,14 +281,13 @@ function ConstellationMiniGlyph({ c }: { c: Constellation }) {
 }
 
 /* ───────────────────────────────────────────────────────────
- * ConstellationsCard — list of all constellations w/ mini glyph,
- * level chip, mastery bar.
+ * ConstellationsCard — list of all constellations. Calm.
  * ─────────────────────────────────────────────────────────── */
 export function ConstellationsCard({ onSelect }: { onSelect?: (id: string) => void }) {
   return (
     <SkyCard>
-      <CardHeader title="YOUR CONSTELLATIONS" right={`${CONSTELLATIONS.length} TRACKED`} />
-      <div className="flex flex-col mt-3.5">
+      <CardHeader title="ALL CONSTELLATIONS" right={`${CONSTELLATIONS.length} TRACKED`} />
+      <div className="flex flex-col mt-3">
         {CONSTELLATIONS.map((c) => {
           const avg = c.stars.reduce((a, s) => a + s.mastery, 0) / c.stars.length;
           const lvl = levelFor(avg);
@@ -298,9 +297,9 @@ export function ConstellationsCard({ onSelect }: { onSelect?: (id: string) => vo
             <button
               key={c.id}
               onClick={() => onSelect?.(c.id)}
-              className="grid items-center gap-3.5 py-3.5 text-left bg-transparent border-none cursor-pointer transition-opacity hover:opacity-80"
+              className="grid items-center gap-3 py-3 text-left bg-transparent border-none cursor-pointer transition-opacity hover:opacity-80"
               style={{
-                gridTemplateColumns: "24px 1fr 100px 70px",
+                gridTemplateColumns: "24px 1fr 80px 60px",
                 borderTop: `1px solid ${LINE}`,
               }}
             >
@@ -309,11 +308,11 @@ export function ConstellationsCard({ onSelect }: { onSelect?: (id: string) => vo
                 <div className="italic" style={{ fontFamily: "var(--font-fraunces)", fontSize: 14, color: TEXT }}>
                   {c.glyph}
                 </div>
-                <div className="mt-0.5 font-mono" style={{ fontSize: 10, color: TEXT_DIM, letterSpacing: 2 }}>
+                <div className="mt-0.5 font-mono" style={{ fontSize: 9.5, color: TEXT_DIM, letterSpacing: 1.5 }}>
                   {c.name.toUpperCase()} · {lit}/{c.stars.length} LIT
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center">
                 <div className="flex-1 h-[3px] rounded-sm" style={{ background: NIGHT_3 }}>
                   <div
                     className="h-full"
@@ -325,7 +324,7 @@ export function ConstellationsCard({ onSelect }: { onSelect?: (id: string) => vo
                   />
                 </div>
               </div>
-              <div className="text-right font-mono" style={{ fontSize: 10, letterSpacing: 2, color: lvlColor }}>
+              <div className="text-right font-mono" style={{ fontSize: 10, letterSpacing: 1.5, color: lvlColor }}>
                 {lvl.name.toUpperCase()}
               </div>
             </button>
@@ -337,20 +336,22 @@ export function ConstellationsCard({ onSelect }: { onSelect?: (id: string) => vo
 }
 
 /* ───────────────────────────────────────────────────────────
- * ActivityHeatmap — 13-week × 7-day GitHub-style grid.
+ * SessionHistoryCard — replaces ActivityHeatmap.
+ * Calm 13-week × 7-day grid, kept because it visualises real
+ * session frequency. No streaks, no longest-streak boasting.
  * ─────────────────────────────────────────────────────────── */
-export function ActivityHeatmap() {
+export function SessionHistoryCard() {
   const data = ACTIVITY;
   const cell = 11;
   const gap = 3;
   const cols = 13;
   const rows = 7;
-  const total = data.reduce((a, b) => a + b, 0);
-  const days = data.filter((d) => d > 0).length;
+  const sessions = data.filter((d) => d > 0).length;
+  const totalH = Math.round(data.reduce((a, b) => a + b, 0) / 60);
 
   return (
     <SkyCard>
-      <CardHeader title="ACTIVITY · 13 WEEKS" right={`${days} ACTIVE · ${Math.round(total / 60)}H`} />
+      <CardHeader title="SESSION HISTORY · 13 WEEKS" right={`${sessions} SESSIONS · ${totalH}H`} />
       <svg width={cols * (cell + gap)} height={rows * (cell + gap)} className="mt-4">
         {data.map((m, i) => {
           const col = Math.floor(i / rows);
@@ -386,102 +387,7 @@ export function ActivityHeatmap() {
           );
         })}
       </svg>
-      <div className="mt-2.5 font-mono" style={{ fontSize: 10, color: TEXT_DIM, letterSpacing: 1 }}>
-        <span style={{ color: MOON }}>● {PLAYER.streak}-DAY STREAK</span> · longest 22 days
-      </div>
     </SkyCard>
-  );
-}
-
-/* ───────────────────────────────────────────────────────────
- * AchievementsCard — 5 badge slots with custom glyphs.
- * ─────────────────────────────────────────────────────────── */
-export function AchievementsCard() {
-  return (
-    <SkyCard>
-      <CardHeader
-        title="ACHIEVEMENTS"
-        right={`${ACHIEVEMENTS.filter((a) => a.earned).length} / ${ACHIEVEMENTS.length}`}
-      />
-      <div className="grid grid-cols-5 gap-3 mt-4">
-        {ACHIEVEMENTS.map((a) => (
-          <div
-            key={a.id}
-            className="flex flex-col items-center gap-1.5"
-            style={{ opacity: a.earned ? 1 : 0.35 }}
-            title={a.desc}
-          >
-            <div
-              className="grid place-items-center"
-              style={{
-                width: 48,
-                height: 48,
-                borderRadius: "50%",
-                border: `1px solid ${a.earned ? MOON : TEXT_FAINT}`,
-                background: NIGHT_3,
-                boxShadow: a.earned ? `0 0 12px ${MOON}33` : "none",
-              }}
-            >
-              <AchievementGlyph kind={a.glyph} on={a.earned} />
-            </div>
-            <div
-              className="text-center font-mono"
-              style={{ fontSize: 9, letterSpacing: 1, color: a.earned ? TEXT : TEXT_DIM }}
-            >
-              {a.name.toUpperCase()}
-            </div>
-          </div>
-        ))}
-      </div>
-    </SkyCard>
-  );
-}
-
-function AchievementGlyph({ kind, on }: { kind: Achievement["glyph"]; on: boolean }) {
-  const c = on ? MOON : TEXT_DIM;
-  const s = 24;
-  if (kind === "star") {
-    return (
-      <svg width={s} height={s} viewBox="0 0 24 24" aria-hidden>
-        <path d="M 12 3 L 13.5 10.5 L 21 12 L 13.5 13.5 L 12 21 L 10.5 13.5 L 3 12 L 10.5 10.5 Z" fill={c} />
-      </svg>
-    );
-  }
-  if (kind === "compass") {
-    return (
-      <svg width={s} height={s} viewBox="0 0 24 24" aria-hidden>
-        <circle cx="12" cy="12" r="9" fill="none" stroke={c} strokeWidth="1.2" />
-        <path d="M 12 4 L 14 12 L 12 20 L 10 12 Z" fill={c} />
-      </svg>
-    );
-  }
-  if (kind === "aurora") {
-    return (
-      <svg width={s} height={s} viewBox="0 0 24 24" aria-hidden>
-        <path d="M 4 16 Q 8 6 12 16 Q 16 6 20 16" fill="none" stroke={c} strokeWidth="1.2" />
-        <circle cx="6" cy="20" r="0.8" fill={c} />
-        <circle cx="18" cy="20" r="0.8" fill={c} />
-      </svg>
-    );
-  }
-  if (kind === "eclipse") {
-    return (
-      <svg width={s} height={s} viewBox="0 0 24 24" aria-hidden>
-        <circle cx="12" cy="12" r="8" fill="none" stroke={c} strokeWidth="1.2" />
-        <circle cx="14" cy="12" r="6.5" fill={c} />
-      </svg>
-    );
-  }
-  // map
-  return (
-    <svg width={s} height={s} viewBox="0 0 24 24" aria-hidden>
-      <circle cx="6" cy="8" r="1.5" fill={c} />
-      <circle cx="18" cy="8" r="1.5" fill={c} />
-      <circle cx="12" cy="16" r="1.5" fill={c} />
-      <line x1="6" y1="8" x2="12" y2="16" stroke={c} strokeWidth="0.8" />
-      <line x1="18" y1="8" x2="12" y2="16" stroke={c} strokeWidth="0.8" />
-      <line x1="6" y1="8" x2="18" y2="8" stroke={c} strokeWidth="0.8" />
-    </svg>
   );
 }
 
@@ -502,7 +408,7 @@ export function DashTabs({
     >
       {([
         { id: "sky", label: "The Sky" },
-        { id: "metrics", label: "Plan & Metrics" },
+        { id: "metrics", label: "Plan & Notes" },
       ] as const).map((t) => (
         <button
           key={t.id}
