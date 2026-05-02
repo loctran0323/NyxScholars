@@ -98,7 +98,7 @@ function FilterChip({ label, active, onClick }: { label: string; active: boolean
   return (
     <button onClick={onClick} className={cn(
       "px-3 py-1.5 rounded-lg text-[12.5px] font-medium transition-all whitespace-nowrap",
-      active ? "bg-[#d4a853]/15 text-[#d4a853] border border-[#d4a853]/25" : "bg-white/[0.04] text-[#8d9ab0] border border-white/[0.07] hover:border-white/[0.14] hover:text-[#c8d0de]"
+      active ? "bg-[var(--accent)]/15 text-[var(--accent)] border border-[var(--border-accent)]" : "bg-white/[0.04] text-[var(--text-2)] border border-[var(--border)] hover:border-[var(--border-2)] hover:text-[var(--text-1)]"
     )}>
       {label}
     </button>
@@ -135,17 +135,17 @@ export default function MaterialsPage() {
   return (
     <div>
       <div className="mb-7">
-        <p className="text-[13px] text-[#4e5d72] uppercase tracking-wider font-semibold mb-1">Portal</p>
-        <h1 className="text-[26px] font-bold text-[#f0ece3]">Practice Materials</h1>
-        <p className="text-[#8d9ab0] mt-1 text-[14px]">
-          Curated resources — handpicked by your Nyx Scholars founders.
+        <p className="text-[13px] text-[var(--text-3)] uppercase tracking-wider font-semibold mb-1">Portal</p>
+        <h1 className="text-[26px] font-bold text-[var(--text-1)]">Practice Materials</h1>
+        <p className="text-[var(--text-2)] mt-1 text-[14px]">
+          Curated resources — handpicked by your Nyx founders.
         </p>
       </div>
 
       {/* Filters */}
       <div className="space-y-3 mb-6">
         <div>
-          <p className="text-[11px] text-[#4e5d72] font-semibold uppercase tracking-wider mb-2">Category</p>
+          <p className="text-[11px] text-[var(--text-3)] font-semibold uppercase tracking-wider mb-2">Category</p>
           <div className="flex flex-wrap gap-2">
             {availableCats.map((c) => (
               <FilterChip key={c} label={c} active={categoryFilter === c} onClick={() => setCategoryFilter(c)} />
@@ -153,7 +153,7 @@ export default function MaterialsPage() {
           </div>
         </div>
         <div>
-          <p className="text-[11px] text-[#4e5d72] font-semibold uppercase tracking-wider mb-2">Difficulty</p>
+          <p className="text-[11px] text-[var(--text-3)] font-semibold uppercase tracking-wider mb-2">Difficulty</p>
           <div className="flex flex-wrap gap-2">
             {DIFFICULTIES.map((d) => (
               <FilterChip key={d} label={d} active={difficultyFilter === d} onClick={() => setDifficultyFilter(d)} />
@@ -162,26 +162,26 @@ export default function MaterialsPage() {
         </div>
       </div>
 
-      <p className="text-[12px] text-[#4e5d72] mb-4">{filtered.length} resource{filtered.length !== 1 ? "s" : ""}</p>
+      <p className="text-[12px] text-[var(--text-3)] mb-4">{filtered.length} resource{filtered.length !== 1 ? "s" : ""}</p>
 
       <div className="grid md:grid-cols-2 gap-3">
         {filtered.map((material) => (
           <a key={material.id} href={material.url} target="_blank" rel="noopener noreferrer"
-            className="flex gap-4 p-4 bg-[#0f1521] border border-white/[0.07] rounded-2xl hover:border-white/[0.14] transition-all group"
+            className="flex gap-4 p-4 bg-[var(--surface)] border border-[var(--border)] rounded-2xl hover:border-[var(--border-2)] transition-all group"
           >
-            <div className="w-10 h-10 rounded-xl bg-[#141b2d] border border-white/[0.07] flex items-center justify-center shrink-0 text-[#8d9ab0] group-hover:text-[#d4a853] transition-colors">
+            <div className="w-10 h-10 rounded-xl bg-[var(--surface-elevated)] border border-[var(--border)] flex items-center justify-center shrink-0 text-[var(--text-2)] group-hover:text-[var(--accent)] transition-colors">
               {typeIcon(material.type)}
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-2 mb-1">
-                <p className="text-[13.5px] font-semibold text-[#f0ece3] leading-snug line-clamp-2">{material.title}</p>
-                <ExternalLink size={12} className="text-[#4e5d72] shrink-0 mt-0.5 group-hover:text-[#8d9ab0] transition-colors" />
+                <p className="text-[13.5px] font-semibold text-[var(--text-1)] leading-snug line-clamp-2">{material.title}</p>
+                <ExternalLink size={12} className="text-[var(--text-3)] shrink-0 mt-0.5 group-hover:text-[var(--text-2)] transition-colors" />
               </div>
-              <p className="text-[12px] text-[#8d9ab0] line-clamp-2 leading-relaxed mb-2">{material.description}</p>
+              <p className="text-[12px] text-[var(--text-2)] line-clamp-2 leading-relaxed mb-2">{material.description}</p>
               <div className="flex flex-wrap items-center gap-2">
                 <Badge variant={difficultyVariant(material.difficulty)} size="sm">{material.difficulty}</Badge>
-                <span className="text-[11px] text-[#4e5d72] flex items-center gap-1">{typeIcon(material.type)}{typeLabel(material.type)}</span>
-                <span className="text-[11px] text-[#4e5d72]">· {material.estimated_time}</span>
+                <span className="text-[11px] text-[var(--text-3)] flex items-center gap-1">{typeIcon(material.type)}{typeLabel(material.type)}</span>
+                <span className="text-[11px] text-[var(--text-3)]">· {material.estimated_time}</span>
               </div>
             </div>
           </a>

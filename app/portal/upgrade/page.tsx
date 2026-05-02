@@ -71,10 +71,10 @@ export default function UpgradePage() {
           <Lock size={11} />
           Access Required
         </div>
-        <h1 className="text-[28px] font-bold text-[#f0ece3] tracking-tight mb-3">
+        <h1 className="text-[28px] font-bold text-[var(--text-1)] tracking-tight mb-3">
           Choose your plan to get started.
         </h1>
-        <p className="text-[#8d9ab0] text-[15px] max-w-lg mx-auto leading-relaxed">
+        <p className="text-[var(--text-2)] text-[15px] max-w-lg mx-auto leading-relaxed">
           All plans include direct access to Loc and Charles — no intermediaries, no matching algorithms.
           Book a free call and we&apos;ll activate your access within 24 hours of payment.
         </p>
@@ -88,43 +88,43 @@ export default function UpgradePage() {
             className={cn(
               "relative rounded-2xl p-6 flex flex-col",
               plan.featured
-                ? "bg-[#d4a853]/[0.06] border border-[#d4a853]/30"
-                : "bg-[#0f1521] border border-white/[0.07]"
+                ? "bg-[var(--accent)]/[0.06] border border-[var(--border-accent)]"
+                : "bg-[var(--surface)] border border-[var(--border)]"
             )}
             style={plan.featured ? { boxShadow: "0 0 0 1px rgba(212,168,83,0.15), 0 16px 48px rgba(0,0,0,0.4)" } : {}}
           >
             {plan.featured && (
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-[#d4a853] text-black text-[11px] font-bold whitespace-nowrap">
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-[var(--accent)] text-black text-[11px] font-bold whitespace-nowrap">
                 Most Popular
               </span>
             )}
 
             <div className="mb-5">
-              <p className="text-[#d4a853] text-[11px] font-bold uppercase tracking-wider mb-1">{plan.tagline}</p>
-              <h2 className="text-[19px] font-bold text-[#f0ece3] mb-3">{plan.name}</h2>
+              <p className="text-[var(--accent)] text-[11px] font-bold uppercase tracking-wider mb-1">{plan.tagline}</p>
+              <h2 className="text-[19px] font-bold text-[var(--text-1)] mb-3">{plan.name}</h2>
               <div className="flex items-baseline gap-1 mb-3">
-                <span className="text-[32px] font-bold text-[#f0ece3]">{plan.price}</span>
-                <span className="text-[#4e5d72] text-[14px]">{plan.per}</span>
+                <span className="text-[32px] font-bold text-[var(--text-1)]">{plan.price}</span>
+                <span className="text-[var(--text-3)] text-[14px]">{plan.per}</span>
               </div>
-              <p className="text-[#8d9ab0] text-[13px] leading-relaxed">{plan.description}</p>
+              <p className="text-[var(--text-2)] text-[13px] leading-relaxed">{plan.description}</p>
             </div>
 
             <ul className="space-y-2.5 flex-1 mb-6">
               {plan.features.map((f) => (
                 <li key={f} className="flex items-start gap-2.5">
-                  <CheckCircle2 size={13} className="text-[#d4a853] shrink-0 mt-0.5" />
-                  <span className="text-[#c8d0de] text-[13px] leading-snug">{f}</span>
+                  <CheckCircle2 size={13} className="text-[var(--accent)] shrink-0 mt-0.5" />
+                  <span className="text-[var(--text-1)] text-[13px] leading-snug">{f}</span>
                 </li>
               ))}
               {plan.addons.length > 0 && (
                 <>
-                  <li><div className="border-t border-white/[0.06] my-1" /></li>
+                  <li><div className="border-t border-[var(--border)] my-1" /></li>
                   {plan.addons.map((a) => (
                     <li key={a} className="flex items-start gap-2.5">
-                      <div className="w-[13px] h-[13px] rounded-full border border-[#d4a853]/40 bg-[#d4a853]/[0.08] flex items-center justify-center shrink-0 mt-0.5">
-                        <Plus size={7} strokeWidth={3} className="text-[#d4a853]" />
+                      <div className="w-[13px] h-[13px] rounded-full border border-[var(--border-accent)] bg-[var(--accent)]/[0.08] flex items-center justify-center shrink-0 mt-0.5">
+                        <Plus size={7} strokeWidth={3} className="text-[var(--accent)]" />
                       </div>
-                      <span className="text-[#8d9ab0] text-[12px] leading-snug italic">{a}</span>
+                      <span className="text-[var(--text-2)] text-[12px] leading-snug italic">{a}</span>
                     </li>
                   ))}
                 </>
@@ -136,8 +136,8 @@ export default function UpgradePage() {
               className={cn(
                 "flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-[13px] font-bold transition-all",
                 plan.featured
-                  ? "bg-gradient-to-b from-[#e0b55c] to-[#c99438] text-black hover:from-[#eac068] hover:to-[#d4a045] shadow-lg shadow-[#d4a853]/20"
-                  : "bg-white/[0.06] border border-white/[0.1] text-[#c8d0de] hover:border-white/[0.18] hover:text-[#f0ece3]"
+                  ? "bg-gradient-to-b from-[var(--accent-bright)] to-[var(--accent)] text-black hover:from-[#e2c685] hover:to-[#cba961] shadow-lg shadow-[var(--accent-dim)]"
+                  : "bg-white/[0.06] border border-white/[0.1] text-[var(--text-1)] hover:border-[var(--border-2)] hover:text-[var(--text-1)]"
               )}
             >
               {plan.cta} <ArrowRight size={13} />
@@ -148,9 +148,9 @@ export default function UpgradePage() {
 
       {/* Already paid note */}
       <div className="text-center">
-        <p className="text-[#4e5d72] text-[13px]">
+        <p className="text-[var(--text-3)] text-[13px]">
           Already paid?{" "}
-          <Link href="/portal/messages" className="text-[#d4a853] hover:text-[#e8c46a] transition-colors">
+          <Link href="/portal/messages" className="text-[var(--accent)] hover:text-[var(--accent-bright)] transition-colors">
             Message us
           </Link>{" "}
           and your access will be activated within 24 hours.

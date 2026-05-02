@@ -70,21 +70,21 @@ export default function MessagesPage() {
   return (
     <div className="max-w-2xl flex flex-col h-full" style={{ height: "calc(100vh - 180px)" }}>
       <div className="mb-5 shrink-0">
-        <p className="text-[13px] text-[#4e5d72] uppercase tracking-wider font-semibold mb-1">Portal</p>
-        <h1 className="text-[26px] font-bold text-[#f0ece3]">Messages</h1>
-        <p className="text-[14px] text-[#8d9ab0] mt-1">Chat with the Nyx Scholars team</p>
+        <p className="text-[13px] text-[var(--text-3)] uppercase tracking-wider font-semibold mb-1">Portal</p>
+        <h1 className="text-[26px] font-bold text-[var(--text-1)]">Messages</h1>
+        <p className="text-[14px] text-[var(--text-2)] mt-1">Chat with the Nyx team</p>
       </div>
 
       {/* Chat window */}
-      <div className="flex-1 flex flex-col bg-[#0f1521] border border-white/[0.07] rounded-2xl overflow-hidden">
+      <div className="flex-1 flex flex-col bg-[var(--surface)] border border-[var(--border)] rounded-2xl overflow-hidden">
         {/* Header */}
-        <div className="flex items-center gap-3 px-5 py-3.5 border-b border-white/[0.06] shrink-0">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#d4a853]/25 to-[#a07830]/15 border border-[#d4a853]/25 flex items-center justify-center">
-            <span className="text-[11px] font-bold text-[#d4a853]">N</span>
+        <div className="flex items-center gap-3 px-5 py-3.5 border-b border-[var(--border)] shrink-0">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--border-accent)] to-[#a98842]/15 border border-[var(--border-accent)] flex items-center justify-center">
+            <span className="text-[11px] font-bold text-[var(--accent)]">N</span>
           </div>
           <div>
-            <p className="text-[13.5px] font-semibold text-[#f0ece3]">Nyx Scholars Team</p>
-            <p className="text-[11px] text-[#4e5d72]">Usually responds within a few hours</p>
+            <p className="text-[13.5px] font-semibold text-[var(--text-1)]">Nyx Team</p>
+            <p className="text-[11px] text-[var(--text-3)]">Usually responds within a few hours</p>
           </div>
           <div className="ml-auto w-2 h-2 rounded-full bg-emerald-400" title="Online" />
         </div>
@@ -93,15 +93,15 @@ export default function MessagesPage() {
         <div className="flex-1 overflow-y-auto px-4 py-5 space-y-4">
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 size={20} className="animate-spin text-[#4e5d72]" />
+              <Loader2 size={20} className="animate-spin text-[var(--text-3)]" />
             </div>
           ) : messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="w-12 h-12 rounded-full bg-[#141b2d] border border-white/[0.08] flex items-center justify-center mb-3">
-                <span className="text-[#4e5d72] text-lg">💬</span>
+              <div className="w-12 h-12 rounded-full bg-[var(--surface-elevated)] border border-[var(--border)] flex items-center justify-center mb-3">
+                <span className="text-[var(--text-3)] text-lg">💬</span>
               </div>
-              <p className="text-[#8d9ab0] text-[13px] mb-1">No messages yet</p>
-              <p className="text-[12px] text-[#4e5d72]">
+              <p className="text-[var(--text-2)] text-[13px] mb-1">No messages yet</p>
+              <p className="text-[12px] text-[var(--text-3)]">
                 Say hi! Ask about scheduling, tutors, or anything else.
               </p>
             </div>
@@ -109,16 +109,16 @@ export default function MessagesPage() {
             <>
               {/* Welcome message */}
               <div className="flex gap-3 items-end">
-                <div className="w-7 h-7 rounded-full bg-[#d4a853]/15 border border-[#d4a853]/20 flex items-center justify-center shrink-0">
-                  <span className="text-[10px] font-bold text-[#d4a853]">N</span>
+                <div className="w-7 h-7 rounded-full bg-[var(--accent)]/15 border border-[var(--border-accent)] flex items-center justify-center shrink-0">
+                  <span className="text-[10px] font-bold text-[var(--accent)]">N</span>
                 </div>
                 <div className="max-w-[78%]">
-                  <div className="px-4 py-3 bg-[#141b2d] border border-white/[0.07] rounded-2xl rounded-bl-md">
-                    <p className="text-[13.5px] text-[#c8d0de] leading-relaxed">
-                      Welcome to Nyx Scholars! 👋 We&apos;re here to help with scheduling, tutor matching, or any questions about your prep journey.
+                  <div className="px-4 py-3 bg-[var(--surface-elevated)] border border-[var(--border)] rounded-2xl rounded-bl-md">
+                    <p className="text-[13.5px] text-[var(--text-1)] leading-relaxed">
+                      Welcome to Nyx! 👋 We&apos;re here to help with scheduling, tutor matching, or any questions about your prep journey.
                     </p>
                   </div>
-                  <p className="text-[11px] text-[#4e5d72] mt-1 ml-1">Nyx Scholars</p>
+                  <p className="text-[11px] text-[var(--text-3)] mt-1 ml-1">Nyx</p>
                 </div>
               </div>
 
@@ -134,14 +134,14 @@ export default function MessagesPage() {
                 return (
                   <div key={msg.id}>
                     {showTime && (
-                      <p className="text-center text-[11px] text-[#4e5d72] my-2">
+                      <p className="text-center text-[11px] text-[var(--text-3)] my-2">
                         {format(new Date(msg.created_at), "MMM d, h:mm a")}
                       </p>
                     )}
                     <div className={cn("flex gap-2.5 items-end", isStudent && "flex-row-reverse")}>
                       {!isStudent && (
-                        <div className="w-7 h-7 rounded-full bg-[#d4a853]/15 border border-[#d4a853]/20 flex items-center justify-center shrink-0">
-                          <span className="text-[10px] font-bold text-[#d4a853]">N</span>
+                        <div className="w-7 h-7 rounded-full bg-[var(--accent)]/15 border border-[var(--border-accent)] flex items-center justify-center shrink-0">
+                          <span className="text-[10px] font-bold text-[var(--accent)]">N</span>
                         </div>
                       )}
                       <div className={cn("max-w-[78%]", isStudent && "items-end")}>
@@ -149,14 +149,14 @@ export default function MessagesPage() {
                           className={cn(
                             "px-4 py-3 rounded-2xl",
                             isStudent
-                              ? "bg-gradient-to-b from-[#e0b55c] to-[#c99438] text-black rounded-br-md"
-                              : "bg-[#141b2d] border border-white/[0.07] text-[#c8d0de] rounded-bl-md"
+                              ? "bg-gradient-to-b from-[var(--accent-bright)] to-[var(--accent)] text-black rounded-br-md"
+                              : "bg-[var(--surface-elevated)] border border-[var(--border)] text-[var(--text-1)] rounded-bl-md"
                           )}
                         >
                           <p className="text-[13.5px] leading-relaxed whitespace-pre-wrap">{msg.content}</p>
                         </div>
                         {!isStudent && !msg.read && (
-                          <span className="text-[10px] text-[#d4a853] ml-1 mt-0.5 block">New</span>
+                          <span className="text-[10px] text-[var(--accent)] ml-1 mt-0.5 block">New</span>
                         )}
                       </div>
                     </div>
@@ -169,7 +169,7 @@ export default function MessagesPage() {
         </div>
 
         {/* Input */}
-        <div className="px-4 pb-4 pt-3 border-t border-white/[0.06] shrink-0">
+        <div className="px-4 pb-4 pt-3 border-t border-[var(--border)] shrink-0">
           {error && (
             <p className="text-[12px] text-red-400 mb-2 px-1">{error}</p>
           )}
@@ -179,9 +179,9 @@ export default function MessagesPage() {
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Message Nyx Scholars… (Enter to send, Shift+Enter for newline)"
+              placeholder="Message Nyx… (Enter to send, Shift+Enter for newline)"
               rows={1}
-              className="flex-1 px-4 py-2.5 rounded-xl bg-[#0b0f1a] border border-white/[0.08] text-[14px] text-[#f0ece3] placeholder:text-[#4e5d72] focus:outline-none focus:ring-2 focus:ring-[#d4a853]/40 focus:border-[#d4a853]/40 transition-all resize-none"
+              className="flex-1 px-4 py-2.5 rounded-xl bg-[var(--bg-2)] border border-[var(--border)] text-[14px] text-[var(--text-1)] placeholder:text-[var(--text-3)] focus:outline-none focus:ring-2 focus:ring-[var(--border-accent)] focus:border-[var(--border-accent)] transition-all resize-none"
               style={{ minHeight: "42px", maxHeight: "120px" }}
             />
             <button
@@ -190,8 +190,8 @@ export default function MessagesPage() {
               className={cn(
                 "w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all",
                 newMessage.trim() && !sending
-                  ? "bg-gradient-to-b from-[#e0b55c] to-[#c99438] text-black hover:from-[#eac068] hover:to-[#d4a045] shadow-md shadow-[#d4a853]/20"
-                  : "bg-white/[0.06] text-[#4e5d72] cursor-not-allowed"
+                  ? "bg-gradient-to-b from-[var(--accent-bright)] to-[var(--accent)] text-black hover:from-[#e2c685] hover:to-[#cba961] shadow-md shadow-[var(--accent-dim)]"
+                  : "bg-white/[0.06] text-[var(--text-3)] cursor-not-allowed"
               )}
             >
               {sending ? <Loader2 size={15} className="animate-spin" /> : <Send size={15} />}

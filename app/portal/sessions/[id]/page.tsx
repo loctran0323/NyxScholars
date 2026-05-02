@@ -34,16 +34,16 @@ function VideoCallSection({ session }: { session: Session }) {
 
   if (!session.meeting_link) {
     return (
-      <div className="bg-[#0f1521] border border-white/[0.07] rounded-2xl p-5">
-        <h3 className="font-semibold text-[#f0ece3] mb-2 flex items-center gap-2">
-          <Video size={16} className="text-[#4e5d72]" />
+      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5">
+        <h3 className="font-semibold text-[var(--text-1)] mb-2 flex items-center gap-2">
+          <Video size={16} className="text-[var(--text-3)]" />
           Video Call
         </h3>
-        <div className="flex items-start gap-3 px-4 py-3 bg-[#0b0f1a] rounded-xl border border-white/[0.06]">
-          <AlertCircle size={14} className="text-[#8d9ab0] shrink-0 mt-0.5" />
-          <p className="text-[13px] text-[#8d9ab0]">
+        <div className="flex items-start gap-3 px-4 py-3 bg-[var(--bg-2)] rounded-xl border border-[var(--border)]">
+          <AlertCircle size={14} className="text-[var(--text-2)] shrink-0 mt-0.5" />
+          <p className="text-[13px] text-[var(--text-2)]">
             {session.status === "pending"
-              ? "A meeting link will be added once your session is confirmed by the Nyx Scholars team."
+              ? "A meeting link will be added once your session is confirmed by the Nyx team."
               : "Your meeting link will appear here before your session."}
           </p>
         </div>
@@ -52,10 +52,10 @@ function VideoCallSection({ session }: { session: Session }) {
   }
 
   return (
-    <div className="bg-[#0f1521] border border-white/[0.07] rounded-2xl overflow-hidden">
-      <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
-        <h3 className="font-semibold text-[#f0ece3] flex items-center gap-2">
-          <Video size={16} className={isActive ? "text-emerald-400" : "text-[#4e5d72]"} />
+    <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl overflow-hidden">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
+        <h3 className="font-semibold text-[var(--text-1)] flex items-center gap-2">
+          <Video size={16} className={isActive ? "text-emerald-400" : "text-[var(--text-3)]"} />
           Video Call
           {isActive && (
             <span className="flex items-center gap-1.5 text-[11px] font-medium text-emerald-400">
@@ -68,7 +68,7 @@ function VideoCallSection({ session }: { session: Session }) {
           href={session.meeting_link}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-[12px] text-[#8d9ab0] hover:text-[#f0ece3] transition-colors"
+          className="flex items-center gap-1.5 text-[12px] text-[var(--text-2)] hover:text-[var(--text-1)] transition-colors"
         >
           Open in new tab <ExternalLink size={11} />
         </a>
@@ -85,15 +85,15 @@ function VideoCallSection({ session }: { session: Session }) {
         </div>
       ) : (
         <div className="px-5 py-8 text-center">
-          <div className="w-14 h-14 rounded-full bg-[#141b2d] border border-white/[0.08] flex items-center justify-center mx-auto mb-4">
-            <Video size={22} className="text-[#8d9ab0]" />
+          <div className="w-14 h-14 rounded-full bg-[var(--surface-elevated)] border border-[var(--border)] flex items-center justify-center mx-auto mb-4">
+            <Video size={22} className="text-[var(--text-2)]" />
           </div>
-          <p className="text-[#f0ece3] font-medium mb-1">
+          <p className="text-[var(--text-1)] font-medium mb-1">
             {minutesUntil > 15
               ? `Session starts ${format(new Date(session.scheduled_at), "MMMM d 'at' h:mm a")}`
               : "Session has ended"}
           </p>
-          <p className="text-[13px] text-[#8d9ab0] mb-5">
+          <p className="text-[13px] text-[var(--text-2)] mb-5">
             {minutesUntil > 15
               ? "The video call will appear here 15 minutes before your session."
               : "Thank you for your session!"}
@@ -103,7 +103,7 @@ function VideoCallSection({ session }: { session: Session }) {
               href={session.meeting_link}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-b from-[#e0b55c] to-[#c99438] text-black font-bold text-[14px] hover:from-[#eac068] hover:to-[#d4a045] transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-b from-[var(--accent-bright)] to-[var(--accent)] text-black font-bold text-[14px] hover:from-[#e2c685] hover:to-[#cba961] transition-all"
             >
               <Video size={15} />
               Join Session
@@ -143,7 +143,7 @@ export default async function SessionDetailPage({
       <div className="flex items-center gap-3 mb-6">
         <Link
           href="/portal/sessions"
-          className="flex items-center gap-2 text-[13px] text-[#8d9ab0] hover:text-[#f0ece3] transition-colors"
+          className="flex items-center gap-2 text-[13px] text-[var(--text-2)] hover:text-[var(--text-1)] transition-colors"
         >
           <ArrowLeft size={14} />
           Back to sessions
@@ -151,11 +151,11 @@ export default async function SessionDetailPage({
       </div>
 
       {/* Session info card */}
-      <div className="bg-[#0f1521] border border-white/[0.07] rounded-2xl p-5">
+      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5">
         <div className="flex items-start justify-between gap-4 mb-4">
           <div>
-            <h1 className="text-[20px] font-bold text-[#f0ece3]">{s.subject}</h1>
-            <p className="text-[13px] text-[#4e5d72] mt-0.5">Session #{s.id.slice(0, 8).toUpperCase()}</p>
+            <h1 className="text-[20px] font-bold text-[var(--text-1)]">{s.subject}</h1>
+            <p className="text-[13px] text-[var(--text-3)] mt-0.5">Session #{s.id.slice(0, 8).toUpperCase()}</p>
           </div>
           <Badge variant={statusVariant(s.status)} className="shrink-0">
             {s.status}
@@ -163,46 +163,46 @@ export default async function SessionDetailPage({
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <div className="flex items-center gap-3 px-3.5 py-3 bg-[#0b0f1a] rounded-xl border border-white/[0.06]">
-            <Calendar size={15} className="text-[#4e5d72] shrink-0" />
+          <div className="flex items-center gap-3 px-3.5 py-3 bg-[var(--bg-2)] rounded-xl border border-[var(--border)]">
+            <Calendar size={15} className="text-[var(--text-3)] shrink-0" />
             <div>
-              <p className="text-[11px] text-[#4e5d72] uppercase tracking-wide">Date</p>
-              <p className="text-[13px] text-[#f0ece3] font-medium">
+              <p className="text-[11px] text-[var(--text-3)] uppercase tracking-wide">Date</p>
+              <p className="text-[13px] text-[var(--text-1)] font-medium">
                 {format(new Date(s.scheduled_at), "MMM d, yyyy")}
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-3 px-3.5 py-3 bg-[#0b0f1a] rounded-xl border border-white/[0.06]">
-            <Clock size={15} className="text-[#4e5d72] shrink-0" />
+          <div className="flex items-center gap-3 px-3.5 py-3 bg-[var(--bg-2)] rounded-xl border border-[var(--border)]">
+            <Clock size={15} className="text-[var(--text-3)] shrink-0" />
             <div>
-              <p className="text-[11px] text-[#4e5d72] uppercase tracking-wide">Time</p>
-              <p className="text-[13px] text-[#f0ece3] font-medium">
+              <p className="text-[11px] text-[var(--text-3)] uppercase tracking-wide">Time</p>
+              <p className="text-[13px] text-[var(--text-1)] font-medium">
                 {format(new Date(s.scheduled_at), "h:mm a")} · {s.duration_minutes}min
               </p>
             </div>
           </div>
           {s.tutor_name && (
-            <div className="flex items-center gap-3 px-3.5 py-3 bg-[#0b0f1a] rounded-xl border border-white/[0.06] col-span-2">
-              <User size={15} className="text-[#4e5d72] shrink-0" />
+            <div className="flex items-center gap-3 px-3.5 py-3 bg-[var(--bg-2)] rounded-xl border border-[var(--border)] col-span-2">
+              <User size={15} className="text-[var(--text-3)] shrink-0" />
               <div>
-                <p className="text-[11px] text-[#4e5d72] uppercase tracking-wide">Tutor</p>
-                <p className="text-[13px] text-[#f0ece3] font-medium">{s.tutor_name}</p>
+                <p className="text-[11px] text-[var(--text-3)] uppercase tracking-wide">Tutor</p>
+                <p className="text-[13px] text-[var(--text-1)] font-medium">{s.tutor_name}</p>
               </div>
             </div>
           )}
         </div>
 
         {s.student_notes && (
-          <div className="mt-4 pt-4 border-t border-white/[0.06]">
-            <p className="text-[12px] font-semibold text-[#4e5d72] uppercase tracking-wide mb-1.5">Your Notes</p>
-            <p className="text-[13px] text-[#8d9ab0] leading-relaxed">{s.student_notes}</p>
+          <div className="mt-4 pt-4 border-t border-[var(--border)]">
+            <p className="text-[12px] font-semibold text-[var(--text-3)] uppercase tracking-wide mb-1.5">Your Notes</p>
+            <p className="text-[13px] text-[var(--text-2)] leading-relaxed">{s.student_notes}</p>
           </div>
         )}
 
         {s.admin_notes && (
-          <div className="mt-3 px-4 py-3 bg-[#d4a853]/[0.06] border border-[#d4a853]/15 rounded-xl">
-            <p className="text-[12px] font-semibold text-[#d4a853] uppercase tracking-wide mb-1">Note from Nyx Scholars</p>
-            <p className="text-[13px] text-[#c8d0de] leading-relaxed">{s.admin_notes}</p>
+          <div className="mt-3 px-4 py-3 bg-[var(--accent)]/[0.06] border border-[var(--border-accent)] rounded-xl">
+            <p className="text-[12px] font-semibold text-[var(--accent)] uppercase tracking-wide mb-1">Note from Nyx</p>
+            <p className="text-[13px] text-[var(--text-1)] leading-relaxed">{s.admin_notes}</p>
           </div>
         )}
       </div>

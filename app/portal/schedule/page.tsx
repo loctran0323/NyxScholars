@@ -108,20 +108,20 @@ export default function SchedulePage() {
         <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-5">
           <CheckCircle size={30} className="text-emerald-400" />
         </div>
-        <h2 className="text-2xl font-bold text-[#f0ece3] mb-2">Request Submitted!</h2>
-        <p className="text-[#8d9ab0] leading-relaxed mb-6">
+        <h2 className="text-2xl font-bold text-[var(--text-1)] mb-2">Request Submitted!</h2>
+        <p className="text-[var(--text-2)] leading-relaxed mb-6">
           Your session request has been received. We&apos;ll confirm and send you a meeting link within 24 hours.
         </p>
         <div className="flex gap-3 justify-center">
           <button
             onClick={() => router.push("/portal/sessions")}
-            className="px-5 py-2.5 rounded-xl bg-gradient-to-b from-[#e0b55c] to-[#c99438] text-black font-bold text-[14px] hover:from-[#eac068] hover:to-[#d4a045] transition-all"
+            className="px-5 py-2.5 rounded-xl bg-gradient-to-b from-[var(--accent-bright)] to-[var(--accent)] text-black font-bold text-[14px] hover:from-[#e2c685] hover:to-[#cba961] transition-all"
           >
             View My Sessions
           </button>
           <button
             onClick={() => { setSuccess(false); setSubject(""); setNotes(""); setPreferredDate(""); setPreferredTime(""); setFormat(""); }}
-            className="px-5 py-2.5 rounded-xl bg-white/[0.06] border border-white/[0.1] text-[#c8d0de] font-medium text-[14px] hover:border-white/[0.18] transition-all"
+            className="px-5 py-2.5 rounded-xl bg-white/[0.06] border border-white/[0.1] text-[var(--text-1)] font-medium text-[14px] hover:border-[var(--border-2)] transition-all"
           >
             Schedule Another
           </button>
@@ -135,16 +135,16 @@ export default function SchedulePage() {
   return (
     <div className="max-w-2xl">
       <div className="mb-7">
-        <p className="text-[13px] text-[#4e5d72] uppercase tracking-wider font-semibold mb-1">Portal</p>
-        <h1 className="text-[26px] font-bold text-[#f0ece3]">Schedule a Session</h1>
-        <p className="text-[#8d9ab0] mt-1 text-[14px]">
+        <p className="text-[13px] text-[var(--text-3)] uppercase tracking-wider font-semibold mb-1">Portal</p>
+        <h1 className="text-[26px] font-bold text-[var(--text-1)]">Schedule a Session</h1>
+        <p className="text-[var(--text-2)] mt-1 text-[14px]">
           {planLocked
             ? `Your Session plan includes ${profile?.plan_subject ?? "your chosen subject"}. Contact us to add more subjects.`
             : "Request a session — we’ll confirm within 24 hours and send you a meeting link."}
         </p>
       </div>
 
-      <div className="bg-[#0f1521] border border-white/[0.08] rounded-2xl p-6 md:p-8">
+      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6 md:p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
             <div className="px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-[13px]">
@@ -154,15 +154,15 @@ export default function SchedulePage() {
 
           {/* Subject */}
           <div className="space-y-2">
-            <label className="flex items-center gap-2 text-[13px] font-semibold text-[#8d9ab0]">
+            <label className="flex items-center gap-2 text-[13px] font-semibold text-[var(--text-2)]">
               Subject <span className="text-red-400">*</span>
-              {planLocked && <Lock size={11} className="text-[#4e5d72]" />}
+              {planLocked && <Lock size={11} className="text-[var(--text-3)]" />}
             </label>
             <select
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               required
-              className="w-full h-10 px-3.5 rounded-xl bg-[#0b0f1a] border border-white/[0.08] text-[14px] text-[#f0ece3] focus:outline-none focus:ring-2 focus:ring-[#d4a853]/40 focus:border-[#d4a853]/40 transition-all cursor-pointer"
+              className="w-full h-10 px-3.5 rounded-xl bg-[var(--bg-2)] border border-[var(--border)] text-[14px] text-[var(--text-1)] focus:outline-none focus:ring-2 focus:ring-[var(--border-accent)] focus:border-[var(--border-accent)] transition-all cursor-pointer"
             >
               <option value="">Select a subject</option>
               {subjectGroups.map((group) => (
@@ -178,19 +178,19 @@ export default function SchedulePage() {
           {/* Date + Time */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="block text-[13px] font-semibold text-[#8d9ab0]">
+              <label className="block text-[13px] font-semibold text-[var(--text-2)]">
                 Preferred Date <span className="text-red-400">*</span>
               </label>
               <input type="date" value={preferredDate} min={today} onChange={(e) => setPreferredDate(e.target.value)} required
-                className="w-full h-10 px-3.5 rounded-xl bg-[#0b0f1a] border border-white/[0.08] text-[14px] text-[#f0ece3] focus:outline-none focus:ring-2 focus:ring-[#d4a853]/40 focus:border-[#d4a853]/40 transition-all cursor-pointer"
+                className="w-full h-10 px-3.5 rounded-xl bg-[var(--bg-2)] border border-[var(--border)] text-[14px] text-[var(--text-1)] focus:outline-none focus:ring-2 focus:ring-[var(--border-accent)] focus:border-[var(--border-accent)] transition-all cursor-pointer"
               />
             </div>
             <div className="space-y-2">
-              <label className="block text-[13px] font-semibold text-[#8d9ab0]">
+              <label className="block text-[13px] font-semibold text-[var(--text-2)]">
                 Preferred Time <span className="text-red-400">*</span>
               </label>
               <input type="time" value={preferredTime} onChange={(e) => setPreferredTime(e.target.value)} required
-                className="w-full h-10 px-3.5 rounded-xl bg-[#0b0f1a] border border-white/[0.08] text-[14px] text-[#f0ece3] focus:outline-none focus:ring-2 focus:ring-[#d4a853]/40 focus:border-[#d4a853]/40 transition-all cursor-pointer"
+                className="w-full h-10 px-3.5 rounded-xl bg-[var(--bg-2)] border border-[var(--border)] text-[14px] text-[var(--text-1)] focus:outline-none focus:ring-2 focus:ring-[var(--border-accent)] focus:border-[var(--border-accent)] transition-all cursor-pointer"
               />
             </div>
           </div>
@@ -198,27 +198,27 @@ export default function SchedulePage() {
           {/* Format + Duration */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="block text-[13px] font-semibold text-[#8d9ab0]">Session Format <span className="text-red-400">*</span></label>
+              <label className="block text-[13px] font-semibold text-[var(--text-2)]">Session Format <span className="text-red-400">*</span></label>
               <div className="space-y-2">
                 {FORMATS.map((f) => (
                   <label key={f} className="flex items-center gap-3 cursor-pointer group">
-                    <div onClick={() => setFormat(f)} className={cn("w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all", format === f ? "border-[#d4a853] bg-[#d4a853]" : "border-white/[0.2] hover:border-white/[0.4]")}>
+                    <div onClick={() => setFormat(f)} className={cn("w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all", format === f ? "border-[var(--accent)] bg-[var(--accent)]" : "border-[var(--border-2)] hover:border-[var(--border-2)]")}>
                       {format === f && <div className="w-1.5 h-1.5 rounded-full bg-black" />}
                     </div>
-                    <span onClick={() => setFormat(f)} className={cn("text-[13px] transition-colors", format === f ? "text-[#f0ece3]" : "text-[#8d9ab0] group-hover:text-[#c8d0de]")}>{f}</span>
+                    <span onClick={() => setFormat(f)} className={cn("text-[13px] transition-colors", format === f ? "text-[var(--text-1)]" : "text-[var(--text-2)] group-hover:text-[var(--text-1)]")}>{f}</span>
                   </label>
                 ))}
               </div>
             </div>
             <div className="space-y-2">
-              <label className="block text-[13px] font-semibold text-[#8d9ab0]">Duration</label>
+              <label className="block text-[13px] font-semibold text-[var(--text-2)]">Duration</label>
               <div className="space-y-2">
                 {DURATIONS.map((d) => (
                   <label key={d} className="flex items-center gap-3 cursor-pointer group">
-                    <div onClick={() => setDuration(d)} className={cn("w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all", duration === d ? "border-[#d4a853] bg-[#d4a853]" : "border-white/[0.2] hover:border-white/[0.4]")}>
+                    <div onClick={() => setDuration(d)} className={cn("w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all", duration === d ? "border-[var(--accent)] bg-[var(--accent)]" : "border-[var(--border-2)] hover:border-[var(--border-2)]")}>
                       {duration === d && <div className="w-1.5 h-1.5 rounded-full bg-black" />}
                     </div>
-                    <span onClick={() => setDuration(d)} className={cn("text-[13px] transition-colors", duration === d ? "text-[#f0ece3]" : "text-[#8d9ab0] group-hover:text-[#c8d0de]")}>{d}</span>
+                    <span onClick={() => setDuration(d)} className={cn("text-[13px] transition-colors", duration === d ? "text-[var(--text-1)]" : "text-[var(--text-2)] group-hover:text-[var(--text-1)]")}>{d}</span>
                   </label>
                 ))}
               </div>
@@ -227,20 +227,20 @@ export default function SchedulePage() {
 
           {/* Notes */}
           <div className="space-y-2">
-            <label className="block text-[13px] font-semibold text-[#8d9ab0]">
-              Additional Notes <span className="text-[#4e5d72] font-normal">(optional)</span>
+            <label className="block text-[13px] font-semibold text-[var(--text-2)]">
+              Additional Notes <span className="text-[var(--text-3)] font-normal">(optional)</span>
             </label>
             <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3}
               placeholder="Specific topics, current score, or anything else you'd like us to know…"
-              className="w-full px-3.5 py-2.5 rounded-xl bg-[#0b0f1a] border border-white/[0.08] text-[14px] text-[#f0ece3] placeholder:text-[#4e5d72] focus:outline-none focus:ring-2 focus:ring-[#d4a853]/40 focus:border-[#d4a853]/40 transition-all resize-none"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg-2)] border border-[var(--border)] text-[14px] text-[var(--text-1)] placeholder:text-[var(--text-3)] focus:outline-none focus:ring-2 focus:ring-[var(--border-accent)] focus:border-[var(--border-accent)] transition-all resize-none"
             />
           </div>
 
           <button type="submit" disabled={loading}
             className={cn(
               "w-full h-12 rounded-xl font-bold text-[15px] transition-all flex items-center justify-center gap-2",
-              "bg-gradient-to-b from-[#e0b55c] to-[#c99438] text-black",
-              "hover:from-[#eac068] hover:to-[#d4a045] shadow-lg shadow-[#d4a853]/20 hover:shadow-[#d4a853]/35",
+              "bg-gradient-to-b from-[var(--accent-bright)] to-[var(--accent)] text-black",
+              "hover:from-[#e2c685] hover:to-[#cba961] shadow-lg shadow-[var(--accent-dim)] hover:shadow-[var(--border-accent)]",
               "disabled:opacity-60 disabled:cursor-not-allowed"
             )}
           >
@@ -248,7 +248,7 @@ export default function SchedulePage() {
             {loading ? "Submitting…" : "Submit Session Request"}
           </button>
 
-          <p className="text-[12px] text-[#4e5d72] text-center">
+          <p className="text-[12px] text-[var(--text-3)] text-center">
             We&apos;ll confirm your session and send you a meeting link within 24 hours.
           </p>
         </form>
