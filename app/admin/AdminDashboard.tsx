@@ -26,13 +26,13 @@ export default async function AdminDashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-[#060912] pt-[68px]">
+    <div className="min-h-screen bg-[var(--bg)] pt-[68px]">
       <div className="max-w-5xl mx-auto px-6 py-14">
 
         {/* Page header */}
         <div className="mb-12">
-          <p className="text-[#d4a853] text-[11px] font-bold uppercase tracking-[0.15em] mb-3">Nyx Scholars</p>
-          <h1 className="text-[2rem] font-bold text-[#f0ece3] tracking-tight">Admin Dashboard</h1>
+          <p className="text-[var(--accent)] text-[11px] font-bold uppercase tracking-[0.15em] mb-3">Nyx</p>
+          <h1 className="text-[2rem] font-bold text-[var(--text-1)] tracking-tight">Admin Dashboard</h1>
           {!isSupabaseConnected && (
             <p className="mt-3 text-amber-400 text-[13px]">
               ⚠ Supabase not configured — data won&apos;t persist.
@@ -43,8 +43,8 @@ export default async function AdminDashboard() {
         {/* Leads */}
         <section className="mb-16">
           <div className="flex items-baseline justify-between mb-5">
-            <h2 className="text-[15px] font-semibold text-[#f0ece3]">Consultation Requests</h2>
-            <span className="text-[#4e5d72] text-[13px]">{leads.length} total</span>
+            <h2 className="text-[15px] font-semibold text-[var(--text-1)]">Consultation Requests</h2>
+            <span className="text-[var(--text-3)] text-[13px]">{leads.length} total</span>
           </div>
           <AdminLeadTable leads={leads} />
         </section>

@@ -5,7 +5,7 @@ import AdminDashboard from "./AdminDashboard";
 
 export const metadata: Metadata = {
   title: "Admin",
-  description: "Nyx Scholars admin dashboard.",
+  description: "Nyx admin dashboard.",
   robots: { index: false, follow: false },
 };
 
