@@ -2,17 +2,17 @@ import Link from "next/link";
 import { NyxLockup } from "@/components/system";
 
 const footerLinks = {
-  Tutoring: [
-    { href: "/tutors", label: "The Roster" },
-    { href: "/sat-act", label: "How it works" },
-    { href: "/services", label: "Services" },
-    { href: "/college-admissions", label: "Admissions" },
-  ],
-  Company: [
-    { href: "/pricing", label: "Packages" },
+  Nyx: [
+    { href: "/#how", label: "How it works" },
+    { href: "/tutors", label: "Vetting" },
+    { href: "/pricing", label: "Pricing" },
     { href: "/faq", label: "FAQ" },
-    { href: "/apply", label: "Book Free Trial" },
-    { href: "/portal/login", label: "Student Portal" },
+  ],
+  Account: [
+    { href: "/match", label: "Get matched" },
+    { href: "/portal/login", label: "Sign in" },
+    { href: "mailto:hello@nyxscholars.com", label: "Contact" },
+    { href: "mailto:tutors@nyxscholars.com", label: "Apply to tutor" },
   ],
 };
 

@@ -10,10 +10,7 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { CTA, NyxLockup } from "@/components/system";
 
 const navLinks = [
-  { href: "/tutors", label: "Tutors" },
-  { href: "/sat-act", label: "How it works" },
-  { href: "/services", label: "Services" },
-  { href: "/college-admissions", label: "Admissions" },
+  { href: "/#how", label: "How it works" },
   { href: "/pricing", label: "Pricing" },
   { href: "/faq", label: "FAQ" },
 ];
