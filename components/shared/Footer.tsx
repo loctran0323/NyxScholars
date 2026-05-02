@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { NyxLockup } from "@/components/system";
 
 const footerLinks = {
   Services: [
@@ -21,14 +22,8 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           <div className="md:col-span-2">
-            <Link href="/" className="inline-flex items-center gap-3 mb-5 group">
-              <div className="relative w-8 h-8 flex items-center justify-center">
-                <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[var(--accent-bright)] to-[#a98842]" />
-                <span className="relative text-black font-black text-sm">N</span>
-              </div>
-              <span className="font-[family-name:var(--font-fraunces)] font-medium tracking-tight text-[18px] text-[var(--text-1)]">
-                Nyx
-              </span>
+            <Link href="/" className="inline-block mb-5">
+              <NyxLockup size="md" />
             </Link>
             <p className="text-[var(--text-2)] text-[13.5px] leading-[1.8] max-w-sm mb-5">
               Adaptive SAT preparation built around your gaps, your pace, and your target score —

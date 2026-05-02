@@ -1,34 +1,35 @@
 @import "tailwindcss";
 
 :root {
-  /* Surfaces */
-  --bg: #05070d;
-  --bg-2: #080b14;
-  --surface: #0c1018;
-  --surface-elevated: #141925;
-  --surface-3: #1b2236;
+  /* Surfaces — aligned with brand family palette */
+  --bg: #0a0e1a;                 /* INK — near-black midnight */
+  --bg-2: #111726;               /* INK_2 — slightly lifted */
+  --surface: #141b2c;
+  --surface-elevated: #1a2238;
+  --surface-3: #232c47;
 
   /* Borders */
-  --border: rgba(255, 255, 255, 0.06);
-  --border-2: rgba(255, 255, 255, 0.10);
-  --border-accent: rgba(201, 169, 97, 0.30);
+  --border: rgba(237, 231, 214, 0.07);
+  --border-2: rgba(237, 231, 214, 0.12);
+  --border-accent: rgba(200, 162, 75, 0.32);
 
-  /* Accents */
-  --accent: #c9a961;
-  --accent-bright: #d8bb78;
-  --accent-dim: rgba(201, 169, 97, 0.12);
-  --accent-2: #7d9bc1;          /* moonlight blue */
-  --accent-2-dim: rgba(125, 155, 193, 0.14);
+  /* Accents — antique gold */
+  --accent: #c8a24b;             /* GOLD */
+  --accent-bright: #e8cc7e;      /* GOLD_HI */
+  --accent-deep: #8c6f2e;        /* GOLD_DIM */
+  --accent-dim: rgba(200, 162, 75, 0.12);
+  --accent-2: #7dd3fc;           /* sky blue (from diagnostic ref) — used sparingly */
+  --accent-2-dim: rgba(125, 211, 252, 0.12);
 
-  /* Text */
-  --text-1: #f5f1e8;
-  --text-2: #9aa5b8;
-  --text-3: #52607a;
+  /* Text — warm parchment / ivory */
+  --text-1: #ede7d6;             /* IVORY */
+  --text-2: #c9c2ae;             /* IVORY_DIM */
+  --text-3: #7a7560;
 
   /* Atmosphere */
-  --glow-hero: radial-gradient(ellipse 65% 45% at 50% -8%, rgba(201, 169, 97, 0.16) 0%, transparent 60%);
-  --glow-accent: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(201, 169, 97, 0.10) 0%, transparent 60%);
-  --glow-side: radial-gradient(circle at 100% 50%, rgba(125, 155, 193, 0.06) 0%, transparent 50%);
+  --glow-hero: radial-gradient(ellipse 65% 45% at 50% -8%, rgba(200, 162, 75, 0.16) 0%, transparent 60%);
+  --glow-accent: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(200, 162, 75, 0.10) 0%, transparent 60%);
+  --glow-side: radial-gradient(circle at 100% 50%, rgba(125, 211, 252, 0.06) 0%, transparent 50%);
 
   /* Type scale (locked) */
   --fs-12: 0.75rem;
@@ -138,16 +139,16 @@ body::after {
 /* Page content sits above atmosphere */
 body > * { position: relative; z-index: 1; }
 
-::selection { background: rgba(201, 169, 97, 0.25); color: var(--text-1); }
+::selection { background: rgba(200, 162, 75, 0.25); color: var(--text-1); }
 
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(201, 169, 97, 0.30); }
+::-webkit-scrollbar-thumb:hover { background: rgba(200, 162, 75, 0.30); }
 
 /* Display gradient — used inside <Heading> for emphasis spans */
 .text-gradient {
-  background: linear-gradient(135deg, var(--accent-bright) 0%, var(--accent) 55%, #a98842 100%);
+  background: linear-gradient(135deg, var(--accent-bright) 0%, var(--accent) 55%, var(--accent-deep) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

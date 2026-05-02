@@ -1,5 +1,6 @@
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { PortalSidebar } from "@/components/portal/PortalSidebar";
+import { NyxLockup } from "@/components/system";
 import type { Profile } from "@/types/portal";
 
 export default async function PortalLayout({
@@ -13,8 +14,8 @@ export default async function PortalLayout({
     return (
       <div className="fixed inset-0 z-[100] bg-[var(--bg)] flex items-center justify-center">
         <div className="text-center px-6 max-w-sm">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[var(--accent-bright)] to-[#a98842] flex items-center justify-center mx-auto mb-4">
-            <span className="text-black font-black text-lg">N</span>
+          <div className="flex justify-center mb-5">
+            <NyxLockup size="lg" variant="stacked" />
           </div>
           <h2 className="text-xl font-semibold text-[var(--text-1)] mb-2 font-[family-name:var(--font-fraunces)]">Portal unavailable</h2>
           <p className="text-[var(--text-2)] text-sm leading-relaxed">

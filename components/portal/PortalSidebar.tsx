@@ -18,6 +18,7 @@ import {
   X,
 } from "lucide-react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
+import { NyxLockup } from "@/components/system";
 import type { Profile, PlanType } from "@/types/portal";
 
 const allNavItems = [
@@ -99,14 +100,8 @@ function SidebarContent({
   return (
     <>
       <div className="px-5 h-[68px] flex items-center border-b border-[var(--border)] shrink-0">
-        <Link href="/" className="flex items-center gap-2.5">
-          <div className="relative w-7 h-7 flex items-center justify-center shrink-0">
-            <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[var(--accent-bright)] to-[#a98842]" />
-            <span className="relative text-black font-black text-xs">N</span>
-          </div>
-          <span className="font-[family-name:var(--font-fraunces)] font-medium text-[16px] text-[var(--text-1)]">
-            Nyx
-          </span>
+        <Link href="/">
+          <NyxLockup size="sm" />
         </Link>
       </div>
 
@@ -151,14 +146,8 @@ export function PortalSidebar(props: PortalSidebarProps) {
       </aside>
 
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 h-14 bg-[var(--bg-2)]/95 backdrop-blur-xl border-b border-[var(--border)] flex items-center justify-between px-4">
-        <Link href="/portal" className="flex items-center gap-2">
-          <div className="relative w-6 h-6 flex items-center justify-center">
-            <div className="absolute inset-0 rounded-md bg-gradient-to-br from-[var(--accent-bright)] to-[#a98842]" />
-            <span className="relative text-black font-black text-[10px]">N</span>
-          </div>
-          <span className="font-[family-name:var(--font-fraunces)] font-medium text-[14px] text-[var(--text-1)]">
-            Nyx
-          </span>
+        <Link href="/portal">
+          <NyxLockup size="sm" />
         </Link>
         <div className="flex items-center gap-2">
           {props.unreadCount ? (

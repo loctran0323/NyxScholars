@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
-import { CTA } from "@/components/system";
+import { CTA, NyxLockup } from "@/components/system";
 
 const navLinks = [
   { href: "/services", label: "Services" },
@@ -62,14 +62,8 @@ export default function Navbar() {
       )}
     >
       <nav className="max-w-7xl mx-auto px-5 sm:px-8 h-[68px] flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 group shrink-0">
-          <div className="relative w-8 h-8 flex items-center justify-center">
-            <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-[var(--accent-bright)] to-[#a98842] shadow-lg shadow-[var(--accent-dim)] group-hover:shadow-[rgba(201,169,97,0.45)] transition-shadow" />
-            <span className="relative text-black font-black text-sm tracking-tight">N</span>
-          </div>
-          <span className="font-[family-name:var(--font-fraunces)] font-medium tracking-tight text-[18px] text-[var(--text-1)]">
-            Nyx
-          </span>
+        <Link href="/" className="shrink-0 group">
+          <NyxLockup size="md" />
         </Link>
 
         <div className="hidden md:flex items-center">
