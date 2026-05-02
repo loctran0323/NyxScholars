@@ -1,24 +1,31 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Fraunces } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  axes: ["opsz"],
+  weight: ["400", "500", "600"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
-    default: "Nyx Scholars | Ivy League+ SAT, ACT, and AP Tutoring",
-    template: "%s | Nyx Scholars",
+    default: "Nyx | Adaptive SAT prep, calibrated by Ivy-tier students",
+    template: "%s | Nyx",
   },
   description:
-    "Premium SAT, ACT, and AP tutoring from Ivy League+ college mentors. Personalized 1:1 test prep for ambitious students.",
-  keywords: ["SAT tutoring", "ACT tutoring", "AP tutoring", "Ivy League tutors", "test prep", "college admissions"],
+    "Adaptive SAT preparation built around your gaps, your pace, and your target score — written and vetted by Ivy-tier students.",
+  keywords: ["SAT prep", "adaptive SAT", "Nyx", "Ivy League tutors", "test prep", "college admissions"],
   openGraph: {
-    title: "Nyx Scholars | Ivy League+ SAT, ACT, and AP Tutoring",
+    title: "Nyx | Adaptive SAT prep",
     description:
-      "Premium SAT, ACT, and AP tutoring from Ivy League+ college mentors. Personalized 1:1 test prep for ambitious students.",
+      "Adaptive SAT preparation built around your gaps, your pace, and your target score.",
     type: "website",
   },
 };
@@ -29,8 +36,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full`}>
-      <body className="bg-[#0a0d14] text-[#f0ede6] min-h-screen flex flex-col antialiased">
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full`}
+    >
+      <body className="text-[var(--text-1)] min-h-screen flex flex-col antialiased">
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
