@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { NyxLockup } from "@/components/system";
+import Image from "next/image";
 
 const footerLinks = {
   Nyx: [
@@ -22,12 +22,19 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           <div className="md:col-span-2">
-            <Link href="/" className="inline-block mb-5">
-              <NyxLockup size="md" />
+            <Link href="/" className="inline-block mb-6 relative" aria-label="Nyx">
+              <Image
+                src="/design/primary-lockup.png"
+                alt="Nyx Scholars"
+                width={220}
+                height={56}
+                className="h-12 w-auto opacity-95"
+                priority={false}
+              />
             </Link>
             <p className="text-[var(--text-2)] text-[13.5px] leading-[1.8] max-w-sm mb-5">
-              1:1 SAT, ACT, AP, and admissions tutoring with vetted Ivy League undergraduates.
-              Online, by the session, with a free first trial.
+              1:1 SAT, ACT, AP, and admissions tutoring with vetted undergrads. Online, by the
+              session, with a free 30-minute trial.
             </p>
             <p className="text-[var(--text-3)] text-[12px] leading-relaxed max-w-sm">
               Nyx does not guarantee test score increases or admissions outcomes.

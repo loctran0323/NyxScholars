@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { cn } from "@/lib/utils";
-import { NyxLockup } from "@/components/system";
+import Image from "next/image";
 
 const GRADES = ["8", "9", "10", "11", "12", "College Freshman", "Other"];
 
@@ -107,8 +107,15 @@ export default function SignupPage() {
       <div className="flex-1 flex items-center justify-center px-4 pb-12">
         <div className="w-full max-w-[420px]">
           <div className="text-center mb-8">
-            <div className="flex justify-center mb-5">
-              <NyxLockup size="lg" variant="stacked" />
+            <div className="flex justify-center mb-7">
+              <Image
+                src="/design/stacked-lockup.png"
+                alt="Nyx"
+                width={140}
+                height={170}
+                className="opacity-95"
+                priority
+              />
             </div>
             <h1 className="text-2xl font-medium text-[var(--text-1)] mb-1 font-[family-name:var(--font-fraunces)]">Create your account</h1>
             <p className="text-[14px] text-[var(--text-2)]">Join Nyx and start your prep journey</p>

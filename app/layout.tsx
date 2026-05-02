@@ -44,6 +44,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} ${cormorant.variable} h-full`}
     >
       <body className="text-[var(--text-1)] min-h-screen flex flex-col antialiased">

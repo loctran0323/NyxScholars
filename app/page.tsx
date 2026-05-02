@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import {
   CTA,
@@ -25,6 +26,21 @@ export default function HomePage() {
           className="absolute inset-0 pointer-events-none"
           style={{ background: "linear-gradient(180deg, rgba(7,9,20,0.55) 0%, rgba(7,9,20,0.2) 40%, rgba(7,9,20,0.75) 100%)" }}
         />
+        {/* Brand monogram — large, faint, drifts in upper-right */}
+        <div
+          aria-hidden
+          className="absolute pointer-events-none hidden lg:block"
+          style={{ top: "-40px", right: "-80px", width: 520, height: 520, opacity: 0.10 }}
+        >
+          <Image
+            src="/design/crescent-monogram.png"
+            alt=""
+            fill
+            sizes="520px"
+            className="object-contain"
+            priority
+          />
+        </div>
         <BgFade top={false} bottom height={120} />
 
         <div className="relative max-w-[1200px] mx-auto px-5 sm:px-8">

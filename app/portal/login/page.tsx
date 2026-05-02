@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { cn } from "@/lib/utils";
-import { NyxLockup } from "@/components/system";
+import Image from "next/image";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -87,8 +87,15 @@ export default function LoginPage() {
         <div className="w-full max-w-[400px]">
           {/* Brand */}
           <div className="text-center mb-8">
-            <div className="flex justify-center mb-5">
-              <NyxLockup size="lg" variant="stacked" />
+            <div className="flex justify-center mb-7">
+              <Image
+                src="/design/stacked-lockup.png"
+                alt="Nyx"
+                width={140}
+                height={170}
+                className="opacity-95"
+                priority
+              />
             </div>
             <h1 className="text-2xl font-medium text-[var(--text-1)] mb-1 font-[family-name:var(--font-fraunces)]">Welcome back</h1>
             <p className="text-[14px] text-[var(--text-2)]">Sign in to your Nyx portal</p>
