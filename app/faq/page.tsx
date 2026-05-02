@@ -1,5 +1,5 @@
 import {
-  Eyebrow, CTA,
+  CTA,
   BgInkWash, BgFade,
 } from "@/components/system";
 import FAQAccordion from "@/components/shared/FAQAccordion";
@@ -21,13 +21,15 @@ const faqs = [
 export default function FaqPage() {
   return (
     <div className="relative">
-      <section className="relative pt-[120px] md:pt-[160px] pb-12 overflow-hidden">
+      <section className="relative pt-[140px] md:pt-[180px] pb-14 overflow-hidden">
         <BgInkWash />
         <BgFade top={false} bottom height={120} />
-        <div className="relative max-w-[800px] mx-auto px-5 sm:px-8">
-          <Eyebrow color="brass" className="mb-6">FAQ</Eyebrow>
+        <div className="relative max-w-[760px] mx-auto px-6 sm:px-10">
+          <p className="font-mono text-[var(--accent)] text-[11px] uppercase tracking-[0.28em] mb-6">
+            <span className="gold-line" />FAQ
+          </p>
           <h1
-            className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.0] tracking-[-0.02em]"
+            className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.05] tracking-[-0.02em] read-default"
             style={{ fontSize: "clamp(2.2rem, 4.5vw, 3.4rem)" }}
           >
             Six things people ask.
@@ -35,19 +37,19 @@ export default function FaqPage() {
         </div>
       </section>
 
-      <section className="relative pb-16 md:pb-20">
-        <div className="max-w-[800px] mx-auto px-5 sm:px-8">
-          <div className="bg-[#0c1124]/70 backdrop-blur-sm border border-[var(--border)] rounded-[14px] px-5 sm:px-8 py-2">
+      <section className="relative pb-20 md:pb-24">
+        <div className="max-w-[760px] mx-auto px-6 sm:px-10">
+          <div className="bg-[#0c1124]/70 backdrop-blur-sm border border-[var(--border)] rounded-[14px] px-6 sm:px-9 py-2">
             <FAQAccordion items={faqs} />
           </div>
         </div>
       </section>
 
-      <section className="relative pb-20 md:pb-24 border-t border-[var(--border)] pt-12">
-        <div className="max-w-[800px] mx-auto px-5 sm:px-8 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+      <section className="relative pb-24 md:pb-28 border-t border-[var(--border)] pt-14">
+        <div className="max-w-[760px] mx-auto px-6 sm:px-10 flex flex-col sm:flex-row sm:items-center justify-between gap-7">
           <p
-            className="font-[family-name:var(--font-fraunces)] italic text-[var(--text-2)] leading-[1.4]"
-            style={{ fontSize: 17 }}
+            className="font-[family-name:var(--font-fraunces)] italic text-[var(--text-2)] leading-[1.45] read-default"
+            style={{ fontSize: 18 }}
           >
             Anything else? The trial is the fastest way to find out.
           </p>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import {
-  Eyebrow, CTA,
+  CTA,
   BgInkWash, BgFade,
 } from "@/components/system";
 
@@ -28,80 +28,82 @@ const steps = [
 export default function VettingPage() {
   return (
     <div className="relative">
-      <section className="relative pt-[120px] md:pt-[160px] pb-16 overflow-hidden">
+      <section className="relative pt-[140px] md:pt-[180px] pb-16 overflow-hidden">
         <BgInkWash />
         <BgFade top={false} bottom height={120} />
 
-        <div className="relative max-w-[900px] mx-auto px-5 sm:px-8">
-          <Eyebrow color="brass" className="mb-6">Vetting</Eyebrow>
+        <div className="relative max-w-[860px] mx-auto px-6 sm:px-10">
+          <p className="font-mono text-[var(--accent)] text-[11px] uppercase tracking-[0.28em] mb-6">
+            <span className="gold-line" />Vetting
+          </p>
           <h1
-            className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.0] tracking-[-0.02em] mb-6"
+            className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.05] tracking-[-0.02em] mb-7 read-default"
             style={{ fontSize: "clamp(2.2rem, 4.5vw, 3.6rem)" }}
           >
             How we hire tutors.
           </h1>
-          <p className="text-[var(--text-2)] text-[16.5px] leading-[1.7] max-w-2xl">
+          <p className="text-[var(--text-2)] text-[17px] leading-[1.8] read-default">
             We don&rsquo;t list our tutors publicly — partly because the roster is small,
-            partly because what matters is the process they passed before they ever met a
-            student. You meet your matched tutor at the start of your free trial.
+            partly because what matters is the process they passed before they ever met a student.
+            You meet your matched tutor at the start of your free trial.
           </p>
         </div>
       </section>
 
-      <section className="relative py-16 md:py-20">
-        <div className="max-w-[900px] mx-auto px-5 sm:px-8 space-y-10">
+      <section className="relative py-20 md:py-24">
+        <div className="max-w-[860px] mx-auto px-6 sm:px-10 space-y-14">
           {steps.map((s) => (
-            <div key={s.n} className="grid md:grid-cols-12 gap-x-8 gap-y-3">
+            <div key={s.n} className="grid md:grid-cols-12 gap-x-10 gap-y-3">
               <div className="md:col-span-2">
                 <span
                   className="font-[family-name:var(--font-fraunces)] italic block"
-                  style={{ color: "#7dd3fc", fontSize: 28, lineHeight: 1 }}
+                  style={{ color: "var(--accent)", fontSize: 30, lineHeight: 1 }}
                 >
                   {s.n}
                 </span>
               </div>
-              <div className="md:col-span-10">
+              <div className="md:col-span-10 read-default">
                 <h3
-                  className="font-[family-name:var(--font-fraunces)] font-medium text-[var(--text-1)] leading-[1.2] mb-2"
+                  className="font-[family-name:var(--font-fraunces)] font-medium text-[var(--text-1)] leading-[1.25] mb-3"
                   style={{ fontSize: 22 }}
                 >
                   {s.title}
                 </h3>
-                <p className="text-[var(--text-2)] text-[15.5px] leading-[1.75]">{s.body}</p>
+                <p className="text-[var(--text-2)] text-[16px] leading-[1.8]">{s.body}</p>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="relative py-16 border-t border-[var(--border)]">
-        <div className="max-w-[900px] mx-auto px-5 sm:px-8 grid sm:grid-cols-2 gap-x-12 gap-y-8 items-start">
+      <section className="relative py-20 border-t border-[var(--border)]">
+        <div className="max-w-[860px] mx-auto px-6 sm:px-10 grid sm:grid-cols-2 gap-x-12 gap-y-10 items-start">
           <div>
             <h3
-              className="font-[family-name:var(--font-fraunces)] font-medium text-[var(--text-1)] mb-3"
+              className="font-[family-name:var(--font-fraunces)] font-medium text-[var(--text-1)] mb-4"
               style={{ fontSize: 20 }}
             >
               Want to tutor on Nyx?
             </h3>
-            <p className="text-[var(--text-2)] text-[14.5px] leading-[1.7] mb-4">
-              Cleared the criteria above? Write to us. We pay tutors well, take a small cut to keep
-              the platform running, and only onboard people we&rsquo;d book ourselves.
+            <p className="text-[var(--text-2)] text-[15px] leading-[1.8] mb-5">
+              Cleared the criteria above? Write to us. We pay tutors well, take a small cut, and
+              only onboard people we&rsquo;d book ourselves.
             </p>
             <Link
               href="mailto:tutors@nyxscholars.com"
-              className="inline-flex items-center gap-2 text-[var(--accent)] hover:text-[var(--accent-bright)] text-[12px] font-medium transition-colors group font-mono uppercase tracking-[0.24em]"
+              className="inline-flex items-center gap-2 text-[var(--accent)] hover:text-[var(--accent-bright)] text-[12px] font-medium transition-colors group font-mono uppercase tracking-[0.28em]"
             >
               tutors@nyxscholars.com →
             </Link>
           </div>
           <div>
             <h3
-              className="font-[family-name:var(--font-fraunces)] font-medium text-[var(--text-1)] mb-3"
+              className="font-[family-name:var(--font-fraunces)] font-medium text-[var(--text-1)] mb-4"
               style={{ fontSize: 20 }}
             >
               Want to be tutored?
             </h3>
-            <p className="text-[var(--text-2)] text-[14.5px] leading-[1.7] mb-5">
+            <p className="text-[var(--text-2)] text-[15px] leading-[1.8] mb-6">
               Twelve-minute intake matches you to whoever covers your gaps. Free trial after that.
             </p>
             <CTA href="/match" size="default">Get matched</CTA>
