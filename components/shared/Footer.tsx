@@ -2,17 +2,17 @@ import Link from "next/link";
 import { NyxLockup } from "@/components/system";
 
 const footerLinks = {
-  Services: [
-    { href: "/services", label: "All Services" },
-    { href: "/sat-act", label: "SAT / ACT Prep" },
-    { href: "/services#ap", label: "AP Tutoring" },
-    { href: "/services#admissions", label: "Admissions" },
+  Tutoring: [
+    { href: "/tutors", label: "The Roster" },
+    { href: "/sat-act", label: "How it works" },
+    { href: "/services", label: "Services" },
+    { href: "/college-admissions", label: "Admissions" },
   ],
   Company: [
-    { href: "/tutors", label: "Founders" },
-    { href: "/pricing", label: "Pricing" },
+    { href: "/pricing", label: "Packages" },
     { href: "/faq", label: "FAQ" },
-    { href: "/apply", label: "Book Consultation" },
+    { href: "/apply", label: "Book Free Trial" },
+    { href: "/portal/login", label: "Student Portal" },
   ],
 };
 
@@ -26,8 +26,8 @@ export default function Footer() {
               <NyxLockup size="md" />
             </Link>
             <p className="text-[var(--text-2)] text-[13.5px] leading-[1.8] max-w-sm mb-5">
-              Adaptive SAT preparation built around your gaps, your pace, and your target score —
-              calibrated by Ivy-tier students.
+              1:1 SAT, ACT, AP, and admissions tutoring with vetted Ivy League undergraduates.
+              Online, by the session, with a free first trial.
             </p>
             <p className="text-[var(--text-3)] text-[12px] leading-relaxed max-w-sm">
               Nyx does not guarantee test score increases or admissions outcomes.
@@ -60,7 +60,7 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Nyx. All rights reserved.
           </p>
           <p className="text-[var(--text-3)] text-[12px] font-mono uppercase tracking-[0.14em]">
-            Calibrated by students who recently scored at the top.
+            Per noctem ad lucem · Taught by the test we just took.
           </p>
         </div>
       </div>

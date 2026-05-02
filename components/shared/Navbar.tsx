@@ -10,10 +10,10 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { CTA, NyxLockup } from "@/components/system";
 
 const navLinks = [
+  { href: "/tutors", label: "Tutors" },
+  { href: "/sat-act", label: "How it works" },
   { href: "/services", label: "Services" },
-  { href: "/sat-act", label: "SAT / ACT" },
   { href: "/college-admissions", label: "Admissions" },
-  { href: "/tutors", label: "Founders" },
   { href: "/pricing", label: "Pricing" },
   { href: "/faq", label: "FAQ" },
 ];
@@ -108,7 +108,7 @@ export default function Navbar() {
             </Link>
           )}
           <CTA href="/apply" size="default" trailingIcon={false} className="px-4 py-2 text-[13px]">
-            Book Consultation
+            Book Free Trial
           </CTA>
         </div>
 
@@ -173,7 +173,7 @@ export default function Navbar() {
                   </Link>
                 )}
                 <CTA href="/apply" size="default" trailingIcon={false} className="w-full py-3">
-                  Book Free Consultation
+                  Book Free Trial
                 </CTA>
               </div>
             </div>

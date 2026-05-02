@@ -5,64 +5,66 @@ import {
   SignatureLine,
 } from "@/components/system";
 
-export const metadata = { title: "Pricing" };
+export const metadata = { title: "Packages" };
 
 const tiers = [
   {
-    name: "Free",
+    name: "Trial",
     price: "$0",
-    period: "",
-    summary: "Take the diagnostic. Sample the platform.",
-    cta: { label: "Start free", href: "/apply" },
+    period: "30 minutes",
+    summary: "Meet your matched tutor. Drill a real problem. No card required.",
+    cta: { label: "Book a trial", href: "/apply" },
     accent: false,
     bullets: [
-      "Adaptive diagnostic (1 attempt)",
-      "Score and study report",
-      "50 practice questions / week",
-      "Email support",
+      "Free 30-minute video session",
+      "Live whiteboard + screen share",
+      "Re-match if it isn't a fit",
+      "No card on file",
     ],
   },
   {
-    name: "Scholar",
-    price: "$29",
-    period: "/ month",
-    summary: "Unlimited adaptive practice + analytics.",
-    cta: { label: "Start Scholar", href: "/apply" },
+    name: "Pay-as-you-go",
+    price: "$110–$130",
+    period: "/ session, hourly",
+    summary: "Book sessions one at a time. The honest middle of the price range.",
+    cta: { label: "Book a session", href: "/apply" },
     accent: true,
     bullets: [
-      "Unlimited adaptive practice",
-      "Full question bank",
-      "Weekly score updates",
-      "Skill mastery heatmap",
-      "Daily study plan",
+      "Single 60-minute sessions",
+      "Pricing depends on tutor (1500+ to 1590+ SAT)",
+      "Cancel up to 12 hours before",
+      "Materials and notes shared in your sky",
+      "Reschedule freely",
     ],
   },
   {
-    name: "Constellation",
-    price: "$79",
-    period: "/ month",
-    summary: "Scholar + mocks, written feedback.",
-    cta: { label: "Start Constellation", href: "/apply" },
+    name: "Cadence",
+    price: "$95–$110",
+    period: "/ session, prepaid 8-pack",
+    summary: "Same tutors, ~15% off, plus weekly assignments between sessions.",
+    cta: { label: "Start a Cadence", href: "/apply" },
     accent: false,
     bullets: [
-      "Everything in Scholar",
-      "2 full-length mocks / month",
-      "Written tutor feedback",
-      "Priority new content",
-      "Priority support",
+      "Eight 60-minute sessions, prepaid",
+      "Use within four months",
+      "Weekly assignments + score forecasts",
+      "Tutor reviews submitted homework",
+      "One unused session refundable",
     ],
   },
 ];
 
-const matrix: { feature: string; free: boolean; scholar: boolean; constellation: boolean }[] = [
-  { feature: "Adaptive diagnostic",           free: true,  scholar: true,  constellation: true },
-  { feature: "Score and study report",        free: true,  scholar: true,  constellation: true },
-  { feature: "Unlimited practice",            free: false, scholar: true,  constellation: true },
-  { feature: "Skill mastery heatmap",         free: false, scholar: true,  constellation: true },
-  { feature: "Daily study plan",              free: false, scholar: true,  constellation: true },
-  { feature: "Full-length proctored mocks",   free: false, scholar: false, constellation: true },
-  { feature: "Written tutor feedback",        free: false, scholar: false, constellation: true },
-  { feature: "Priority new content",          free: false, scholar: false, constellation: true },
+const matrix: { feature: string; trial: boolean; payg: boolean; cadence: boolean }[] = [
+  { feature: "Free 30-minute trial",          trial: true,  payg: true,  cadence: true },
+  { feature: "Live 1:1 video sessions",       trial: true,  payg: true,  cadence: true },
+  { feature: "Vetted Ivy tutor",              trial: true,  payg: true,  cadence: true },
+  { feature: "Your sky / progress map",       trial: false, payg: true,  cadence: true },
+  { feature: "Cancel up to 12h before",       trial: false, payg: true,  cadence: true },
+  { feature: "Reschedule freely",             trial: false, payg: true,  cadence: true },
+  { feature: "Weekly assignments",            trial: false, payg: false, cadence: true },
+  { feature: "Tutor-reviewed homework",       trial: false, payg: false, cadence: true },
+  { feature: "Bundled discount (~15%)",       trial: false, payg: false, cadence: true },
+  { feature: "Score forecast updates",        trial: false, payg: false, cadence: true },
 ];
 
 export default function PricingPage() {
@@ -77,17 +79,18 @@ export default function PricingPage() {
         />
         <div className="relative w-full max-w-[1180px] mx-auto px-5 sm:px-8 pb-16 md:pb-20">
           <div className="max-w-3xl">
-            <Eyebrow color="brass" className="mb-6">Pricing</Eyebrow>
+            <Eyebrow color="brass" className="mb-6">Packages</Eyebrow>
             <h1
               className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.0] tracking-[-0.02em] mb-7"
               style={{ fontSize: "clamp(2.4rem, 5.5vw, 4.8rem)" }}
             >
-              Simple plans.{" "}
-              <span className="font-[family-name:var(--font-cormorant)] italic">Real outcomes.</span>
+              Pay by the session.{" "}
+              <span className="font-[family-name:var(--font-cormorant)] italic">Or by the cadence.</span>
             </h1>
             <p className="text-[var(--text-2)] text-[18px] leading-[1.7] max-w-2xl">
-              Three tiers and one optional add-on. Cancel anytime. Tutoring is sold separately,
-              never bundled into thousand-dollar packages.
+              No thousand-dollar packages. No prepaid years. Either book one session at a time or
+              prepay an 8-pack for a small discount and weekly assignments. Both end the day you
+              walk away.
             </p>
             <SignatureLine width={180} className="mt-9" />
           </div>
@@ -112,14 +115,14 @@ export default function PricingPage() {
                 >
                   {isMid ? (
                     <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.22em] text-[var(--accent)] font-mono bg-[var(--bg)] px-3 py-1 rounded-full border border-[var(--border-accent)]">
-                      Recommended
+                      Most flexible
                     </span>
                   ) : null}
                   <h3 className="font-[family-name:var(--font-cormorant)] italic text-[var(--text-1)] text-[28px] mb-3 leading-none">
                     {t.name}
                   </h3>
-                  <div className="flex items-baseline gap-2 mb-5">
-                    <span className="font-[family-name:var(--font-fraunces)] text-[52px] leading-none text-[var(--text-1)]">{t.price}</span>
+                  <div className="flex items-baseline gap-2 mb-5 flex-wrap">
+                    <span className="font-[family-name:var(--font-fraunces)] text-[44px] leading-none text-[var(--text-1)]">{t.price}</span>
                     <span className="text-[var(--text-3)] text-[13px]">{t.period}</span>
                   </div>
                   <Text variant="small" className="mb-7">{t.summary}</Text>
@@ -138,6 +141,9 @@ export default function PricingPage() {
               );
             })}
           </div>
+          <p className="mt-10 max-w-2xl mx-auto text-center text-[var(--text-3)] text-[13px] leading-[1.7] font-mono uppercase tracking-[0.16em]">
+            Admissions consulting · $150 / session · Available on any package
+          </p>
         </div>
       </section>
 
@@ -145,34 +151,37 @@ export default function PricingPage() {
         <div className="relative max-w-[1180px] mx-auto px-5 sm:px-8">
           <div className="mb-12">
             <Eyebrow color="moon" className="mb-4">Compare</Eyebrow>
-            <Heading level={2}>Feature matrix</Heading>
+            <Heading level={2}>What you get</Heading>
           </div>
           <div className="overflow-x-auto rounded-[24px] border border-[var(--border)] bg-[#0c1124]/40 backdrop-blur-sm">
             <table className="w-full text-left text-[14px]">
               <thead className="text-[var(--text-3)] uppercase text-[11px] tracking-[0.18em]">
                 <tr>
                   <th className="px-6 py-5 font-mono">Feature</th>
-                  <th className="px-5 py-5 text-center font-mono">Free</th>
-                  <th className="px-5 py-5 text-center font-mono">Scholar</th>
-                  <th className="px-5 py-5 text-center font-mono">Constellation</th>
+                  <th className="px-5 py-5 text-center font-mono">Trial</th>
+                  <th className="px-5 py-5 text-center font-mono">Pay-as-you-go</th>
+                  <th className="px-5 py-5 text-center font-mono">Cadence</th>
                 </tr>
               </thead>
               <tbody>
                 {matrix.map((row) => (
                   <tr key={row.feature} className="border-t border-[var(--border)]">
                     <td className="px-6 py-4 text-[var(--text-1)]">{row.feature}</td>
-                    <td className="px-5 py-4 text-center">{row.free ? <Check size={14} className="inline text-[var(--accent)]" /> : <Minus size={14} className="inline text-[var(--text-3)]" />}</td>
-                    <td className="px-5 py-4 text-center">{row.scholar ? <Check size={14} className="inline text-[var(--accent)]" /> : <Minus size={14} className="inline text-[var(--text-3)]" />}</td>
-                    <td className="px-5 py-4 text-center">{row.constellation ? <Check size={14} className="inline text-[var(--accent)]" /> : <Minus size={14} className="inline text-[var(--text-3)]" />}</td>
+                    <td className="px-5 py-4 text-center">{row.trial ? <Check size={14} className="inline text-[var(--accent)]" /> : <Minus size={14} className="inline text-[var(--text-3)]" />}</td>
+                    <td className="px-5 py-4 text-center">{row.payg ? <Check size={14} className="inline text-[var(--accent)]" /> : <Minus size={14} className="inline text-[var(--text-3)]" />}</td>
+                    <td className="px-5 py-4 text-center">{row.cadence ? <Check size={14} className="inline text-[var(--accent)]" /> : <Minus size={14} className="inline text-[var(--text-3)]" />}</td>
                   </tr>
                 ))}
                 <tr className="border-t border-[var(--border)] bg-[var(--bg)]/40">
-                  <td className="px-6 py-4 text-[var(--text-2)] italic font-[family-name:var(--font-fraunces)]">1:1 tutoring add-on · $120 / session</td>
-                  <td className="px-5 py-4 text-center text-[var(--text-3)] text-[12px]" colSpan={3}>Available on any plan</td>
+                  <td className="px-6 py-4 text-[var(--text-2)] italic font-[family-name:var(--font-fraunces)]">Admissions consulting · $150 / session</td>
+                  <td className="px-5 py-4 text-center text-[var(--text-3)] text-[12px]" colSpan={3}>Available on any package</td>
                 </tr>
               </tbody>
             </table>
           </div>
+          <p className="mt-6 text-[var(--text-3)] text-[12px] font-mono uppercase tracking-[0.16em]">
+            Hourly rate depends on the individual tutor · 1500-1590+ SAT · Princeton, Harvard, Yale, MIT, Stanford, Columbia
+          </p>
         </div>
       </section>
     </div>

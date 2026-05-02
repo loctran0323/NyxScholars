@@ -22,16 +22,16 @@ const cormorant = Cormorant_Garamond({
 
 export const metadata: Metadata = {
   title: {
-    default: "Nyx | Adaptive SAT prep, calibrated by Ivy-tier students",
+    default: "Nyx | 1:1 SAT tutoring with vetted Ivy League students",
     template: "%s | Nyx",
   },
   description:
-    "Adaptive SAT preparation built around your gaps, your pace, and your target score — written and vetted by Ivy-tier students.",
-  keywords: ["SAT prep", "adaptive SAT", "Nyx", "Ivy League tutors", "test prep", "college admissions"],
+    "Online 1:1 SAT, ACT, AP, and admissions tutoring from current Princeton, Harvard, Yale, MIT, Stanford, and Columbia undergraduates. Free 30-minute trial. Pay by the session.",
+  keywords: ["SAT tutoring", "Ivy League tutors", "ACT tutoring", "AP tutoring", "college admissions", "online tutoring", "Nyx"],
   openGraph: {
-    title: "Nyx | Adaptive SAT prep",
+    title: "Nyx | 1:1 SAT tutoring with vetted Ivy League students",
     description:
-      "Adaptive SAT preparation built around your gaps, your pace, and your target score.",
+      "1:1 online tutoring with current Ivy League undergraduates. Free 30-minute trial. Pay by the session.",
     type: "website",
   },
 };

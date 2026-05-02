@@ -7,16 +7,27 @@ import {
 
 export const metadata = { title: "Services" };
 
-const featured = [
-  { n: "01", icon: Target,   label: "SAT Adaptive", body: "Adaptive diagnostic, calibrated practice, weekly score reports. The core Nyx product.", href: "/sat-act" },
-  { n: "02", icon: BookOpen, label: "ACT Prep",     body: "ACT-specific pacing, section drills, and reading speed training adapted to your baseline.", href: "/sat-act" },
-];
-
-const adjacent = [
-  { icon: GraduationCap, label: "AP Tutoring", body: "10+ subjects with current top scorers." },
-  { icon: Award, label: "Admissions", body: "Essays, school lists, interview prep." },
-  { icon: Target, label: "1:1 Add-on", body: "Book Ivy-tier mentors à la carte." },
-  { icon: BookOpen, label: "Mocks", body: "Full-length proctored practice tests with debrief." },
+const services = [
+  {
+    n: "01", icon: Target, label: "SAT", price: "$110–$130 / hr",
+    body: "Digital SAT, both sections. The bulk of what we tutor. Loc and Charles teach this; so do Maya, Kenji, Nadia, and Theo. Free 30-minute trial with your matched tutor.",
+    href: "/sat-act",
+  },
+  {
+    n: "02", icon: BookOpen, label: "ACT", price: "$110–$130 / hr",
+    body: "Same tutors, ACT-trained. Pacing, science section, and the ACT-specific math tricks the SAT doesn't test. Mention ACT in your intake.",
+    href: "/sat-act",
+  },
+  {
+    n: "03", icon: GraduationCap, label: "AP Subjects", price: "$120–$150 / hr",
+    body: "Calculus AB/BC, Statistics, Physics 1/2/C, Chemistry, Biology, English Lang/Lit, US/World History, CS A. Tutors with 5s on the relevant exam.",
+    href: "#",
+  },
+  {
+    n: "04", icon: Award, label: "Admissions", price: "$150 / session",
+    body: "Essay review, school list strategy, mock interviews. Done by current Ivy juniors and seniors who recently went through it.",
+    href: "/college-admissions",
+  },
 ];
 
 export default function ServicesPage() {
@@ -36,12 +47,12 @@ export default function ServicesPage() {
               className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.0] tracking-[-0.02em] mb-7"
               style={{ fontSize: "clamp(2.4rem, 5.5vw, 5rem)" }}
             >
-              Adaptive prep,{" "}
-              <span className="font-[family-name:var(--font-cormorant)] italic">plus humans when it counts.</span>
+              SAT. ACT. AP.{" "}
+              <span className="font-[family-name:var(--font-cormorant)] italic">Admissions.</span>
             </h1>
             <p className="text-[var(--text-2)] text-[18px] leading-[1.7] max-w-2xl">
-              The Nyx platform is the core. Tutoring, mocks, and admissions services exist to amplify
-              it — never as a substitute for adaptive practice.
+              Every service is delivered by the same vetted Ivy roster, online, by the session.
+              No bundles. No upsell.
             </p>
             <SignatureLine width={180} className="mt-9" />
           </div>
@@ -51,55 +62,29 @@ export default function ServicesPage() {
       <section className="relative py-28 md:py-32 overflow-hidden">
         <BgInkWash />
         <BgFade height={120} />
-        <div className="relative max-w-[1180px] mx-auto px-5 sm:px-8 space-y-24 md:space-y-32">
-          {featured.map(({ n, icon: Icon, label, body, href }, i) => (
+        <div className="relative max-w-[1180px] mx-auto px-5 sm:px-8 space-y-20 md:space-y-24">
+          {services.map(({ n, icon: Icon, label, price, body, href }, i) => (
             <article
               key={label}
               className={`grid md:grid-cols-12 gap-8 items-start ${i % 2 === 1 ? "md:[direction:rtl]" : ""}`}
             >
               <div className="md:col-span-2 md:[direction:ltr]">
                 <span className="block font-mono text-[var(--accent)] text-[11px] uppercase tracking-[0.24em] mb-3">{n}</span>
-                <span className="block font-mono text-[var(--text-3)] text-[11px] uppercase tracking-[0.24em]">Featured</span>
+                <span className="block font-mono text-[var(--text-3)] text-[11px] uppercase tracking-[0.24em] mb-6">{price}</span>
+                <Icon size={22} className="text-[var(--accent)]" />
               </div>
               <div className="md:col-span-10 md:[direction:ltr]">
-                <div className="flex items-center gap-4 mb-6">
-                  <Icon size={20} className="text-[var(--accent)]" />
-                  <h2
-                    className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.05] tracking-[-0.015em]"
-                    style={{ fontSize: "clamp(1.8rem, 3.6vw, 3rem)" }}
-                  >
-                    {label}
-                  </h2>
-                </div>
+                <h2
+                  className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.05] tracking-[-0.015em] mb-6"
+                  style={{ fontSize: "clamp(2rem, 4vw, 3.4rem)" }}
+                >
+                  {label}
+                </h2>
                 <p className="text-[var(--text-2)] text-[16.5px] leading-[1.8] max-w-2xl mb-8">{body}</p>
-                <CTA href={href} variant="ghost">Learn more</CTA>
+                <CTA href={href} variant="ghost">Book a trial session</CTA>
               </div>
             </article>
           ))}
-        </div>
-      </section>
-
-      <section className="relative py-24 md:py-28 border-t border-[var(--border)]">
-        <div className="max-w-[1180px] mx-auto px-5 sm:px-8">
-          <div className="mb-14">
-            <Eyebrow color="moon" className="mb-4">Adjacent</Eyebrow>
-            <h2
-              className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.1] tracking-[-0.015em] max-w-3xl"
-              style={{ fontSize: "clamp(1.7rem, 3.4vw, 2.6rem)" }}
-            >
-              Other ways we work{" "}
-              <span className="font-[family-name:var(--font-cormorant)] italic">with students.</span>
-            </h2>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-12 border-t border-[var(--border)]">
-            {adjacent.map(({ icon: Icon, label, body }) => (
-              <div key={label} className="pt-8 border-t border-[var(--border)] sm:border-t-0">
-                <Icon size={18} className="text-[var(--accent)] mb-5" />
-                <h3 className="text-[var(--text-1)] font-semibold text-[16px] mb-2">{label}</h3>
-                <p className="text-[var(--text-2)] text-[14px] leading-[1.7]">{body}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -117,13 +102,13 @@ export default function ServicesPage() {
               className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.0] mb-7 tracking-[-0.02em]"
               style={{ fontSize: "clamp(2.2rem, 5vw, 3.8rem)" }}
             >
-              Start with the{" "}
-              <span className="font-[family-name:var(--font-cormorant)] italic">diagnostic.</span>
+              Match with{" "}
+              <span className="font-[family-name:var(--font-cormorant)] italic">a tutor.</span>
             </h2>
             <p className="text-[var(--text-2)] text-[17px] leading-[1.7] mb-10">
-              Forty minutes. Free. No commitment.
+              Twelve-minute intake. Three matched tutors. A free trial session.
             </p>
-            <CTA href="/apply" size="lg">Take the diagnostic</CTA>
+            <CTA href="/portal/diagnostic" size="lg">Take the intake</CTA>
           </div>
         </div>
       </section>

@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
   Compass,
+  Sparkles,
   CalendarPlus,
   Calendar,
   BookOpen,
@@ -23,7 +24,8 @@ import type { Profile, PlanType } from "@/types/portal";
 
 const allNavItems = [
   { href: "/portal",              label: "Dashboard",        icon: LayoutDashboard, exact: true,  plans: ["session", "monthly", "counseling"] },
-  { href: "/portal/consultation", label: "Consultation",     icon: Compass,         exact: false, plans: ["session", "monthly", "counseling"] },
+  { href: "/portal/consultation", label: "My Sky",           icon: Compass,         exact: false, plans: ["session", "monthly", "counseling"] },
+  { href: "/portal/diagnostic",   label: "Intake",           icon: Sparkles,        exact: false, plans: ["session", "monthly", "counseling"] },
   { href: "/portal/schedule",     label: "Schedule Session", icon: CalendarPlus,    exact: false, plans: ["session", "monthly", "counseling"] },
   { href: "/portal/sessions",     label: "My Sessions",      icon: Calendar,        exact: false, plans: ["session", "monthly", "counseling"] },
   { href: "/portal/materials",    label: "Materials",        icon: BookOpen,        exact: false, plans: ["session", "monthly", "counseling"] },

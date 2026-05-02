@@ -59,14 +59,14 @@ export default function ConsultationDashboardPage() {
             <Compass size={14} className="text-[#7dd3fc]" />
           </span>
           <div className="leading-tight">
-            <p className="text-[11px] font-mono uppercase tracking-[0.22em] text-[#7a82a0]">Consultation</p>
+            <p className="text-[11px] font-mono uppercase tracking-[0.22em] text-[#7a82a0]">Your sky · with Loc</p>
             <p className="text-[13px] text-[#e6e9f5]">
-              {d.student.name} · {d.student.plan} plan
+              {d.student.name} · {d.student.plan} package
             </p>
           </div>
         </div>
         <p className="text-[12px] font-mono text-[#7a82a0]">
-          Next session <span className="text-[#e6e9f5]">{daysUntil(d.student.nextSessionAt)}</span>
+          Next session with Loc <span className="text-[#e6e9f5]">{daysUntil(d.student.nextSessionAt)}</span>
         </p>
       </div>
 
