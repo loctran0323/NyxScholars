@@ -413,7 +413,7 @@ export default function HomePage() {
                 href="/tutors"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border border-white/10 text-[#c8d0de] font-semibold text-[15px] hover:border-white/20 hover:bg-white/[0.04] transition-all"
               >
-                Meet the Tutors
+                Meet the Founders
               </Link>
             </div>
 

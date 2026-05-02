@@ -12,7 +12,7 @@ const navLinks = [
   { href: "/services", label: "Services" },
   { href: "/sat-act", label: "SAT / ACT" },
   { href: "/college-admissions", label: "Admissions" },
-  { href: "/tutors", label: "Tutors" },
+  { href: "/tutors", label: "Founders" },
   { href: "/pricing", label: "Pricing" },
   { href: "/faq", label: "FAQ" },
 ];

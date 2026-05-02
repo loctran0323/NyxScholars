@@ -1,62 +1,30 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import SectionHeader from "@/components/shared/SectionHeader";
-import TutorCard from "@/components/shared/TutorCard";
+import { ArrowRight, GraduationCap, Lightbulb, Users } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Our Tutors",
-  description: "Meet our Ivy League+ tutors — Princeton, Harvard, Yale, MIT, Columbia, and Stanford students.",
+  title: "Meet the Founders",
+  description: "Nyx Scholars was founded by two Princeton students — Loc Tran and Charles Muehlberger.",
 };
 
-const tutors = [
+const founders = [
   {
-    name: "Aiden Park",
-    school: "Princeton",
-    major: "Mathematics",
-    subjects: ["SAT Math", "ACT Math", "AP Calculus BC", "AP Statistics"],
-    bio: "Scored in the 99th percentile on the SAT with a 1590. Helps students break through math anxiety with step-by-step explanations focused on pattern recognition.",
-    testStrengths: ["SAT 1590", "AP Calc BC: 5", "AP Stats: 5"],
+    name: "Loc Tran",
+    school: "Princeton University",
+    major: "Operations Research & Financial Engineering",
+    year: "Class of 2027",
+    focus: ["SAT & ACT Math", "AP Calculus", "AP Statistics", "College Admissions"],
+    bio: "Loc built Nyx Scholars from a simple belief: the best tutors are the ones who just went through it. Studying ORFE at Princeton — one of the most quantitative programs in the country — he brings a rigorous, analytical approach to every subject he teaches. He knows what it takes to navigate competitive college admissions firsthand, and he's committed to giving every student the same edge.",
+    initials: "LT",
   },
   {
-    name: "Maya Chen",
-    school: "Harvard",
-    major: "Cognitive Science",
-    subjects: ["SAT Reading & Writing", "ACT English", "AP English Language", "AP Psychology"],
-    bio: "Consistently top-scored on the verbal sections of the SAT and ACT. Specializes in evidence-based reading strategies and grammar rules that actually stick.",
-    testStrengths: ["SAT 800 EBRW", "ACT 36 English", "AP Lang: 5"],
-  },
-  {
-    name: "Jordan Lee",
-    school: "MIT",
-    major: "Physics",
-    subjects: ["AP Physics C", "AP Physics 1 & 2", "SAT Math", "ACT Science"],
-    bio: "Physics obsessive with a gift for connecting abstract concepts to real problems. Makes ACT Science approachable and AP Physics less intimidating at any level.",
-    testStrengths: ["AP Physics C: 5", "ACT 36 Science", "SAT 800 Math"],
-  },
-  {
-    name: "Sofia Reyes",
-    school: "Yale",
-    major: "Molecular Biology",
-    subjects: ["AP Biology", "AP Chemistry", "SAT", "AP Environmental Science"],
-    bio: "Pre-med with deep AP science expertise. Known for breaking down complex bio and chem content into memorable frameworks that hold up under exam pressure.",
-    testStrengths: ["AP Bio: 5", "AP Chem: 5", "SAT 1540"],
-  },
-  {
-    name: "Marcus Williams",
-    school: "Columbia",
-    major: "History & Political Science",
-    subjects: ["AP US History", "AP World History", "AP Government", "SAT Reading"],
-    bio: "Makes history feel manageable and relevant. Helps students master the essay and short-answer components that define AP history scores.",
-    testStrengths: ["APUSH: 5", "AP World: 5", "SAT 1520"],
-  },
-  {
-    name: "Priya Nair",
-    school: "Stanford",
-    major: "Computer Science",
-    subjects: ["AP Computer Science A", "SAT Math", "ACT Math", "AP Calculus AB"],
-    bio: "Strong technical foundation with a clear communication style. Bridges abstract CS concepts and the AP exam format — quickly builds student confidence.",
-    testStrengths: ["AP CS A: 5", "SAT 800 Math", "AP Calc AB: 5"],
+    name: "Charles Muehlberger",
+    school: "Princeton University",
+    major: "Electrical & Computer Engineering",
+    year: "Class of 2027",
+    focus: ["AP Physics", "AP Computer Science", "SAT & ACT Math", "College Admissions"],
+    bio: "Charles co-founded Nyx Scholars to make high-quality tutoring feel like advice from a friend who actually knows the material. As an ECE student at Princeton, he brings deep technical fluency to math and science subjects — and a straightforward communication style that makes even the hardest concepts click. He cares about students building real understanding, not just hitting the right answer.",
+    initials: "CM",
   },
 ];
 
@@ -64,44 +32,107 @@ export default function TutorsPage() {
   return (
     <div className="pt-[68px]">
 
-      {/* Header */}
+      {/* Hero */}
       <section className="relative py-24 px-5 sm:px-8">
-        <div className="pointer-events-none absolute inset-0" style={{ background: "radial-gradient(ellipse 60% 50% at 50% 0%, rgba(212,168,83,0.13) 0%, transparent 60%)" }} />
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{ background: "radial-gradient(ellipse 60% 50% at 50% 0%, rgba(212,168,83,0.14) 0%, transparent 60%)" }}
+        />
         <div className="relative max-w-3xl mx-auto text-center">
-          <p className="text-[#d4a853] text-[11px] font-bold uppercase tracking-[0.15em] mb-5">Our Tutors</p>
+          <p className="text-[#d4a853] text-[11px] font-bold uppercase tracking-[0.15em] mb-5">The Founders</p>
           <h1 className="text-[clamp(2rem,5vw,3.5rem)] font-bold text-[#f0ece3] leading-tight tracking-tight mb-5">
-            High-achievers who know how to teach.
+            Meet the people behind Nyx Scholars.
           </h1>
-          <p className="text-[#8d9ab0] text-[16px] leading-[1.8] mb-8">
-            Selected for academic performance, communication skill, and genuine interest in helping others succeed — not just their scores.
+          <p className="text-[#8d9ab0] text-[16px] leading-[1.8]">
+            Two Princeton students who built the tutoring resource they wish they&apos;d had — grounded in real experience, not scripts.
           </p>
-          <div className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-white/[0.07] bg-[#0f1521] text-[#8d9ab0] text-[13px]">
-            <div className="w-1.5 h-1.5 rounded-full bg-[#d4a853]/60" />
-            Tutor availability varies. Students are matched based on subject, goals, and schedule.
+        </div>
+      </section>
+
+      {/* Founder cards */}
+      <section className="pb-24 px-5 sm:px-8">
+        <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
+          {founders.map((f) => (
+            <div
+              key={f.name}
+              className="rounded-2xl bg-[#0f1521] p-8"
+              style={{ boxShadow: "0 0 0 1px rgba(255,255,255,0.06), 0 16px 48px rgba(0,0,0,0.5)" }}
+            >
+              {/* Avatar */}
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#d4a853]/20 to-[#d4a853]/5 border border-[#d4a853]/20 flex items-center justify-center mb-6">
+                <span className="text-[18px] font-bold text-[#d4a853]">{f.initials}</span>
+              </div>
+
+              {/* Name + school */}
+              <h2 className="text-[22px] font-bold text-[#f0ece3] mb-1 tracking-tight">{f.name}</h2>
+              <div className="flex items-center gap-2 mb-1">
+                <GraduationCap size={13} className="text-[#d4a853] shrink-0" />
+                <p className="text-[#d4a853] text-[13px] font-medium">{f.school} · {f.year}</p>
+              </div>
+              <p className="text-[#8d9ab0] text-[13px] mb-5">{f.major}</p>
+
+              {/* Bio */}
+              <p className="text-[#c8d0de] text-[14px] leading-[1.8] mb-6">{f.bio}</p>
+
+              {/* Focus areas */}
+              <div>
+                <p className="text-[11px] text-[#4e5d72] font-semibold uppercase tracking-wider mb-2.5">Focuses on</p>
+                <div className="flex flex-wrap gap-2">
+                  {f.focus.map((area) => (
+                    <span
+                      key={area}
+                      className="px-2.5 py-1 rounded-lg bg-white/[0.04] border border-white/[0.07] text-[#8d9ab0] text-[12px] font-medium"
+                    >
+                      {area}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Why we started this */}
+      <section className="py-20 bg-[#0b0f1a] border-y border-white/[0.05]">
+        <div className="max-w-3xl mx-auto px-5 sm:px-8">
+          <div className="flex items-center gap-3 mb-6">
+            <Lightbulb size={16} className="text-[#d4a853]" />
+            <p className="text-[#d4a853] text-[11px] font-bold uppercase tracking-[0.15em]">Why We Built This</p>
+          </div>
+          <h2 className="text-[1.7rem] font-bold text-[#f0ece3] tracking-tight mb-5 leading-tight">
+            The tutoring we wish we&apos;d had.
+          </h2>
+          <div className="space-y-4 text-[#8d9ab0] text-[15px] leading-[1.85]">
+            <p>
+              Most tutoring services assign you whoever is available — often a graduate student or adult professional
+              who learned the SAT a decade ago. The format has changed. The scoring has changed. What works has changed.
+            </p>
+            <p>
+              We started Nyx Scholars because we just went through the process ourselves. We know what the current exams
+              look like, what colleges are actually reading for in essays, and what makes the difference between a good score
+              and a great one. That knowledge has a short shelf life — and we&apos;re using it while it&apos;s current.
+            </p>
+            <p>
+              Every student we work with gets direct access to us — not a tutor-match algorithm or an anonymous
+              platform. We keep our student count intentionally small so the quality stays high.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Grid */}
-      <section className="pb-24 px-5 sm:px-8 max-w-7xl mx-auto">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {tutors.map((tutor) => <TutorCard key={tutor.name} {...tutor} />)}
-        </div>
-      </section>
-
-      {/* Quality section */}
-      <section className="py-20 bg-[#0b0f1a] border-y border-white/[0.05]">
-        <div className="max-w-4xl mx-auto px-5 sm:px-8 text-center">
-          <SectionHeader eyebrow="Our Standard" title="What makes a Nyx Scholars tutor." centered className="mb-12" />
+      {/* Princeton credibility strip */}
+      <section className="py-16 px-5 sm:px-8">
+        <div className="max-w-4xl mx-auto">
           <div className="grid sm:grid-cols-3 gap-4">
             {[
-              { title: "Top University Enrollment", desc: "Current students at Ivy League or equivalent institutions with strong academic standing." },
-              { title: "Recent Test Experience", desc: "Tutors who recently aced the same exams and understand the current format firsthand." },
-              { title: "Communication Ability", desc: "Selected for ability to break down complex material clearly — not just their scores." },
-            ].map(({ title, desc }) => (
+              { icon: GraduationCap, title: "Princeton University", desc: "Both founders are current Princeton students — ranked #1 nationally." },
+              { icon: Users, title: "Small by Design", desc: "We work with a limited number of students so every engagement gets real attention." },
+              { icon: Lightbulb, title: "Fresh Perspective", desc: "We took these exams recently. We know what's on them and what actually works." },
+            ].map(({ icon: Icon, title, desc }) => (
               <div key={title} className="p-6 rounded-xl border border-white/[0.07] bg-[#0f1521]">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#d4a853] mx-auto mb-4" />
-                <h3 className="text-[#f0ece3] font-semibold mb-2 text-[14.5px]">{title}</h3>
+                <Icon size={16} className="text-[#d4a853] mb-3" />
+                <h3 className="text-[#f0ece3] font-semibold mb-1.5 text-[14px]">{title}</h3>
                 <p className="text-[#8d9ab0] text-[13px] leading-relaxed">{desc}</p>
               </div>
             ))}
@@ -110,10 +141,13 @@ export default function TutorsPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 text-center px-5">
-        <h2 className="text-[2rem] font-bold text-[#f0ece3] mb-4 tracking-tight">Ready to get matched?</h2>
-        <p className="text-[#8d9ab0] mb-8 max-w-md mx-auto text-[15px]">Tell us your subject, goals, and schedule — we&apos;ll find the right tutor for you.</p>
-        <Link href="/apply" className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-b from-[#e0b55c] to-[#c99438] text-black font-bold hover:from-[#eac068] hover:to-[#d4a045] transition-all shadow-[0_8px_32px_rgba(212,168,83,0.3)] hover:-translate-y-0.5">
+      <section className="py-20 text-center px-5 bg-[#0b0f1a] border-t border-white/[0.05]">
+        <h2 className="text-[2rem] font-bold text-[#f0ece3] mb-4 tracking-tight">Work with us directly.</h2>
+        <p className="text-[#8d9ab0] mb-8 max-w-md mx-auto text-[15px]">Book a free 20-minute call and you&apos;ll talk to one of us — not a sales rep.</p>
+        <Link
+          href="/apply"
+          className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-b from-[#e0b55c] to-[#c99438] text-black font-bold hover:from-[#eac068] hover:to-[#d4a045] transition-all shadow-[0_8px_32px_rgba(212,168,83,0.3)] hover:-translate-y-0.5"
+        >
           Book Free Consultation <ArrowRight size={16} />
         </Link>
       </section>

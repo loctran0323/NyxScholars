@@ -47,7 +47,7 @@ export default function SatActPage() {
                 Book Free Consultation <ArrowRight size={16} />
               </Link>
               <Link href="/tutors" className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl border border-white/10 text-[#c8d0de] font-semibold hover:border-white/20 hover:bg-white/[0.04] transition-all">
-                Meet the Tutors
+                Meet the Founders
               </Link>
             </div>
           </div>
