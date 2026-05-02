@@ -11,16 +11,16 @@ export default async function PortalLayout({
 
   if (!supabase) {
     return (
-      <div className="fixed inset-0 z-[100] bg-[#060912] flex items-center justify-center">
+      <div className="fixed inset-0 z-[100] bg-[var(--bg)] flex items-center justify-center">
         <div className="text-center px-6 max-w-sm">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#d4a853] to-[#a07830] flex items-center justify-center mx-auto mb-4">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[var(--accent-bright)] to-[#a98842] flex items-center justify-center mx-auto mb-4">
             <span className="text-black font-black text-lg">N</span>
           </div>
-          <h2 className="text-xl font-bold text-[#f0ece3] mb-2">Portal Unavailable</h2>
-          <p className="text-[#8d9ab0] text-sm leading-relaxed">
+          <h2 className="text-xl font-semibold text-[var(--text-1)] mb-2 font-[family-name:var(--font-fraunces)]">Portal unavailable</h2>
+          <p className="text-[var(--text-2)] text-sm leading-relaxed">
             The student portal requires Supabase to be configured. Add your{" "}
-            <code className="text-[#d4a853] text-xs">NEXT_PUBLIC_SUPABASE_URL</code> and{" "}
-            <code className="text-[#d4a853] text-xs">NEXT_PUBLIC_SUPABASE_ANON_KEY</code>{" "}
+            <code className="text-[var(--accent)] text-xs">NEXT_PUBLIC_SUPABASE_URL</code> and{" "}
+            <code className="text-[var(--accent)] text-xs">NEXT_PUBLIC_SUPABASE_ANON_KEY</code>{" "}
             environment variables to enable authentication.
           </p>
         </div>
@@ -35,7 +35,7 @@ export default async function PortalLayout({
   // Unauthenticated — show auth pages full-screen
   if (!user) {
     return (
-      <div className="fixed inset-0 z-[100] bg-[#060912] overflow-auto">
+      <div className="fixed inset-0 z-[100] bg-[var(--bg)] overflow-auto">
         {children}
       </div>
     );
@@ -55,7 +55,7 @@ export default async function PortalLayout({
     .eq("read", false);
 
   return (
-    <div className="fixed inset-0 z-[100] bg-[#060912] flex overflow-hidden">
+    <div className="fixed inset-0 z-[100] bg-[var(--bg)] flex overflow-hidden">
       <PortalSidebar
         profile={profile as Profile | null}
         userEmail={user.email ?? ""}

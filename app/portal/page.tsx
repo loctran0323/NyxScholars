@@ -56,11 +56,11 @@ export default async function PortalDashboard() {
     <div className="space-y-8">
       {/* Welcome */}
       <div>
-        <p className="text-[13px] text-[#4e5d72] uppercase tracking-wider font-semibold mb-1">Dashboard</p>
-        <h1 className="text-[28px] font-bold text-[#f0ece3] leading-tight">
+        <p className="text-[13px] text-[var(--text-3)] uppercase tracking-wider font-semibold mb-1">Dashboard</p>
+        <h1 className="text-[28px] font-bold text-[var(--text-1)] leading-tight">
           Welcome back, {displayName.split(" ")[0]} ✦
         </h1>
-        <p className="text-[#8d9ab0] mt-1 text-[15px]">
+        <p className="text-[var(--text-2)] mt-1 text-[15px]">
           {typedProfile?.target_test
             ? `${typedProfile.target_test} prep${typedProfile.target_score ? ` · Target ${typedProfile.target_score}` : ""}`
             : "Ready to level up your scores?"}
@@ -82,7 +82,7 @@ export default async function PortalDashboard() {
             value: unreadCount,
             icon: MessageSquare,
             href: "/portal/messages",
-            color: unreadCount > 0 ? "text-[#d4a853]" : "text-[#4e5d72]",
+            color: unreadCount > 0 ? "text-[var(--accent)]" : "text-[var(--text-3)]",
           },
           {
             label: "Materials Available",
@@ -96,17 +96,17 @@ export default async function PortalDashboard() {
             value: typedProfile?.grade ? `G${typedProfile.grade}` : "—",
             icon: null,
             href: "/portal/profile",
-            color: "text-[#8d9ab0]",
+            color: "text-[var(--text-2)]",
           },
         ].map((stat) => (
           <Link
             key={stat.label}
             href={stat.href}
-            className="bg-[#0f1521] border border-white/[0.07] rounded-2xl p-4 hover:border-white/[0.14] transition-all group"
+            className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-4 hover:border-[var(--border-2)] transition-all group"
           >
             <div className="flex items-center justify-between mb-2">
-              <p className="text-[11px] text-[#4e5d72] font-semibold uppercase tracking-wider">{stat.label}</p>
-              {stat.icon && <stat.icon size={14} className="text-[#4e5d72] group-hover:text-[#8d9ab0] transition-colors" />}
+              <p className="text-[11px] text-[var(--text-3)] font-semibold uppercase tracking-wider">{stat.label}</p>
+              {stat.icon && <stat.icon size={14} className="text-[var(--text-3)] group-hover:text-[var(--text-2)] transition-colors" />}
             </div>
             <p className={`text-[24px] font-bold ${stat.color}`}>{stat.value}</p>
           </Link>
@@ -115,20 +115,20 @@ export default async function PortalDashboard() {
 
       <div className="grid md:grid-cols-2 gap-6">
         {/* Upcoming sessions */}
-        <div className="bg-[#0f1521] border border-white/[0.07] rounded-2xl overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
-            <h2 className="font-semibold text-[#f0ece3] text-[15px]">Upcoming Sessions</h2>
-            <Link href="/portal/sessions" className="text-[12px] text-[#8d9ab0] hover:text-[#d4a853] flex items-center gap-1 transition-colors">
+        <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
+            <h2 className="font-semibold text-[var(--text-1)] text-[15px]">Upcoming Sessions</h2>
+            <Link href="/portal/sessions" className="text-[12px] text-[var(--text-2)] hover:text-[var(--accent)] flex items-center gap-1 transition-colors">
               View all <ChevronRight size={12} />
             </Link>
           </div>
           {typedSessions.length === 0 ? (
             <div className="px-5 py-8 text-center">
-              <Calendar size={28} className="text-[#4e5d72] mx-auto mb-3" />
-              <p className="text-[13px] text-[#8d9ab0] mb-3">No upcoming sessions yet</p>
+              <Calendar size={28} className="text-[var(--text-3)] mx-auto mb-3" />
+              <p className="text-[13px] text-[var(--text-2)] mb-3">No upcoming sessions yet</p>
               <Link
                 href="/portal/schedule"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-b from-[#e0b55c] to-[#c99438] text-black text-[13px] font-bold hover:from-[#eac068] hover:to-[#d4a045] transition-all"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-b from-[var(--accent-bright)] to-[var(--accent)] text-black text-[13px] font-bold hover:from-[#e2c685] hover:to-[#cba961] transition-all"
               >
                 <CalendarPlus size={14} />
                 Schedule one
@@ -142,24 +142,24 @@ export default async function PortalDashboard() {
                   href={`/portal/sessions/${session.id}`}
                   className="flex items-start gap-3 px-5 py-4 hover:bg-white/[0.02] transition-colors"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-[#141b2d] border border-white/[0.07] flex flex-col items-center justify-center shrink-0">
-                    <span className="text-[10px] text-[#4e5d72] font-medium uppercase">
+                  <div className="w-10 h-10 rounded-xl bg-[var(--surface-elevated)] border border-[var(--border)] flex flex-col items-center justify-center shrink-0">
+                    <span className="text-[10px] text-[var(--text-3)] font-medium uppercase">
                       {format(new Date(session.scheduled_at), "MMM")}
                     </span>
-                    <span className="text-[15px] font-bold text-[#f0ece3] leading-tight">
+                    <span className="text-[15px] font-bold text-[var(--text-1)] leading-tight">
                       {format(new Date(session.scheduled_at), "d")}
                     </span>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[13.5px] font-semibold text-[#f0ece3] truncate">{session.subject}</p>
+                    <p className="text-[13.5px] font-semibold text-[var(--text-1)] truncate">{session.subject}</p>
                     <div className="flex items-center gap-2 mt-0.5">
-                      <Clock size={11} className="text-[#4e5d72]" />
-                      <span className="text-[12px] text-[#8d9ab0]">
+                      <Clock size={11} className="text-[var(--text-3)]" />
+                      <span className="text-[12px] text-[var(--text-2)]">
                         {format(new Date(session.scheduled_at), "h:mm a")} · {session.duration_minutes}min
                       </span>
                     </div>
                     {session.tutor_name && (
-                      <p className="text-[12px] text-[#4e5d72] mt-0.5">{session.tutor_name}</p>
+                      <p className="text-[12px] text-[var(--text-3)] mt-0.5">{session.tutor_name}</p>
                     )}
                   </div>
                   <Badge variant={statusVariant(session.status)} size="sm">
@@ -172,27 +172,27 @@ export default async function PortalDashboard() {
         </div>
 
         {/* Recent messages */}
-        <div className="bg-[#0f1521] border border-white/[0.07] rounded-2xl overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
+        <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
             <div className="flex items-center gap-2">
-              <h2 className="font-semibold text-[#f0ece3] text-[15px]">Messages</h2>
+              <h2 className="font-semibold text-[var(--text-1)] text-[15px]">Messages</h2>
               {unreadCount > 0 && (
-                <span className="w-5 h-5 rounded-full bg-[#d4a853] text-black text-[10px] font-bold flex items-center justify-center">
+                <span className="w-5 h-5 rounded-full bg-[var(--accent)] text-black text-[10px] font-bold flex items-center justify-center">
                   {unreadCount}
                 </span>
               )}
             </div>
-            <Link href="/portal/messages" className="text-[12px] text-[#8d9ab0] hover:text-[#d4a853] flex items-center gap-1 transition-colors">
+            <Link href="/portal/messages" className="text-[12px] text-[var(--text-2)] hover:text-[var(--accent)] flex items-center gap-1 transition-colors">
               Open chat <ChevronRight size={12} />
             </Link>
           </div>
           {typedMessages.length === 0 ? (
             <div className="px-5 py-8 text-center">
-              <MessageSquare size={28} className="text-[#4e5d72] mx-auto mb-3" />
-              <p className="text-[13px] text-[#8d9ab0] mb-3">No messages yet</p>
+              <MessageSquare size={28} className="text-[var(--text-3)] mx-auto mb-3" />
+              <p className="text-[13px] text-[var(--text-2)] mb-3">No messages yet</p>
               <Link
                 href="/portal/messages"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.06] border border-white/[0.1] text-[#c8d0de] text-[13px] font-medium hover:border-white/[0.18] transition-all"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.06] border border-white/[0.1] text-[var(--text-1)] text-[13px] font-medium hover:border-white/[0.18] transition-all"
               >
                 <MessageSquare size={13} />
                 Say hello
@@ -208,21 +208,21 @@ export default async function PortalDashboard() {
                 >
                   <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-[10px] font-bold ${
                     msg.sender === "nyx"
-                      ? "bg-[#d4a853]/15 text-[#d4a853] border border-[#d4a853]/20"
-                      : "bg-white/[0.07] text-[#8d9ab0] border border-white/[0.1]"
+                      ? "bg-[var(--border-accent)] text-[var(--accent)] border border-[var(--border-accent)]"
+                      : "bg-white/[0.07] text-[var(--text-2)] border border-white/[0.1]"
                   }`}>
                     {msg.sender === "nyx" ? "N" : "Me"}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-[12px] font-semibold text-[#8d9ab0]">
-                        {msg.sender === "nyx" ? "Nyx Scholars" : "You"}
+                      <span className="text-[12px] font-semibold text-[var(--text-2)]">
+                        {msg.sender === "nyx" ? "Nyx" : "You"}
                       </span>
                       {msg.sender === "nyx" && !msg.read && (
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#d4a853] shrink-0" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shrink-0" />
                       )}
                     </div>
-                    <p className="text-[13px] text-[#c8d0de] truncate mt-0.5">{msg.content}</p>
+                    <p className="text-[13px] text-[var(--text-1)] truncate mt-0.5">{msg.content}</p>
                   </div>
                 </Link>
               ))}
@@ -233,46 +233,46 @@ export default async function PortalDashboard() {
 
       {/* Quick actions */}
       <div>
-        <h2 className="text-[13px] font-semibold text-[#4e5d72] uppercase tracking-wider mb-3">Quick Actions</h2>
+        <h2 className="text-[13px] font-semibold text-[var(--text-3)] uppercase tracking-wider mb-3">Quick Actions</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <Link
             href="/portal/schedule"
-            className="flex items-center gap-4 p-4 bg-[#0f1521] border border-white/[0.07] rounded-2xl hover:border-[#d4a853]/30 hover:bg-[#d4a853]/[0.03] transition-all group"
+            className="flex items-center gap-4 p-4 bg-[var(--surface)] border border-[var(--border)] rounded-2xl hover:border-[var(--border-accent)] hover:bg-[var(--accent-dim)] transition-all group"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#d4a853]/20 to-[#a07830]/10 border border-[#d4a853]/15 flex items-center justify-center shrink-0">
-              <CalendarPlus size={17} className="text-[#d4a853]" />
+            <div className="w-10 h-10 rounded-xl bg-[var(--accent-dim)] border border-[var(--border-accent)] flex items-center justify-center shrink-0">
+              <CalendarPlus size={17} className="text-[var(--accent)]" />
             </div>
             <div>
-              <p className="text-[13.5px] font-semibold text-[#f0ece3]">Schedule Session</p>
-              <p className="text-[12px] text-[#4e5d72]">Request a tutor</p>
+              <p className="text-[13.5px] font-semibold text-[var(--text-1)]">Schedule Session</p>
+              <p className="text-[12px] text-[var(--text-3)]">Request a tutor</p>
             </div>
-            <ChevronRight size={14} className="text-[#4e5d72] ml-auto group-hover:text-[#d4a853] transition-colors" />
+            <ChevronRight size={14} className="text-[var(--text-3)] ml-auto group-hover:text-[var(--accent)] transition-colors" />
           </Link>
           <Link
             href="/portal/materials"
-            className="flex items-center gap-4 p-4 bg-[#0f1521] border border-white/[0.07] rounded-2xl hover:border-emerald-500/30 hover:bg-emerald-500/[0.02] transition-all group"
+            className="flex items-center gap-4 p-4 bg-[var(--surface)] border border-[var(--border)] rounded-2xl hover:border-emerald-500/30 hover:bg-emerald-500/[0.02] transition-all group"
           >
             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/15 flex items-center justify-center shrink-0">
               <BookOpen size={17} className="text-emerald-400" />
             </div>
             <div>
-              <p className="text-[13.5px] font-semibold text-[#f0ece3]">Practice Materials</p>
-              <p className="text-[12px] text-[#4e5d72]">SAT & ACT resources</p>
+              <p className="text-[13.5px] font-semibold text-[var(--text-1)]">Practice Materials</p>
+              <p className="text-[12px] text-[var(--text-3)]">SAT & ACT resources</p>
             </div>
-            <ChevronRight size={14} className="text-[#4e5d72] ml-auto group-hover:text-emerald-400 transition-colors" />
+            <ChevronRight size={14} className="text-[var(--text-3)] ml-auto group-hover:text-emerald-400 transition-colors" />
           </Link>
           <Link
             href="/portal/messages"
-            className="flex items-center gap-4 p-4 bg-[#0f1521] border border-white/[0.07] rounded-2xl hover:border-blue-500/30 hover:bg-blue-500/[0.02] transition-all group"
+            className="flex items-center gap-4 p-4 bg-[var(--surface)] border border-[var(--border)] rounded-2xl hover:border-blue-500/30 hover:bg-blue-500/[0.02] transition-all group"
           >
             <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/15 flex items-center justify-center shrink-0">
               <MessageSquare size={17} className="text-blue-400" />
             </div>
             <div>
-              <p className="text-[13.5px] font-semibold text-[#f0ece3]">Message Us</p>
-              <p className="text-[12px] text-[#4e5d72]">Ask the Nyx team</p>
+              <p className="text-[13.5px] font-semibold text-[var(--text-1)]">Message Us</p>
+              <p className="text-[12px] text-[var(--text-3)]">Ask the Nyx team</p>
             </div>
-            <ChevronRight size={14} className="text-[#4e5d72] ml-auto group-hover:text-blue-400 transition-colors" />
+            <ChevronRight size={14} className="text-[var(--text-3)] ml-auto group-hover:text-blue-400 transition-colors" />
           </Link>
         </div>
       </div>
