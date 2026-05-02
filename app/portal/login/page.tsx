@@ -23,7 +23,7 @@ export default function LoginPage() {
   if (!supabase) {
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
-        <p className="text-[#8d9ab0] text-center">
+        <p className="text-[var(--text-2)] text-center">
           Authentication is not configured. Please set up Supabase environment variables.
         </p>
       </div>
@@ -74,7 +74,7 @@ export default function LoginPage() {
       <div className="relative z-10 p-6">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-[13px] text-[#8d9ab0] hover:text-[#f0ece3] transition-colors"
+          className="inline-flex items-center gap-2 text-[13px] text-[var(--text-2)] hover:text-[var(--text-1)] transition-colors"
         >
           <ArrowLeft size={14} />
           Back to site
@@ -86,27 +86,27 @@ export default function LoginPage() {
         <div className="w-full max-w-[400px]">
           {/* Brand */}
           <div className="text-center mb-8">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#d4a853] to-[#a07830] shadow-lg shadow-[#d4a853]/25 flex items-center justify-center mx-auto mb-4">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[var(--accent-bright)] to-[#a98842] shadow-lg shadow-[var(--accent-dim)] flex items-center justify-center mx-auto mb-4">
               <span className="text-black font-black text-lg">N</span>
             </div>
-            <h1 className="text-2xl font-bold text-[#f0ece3] mb-1">Welcome back</h1>
-            <p className="text-[14px] text-[#8d9ab0]">Sign in to your Nyx Scholars portal</p>
+            <h1 className="text-2xl font-bold text-[var(--text-1)] mb-1">Welcome back</h1>
+            <p className="text-[14px] text-[var(--text-2)]">Sign in to your Nyx portal</p>
           </div>
 
           {/* Card */}
-          <div className="bg-[#0f1521] border border-white/[0.08] rounded-2xl p-7">
+          <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-7">
             {resetSent ? (
               <div className="text-center py-4">
                 <div className="w-10 h-10 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-3">
                   <span className="text-emerald-400 text-lg">✓</span>
                 </div>
-                <p className="text-[#f0ece3] font-semibold mb-1">Check your email</p>
-                <p className="text-[13px] text-[#8d9ab0]">
-                  We sent a password reset link to <strong className="text-[#f0ece3]">{email}</strong>
+                <p className="text-[var(--text-1)] font-semibold mb-1">Check your email</p>
+                <p className="text-[13px] text-[var(--text-2)]">
+                  We sent a password reset link to <strong className="text-[var(--text-1)]">{email}</strong>
                 </p>
                 <button
                   onClick={() => setResetSent(false)}
-                  className="mt-4 text-[13px] text-[#d4a853] hover:underline"
+                  className="mt-4 text-[13px] text-[var(--accent)] hover:underline"
                 >
                   Back to sign in
                 </button>
@@ -120,7 +120,7 @@ export default function LoginPage() {
                 )}
 
                 <div className="space-y-1.5">
-                  <label className="block text-[13px] font-medium text-[#8d9ab0]">
+                  <label className="block text-[13px] font-medium text-[var(--text-2)]">
                     Email address
                   </label>
                   <input
@@ -130,12 +130,12 @@ export default function LoginPage() {
                     required
                     autoComplete="email"
                     placeholder="you@example.com"
-                    className="w-full h-10 px-3.5 rounded-xl bg-[#0b0f1a] border border-white/[0.08] text-[14px] text-[#f0ece3] placeholder:text-[#4e5d72] focus:outline-none focus:ring-2 focus:ring-[#d4a853]/40 focus:border-[#d4a853]/40 transition-all"
+                    className="w-full h-10 px-3.5 rounded-xl bg-[var(--bg-2)] border border-[var(--border)] text-[14px] text-[var(--text-1)] placeholder:text-[var(--text-3)] focus:outline-none focus:ring-2 focus:ring-[var(--border-accent)] focus:border-[var(--border-accent)] transition-all"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="block text-[13px] font-medium text-[#8d9ab0]">
+                  <label className="block text-[13px] font-medium text-[var(--text-2)]">
                     Password
                   </label>
                   <div className="relative">
@@ -146,12 +146,12 @@ export default function LoginPage() {
                       required
                       autoComplete="current-password"
                       placeholder="••••••••"
-                      className="w-full h-10 px-3.5 pr-10 rounded-xl bg-[#0b0f1a] border border-white/[0.08] text-[14px] text-[#f0ece3] placeholder:text-[#4e5d72] focus:outline-none focus:ring-2 focus:ring-[#d4a853]/40 focus:border-[#d4a853]/40 transition-all"
+                      className="w-full h-10 px-3.5 pr-10 rounded-xl bg-[var(--bg-2)] border border-[var(--border)] text-[14px] text-[var(--text-1)] placeholder:text-[var(--text-3)] focus:outline-none focus:ring-2 focus:ring-[var(--border-accent)] focus:border-[var(--border-accent)] transition-all"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#4e5d72] hover:text-[#8d9ab0] transition-colors"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-3)] hover:text-[var(--text-2)] transition-colors"
                     >
                       {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                     </button>
@@ -159,7 +159,7 @@ export default function LoginPage() {
                   <button
                     type="button"
                     onClick={handleForgotPassword}
-                    className="text-[12px] text-[#4e5d72] hover:text-[#d4a853] transition-colors"
+                    className="text-[12px] text-[var(--text-3)] hover:text-[var(--accent)] transition-colors"
                   >
                     Forgot password?
                   </button>
@@ -170,8 +170,8 @@ export default function LoginPage() {
                   disabled={loading}
                   className={cn(
                     "w-full h-11 rounded-xl font-bold text-[14px] transition-all",
-                    "bg-gradient-to-b from-[#e0b55c] to-[#c99438] text-black",
-                    "hover:from-[#eac068] hover:to-[#d4a045] shadow-lg shadow-[#d4a853]/20 hover:shadow-[#d4a853]/35",
+                    "bg-gradient-to-b from-[var(--accent-bright)] to-[var(--accent)] text-black",
+                    "hover:from-[#e2c685] hover:to-[#cba961] shadow-lg shadow-[var(--accent-dim)] hover:shadow-[var(--accent-dim)]",
                     "disabled:opacity-60 disabled:cursor-not-allowed"
                   )}
                 >
@@ -181,9 +181,9 @@ export default function LoginPage() {
             )}
           </div>
 
-          <p className="text-center text-[13px] text-[#4e5d72] mt-5">
+          <p className="text-center text-[13px] text-[var(--text-3)] mt-5">
             Don&apos;t have an account?{" "}
-            <Link href="/portal/signup" className="text-[#d4a853] hover:underline font-medium">
+            <Link href="/portal/signup" className="text-[var(--accent)] hover:underline font-medium">
               Create one
             </Link>
           </p>

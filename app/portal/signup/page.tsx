@@ -29,7 +29,7 @@ export default function SignupPage() {
   if (!supabase) {
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
-        <p className="text-[#8d9ab0] text-center">
+        <p className="text-[var(--text-2)] text-center">
           Authentication is not configured. Please set up Supabase environment variables.
         </p>
       </div>
@@ -96,7 +96,7 @@ export default function SignupPage() {
       <div className="relative z-10 p-6">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-[13px] text-[#8d9ab0] hover:text-[#f0ece3] transition-colors"
+          className="inline-flex items-center gap-2 text-[13px] text-[var(--text-2)] hover:text-[var(--text-1)] transition-colors"
         >
           <ArrowLeft size={14} />
           Back to site
@@ -106,11 +106,11 @@ export default function SignupPage() {
       <div className="flex-1 flex items-center justify-center px-4 pb-12">
         <div className="w-full max-w-[420px]">
           <div className="text-center mb-8">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#d4a853] to-[#a07830] shadow-lg shadow-[#d4a853]/25 flex items-center justify-center mx-auto mb-4">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[var(--accent-bright)] to-[#a98842] shadow-lg shadow-[var(--accent-dim)] flex items-center justify-center mx-auto mb-4">
               <span className="text-black font-black text-lg">N</span>
             </div>
-            <h1 className="text-2xl font-bold text-[#f0ece3] mb-1">Create your account</h1>
-            <p className="text-[14px] text-[#8d9ab0]">Join Nyx Scholars and start your prep journey</p>
+            <h1 className="text-2xl font-bold text-[var(--text-1)] mb-1">Create your account</h1>
+            <p className="text-[14px] text-[var(--text-2)]">Join Nyx and start your prep journey</p>
           </div>
 
           {/* Step indicator */}
@@ -118,34 +118,34 @@ export default function SignupPage() {
             {[1, 2].map((s) => (
               <div key={s} className="flex-1 h-1 rounded-full overflow-hidden bg-white/[0.06]">
                 <div
-                  className="h-full bg-gradient-to-r from-[#d4a853] to-[#c99438] transition-all duration-300"
+                  className="h-full bg-gradient-to-r from-[var(--accent)] to-[var(--accent)] transition-all duration-300"
                   style={{ width: step >= s ? "100%" : "0%" }}
                 />
               </div>
             ))}
           </div>
 
-          <div className="bg-[#0f1521] border border-white/[0.08] rounded-2xl p-7">
+          <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-7">
             {success ? (
               <div className="text-center py-4">
                 <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-4">
                   <span className="text-emerald-400 text-2xl">✓</span>
                 </div>
-                <p className="text-[#f0ece3] font-bold text-lg mb-2">Check your inbox</p>
-                <p className="text-[13px] text-[#8d9ab0] leading-relaxed">
+                <p className="text-[var(--text-1)] font-bold text-lg mb-2">Check your inbox</p>
+                <p className="text-[13px] text-[var(--text-2)] leading-relaxed">
                   We sent a confirmation link to{" "}
-                  <strong className="text-[#f0ece3]">{email}</strong>. Click it to activate your account.
+                  <strong className="text-[var(--text-1)]">{email}</strong>. Click it to activate your account.
                 </p>
                 <Link
                   href="/portal/login"
-                  className="mt-5 inline-block text-[13px] text-[#d4a853] hover:underline"
+                  className="mt-5 inline-block text-[13px] text-[var(--accent)] hover:underline"
                 >
                   Go to sign in
                 </Link>
               </div>
             ) : step === 1 ? (
               <form onSubmit={handleStep1} className="space-y-4">
-                <p className="text-[12px] font-semibold text-[#4e5d72] uppercase tracking-wider mb-4">
+                <p className="text-[12px] font-semibold text-[var(--text-3)] uppercase tracking-wider mb-4">
                   Step 1 — Account credentials
                 </p>
                 {error && (
@@ -154,18 +154,18 @@ export default function SignupPage() {
                   </div>
                 )}
                 <div className="space-y-1.5">
-                  <label className="block text-[13px] font-medium text-[#8d9ab0]">Email address</label>
+                  <label className="block text-[13px] font-medium text-[var(--text-2)]">Email address</label>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     placeholder="you@example.com"
-                    className="w-full h-10 px-3.5 rounded-xl bg-[#0b0f1a] border border-white/[0.08] text-[14px] text-[#f0ece3] placeholder:text-[#4e5d72] focus:outline-none focus:ring-2 focus:ring-[#d4a853]/40 focus:border-[#d4a853]/40 transition-all"
+                    className="w-full h-10 px-3.5 rounded-xl bg-[var(--bg-2)] border border-[var(--border)] text-[14px] text-[var(--text-1)] placeholder:text-[var(--text-3)] focus:outline-none focus:ring-2 focus:ring-[var(--border-accent)] focus:border-[var(--border-accent)] transition-all"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="block text-[13px] font-medium text-[#8d9ab0]">Password</label>
+                  <label className="block text-[13px] font-medium text-[var(--text-2)]">Password</label>
                   <div className="relative">
                     <input
                       type={showPassword ? "text" : "password"}
@@ -173,33 +173,33 @@ export default function SignupPage() {
                       onChange={(e) => setPassword(e.target.value)}
                       required
                       placeholder="Min. 8 characters"
-                      className="w-full h-10 px-3.5 pr-10 rounded-xl bg-[#0b0f1a] border border-white/[0.08] text-[14px] text-[#f0ece3] placeholder:text-[#4e5d72] focus:outline-none focus:ring-2 focus:ring-[#d4a853]/40 focus:border-[#d4a853]/40 transition-all"
+                      className="w-full h-10 px-3.5 pr-10 rounded-xl bg-[var(--bg-2)] border border-[var(--border)] text-[14px] text-[var(--text-1)] placeholder:text-[var(--text-3)] focus:outline-none focus:ring-2 focus:ring-[var(--border-accent)] focus:border-[var(--border-accent)] transition-all"
                     />
                     <button type="button" onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#4e5d72] hover:text-[#8d9ab0] transition-colors">
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-3)] hover:text-[var(--text-2)] transition-colors">
                       {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                     </button>
                   </div>
                 </div>
                 <div className="space-y-1.5">
-                  <label className="block text-[13px] font-medium text-[#8d9ab0]">Confirm password</label>
+                  <label className="block text-[13px] font-medium text-[var(--text-2)]">Confirm password</label>
                   <input
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
                     placeholder="••••••••"
-                    className="w-full h-10 px-3.5 rounded-xl bg-[#0b0f1a] border border-white/[0.08] text-[14px] text-[#f0ece3] placeholder:text-[#4e5d72] focus:outline-none focus:ring-2 focus:ring-[#d4a853]/40 focus:border-[#d4a853]/40 transition-all"
+                    className="w-full h-10 px-3.5 rounded-xl bg-[var(--bg-2)] border border-[var(--border)] text-[14px] text-[var(--text-1)] placeholder:text-[var(--text-3)] focus:outline-none focus:ring-2 focus:ring-[var(--border-accent)] focus:border-[var(--border-accent)] transition-all"
                   />
                 </div>
                 <button type="submit"
-                  className="w-full h-11 rounded-xl font-bold text-[14px] bg-gradient-to-b from-[#e0b55c] to-[#c99438] text-black hover:from-[#eac068] hover:to-[#d4a045] shadow-lg shadow-[#d4a853]/20 transition-all">
+                  className="w-full h-11 rounded-xl font-bold text-[14px] bg-gradient-to-b from-[var(--accent-bright)] to-[var(--accent)] text-black hover:from-[#e2c685] hover:to-[#cba961] shadow-lg shadow-[var(--accent-dim)] transition-all">
                   Continue
                 </button>
               </form>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
-                <p className="text-[12px] font-semibold text-[#4e5d72] uppercase tracking-wider mb-4">
+                <p className="text-[12px] font-semibold text-[var(--text-3)] uppercase tracking-wider mb-4">
                   Step 2 — Your profile
                 </p>
                 {error && (
@@ -208,33 +208,33 @@ export default function SignupPage() {
                   </div>
                 )}
                 <div className="space-y-1.5">
-                  <label className="block text-[13px] font-medium text-[#8d9ab0]">Full name</label>
+                  <label className="block text-[13px] font-medium text-[var(--text-2)]">Full name</label>
                   <input
                     type="text"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="Your full name"
-                    className="w-full h-10 px-3.5 rounded-xl bg-[#0b0f1a] border border-white/[0.08] text-[14px] text-[#f0ece3] placeholder:text-[#4e5d72] focus:outline-none focus:ring-2 focus:ring-[#d4a853]/40 focus:border-[#d4a853]/40 transition-all"
+                    className="w-full h-10 px-3.5 rounded-xl bg-[var(--bg-2)] border border-[var(--border)] text-[14px] text-[var(--text-1)] placeholder:text-[var(--text-3)] focus:outline-none focus:ring-2 focus:ring-[var(--border-accent)] focus:border-[var(--border-accent)] transition-all"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1.5">
-                    <label className="block text-[13px] font-medium text-[#8d9ab0]">Grade</label>
+                    <label className="block text-[13px] font-medium text-[var(--text-2)]">Grade</label>
                     <select
                       value={grade}
                       onChange={(e) => setGrade(e.target.value)}
-                      className="w-full h-10 px-3.5 rounded-xl bg-[#0b0f1a] border border-white/[0.08] text-[14px] text-[#f0ece3] focus:outline-none focus:ring-2 focus:ring-[#d4a853]/40 transition-all cursor-pointer"
+                      className="w-full h-10 px-3.5 rounded-xl bg-[var(--bg-2)] border border-[var(--border)] text-[14px] text-[var(--text-1)] focus:outline-none focus:ring-2 focus:ring-[var(--border-accent)] transition-all cursor-pointer"
                     >
                       <option value="">Select</option>
                       {GRADES.map((g) => <option key={g} value={g}>{g}</option>)}
                     </select>
                   </div>
                   <div className="space-y-1.5">
-                    <label className="block text-[13px] font-medium text-[#8d9ab0]">Target test</label>
+                    <label className="block text-[13px] font-medium text-[var(--text-2)]">Target test</label>
                     <select
                       value={targetTest}
                       onChange={(e) => setTargetTest(e.target.value as "SAT" | "ACT" | "")}
-                      className="w-full h-10 px-3.5 rounded-xl bg-[#0b0f1a] border border-white/[0.08] text-[14px] text-[#f0ece3] focus:outline-none focus:ring-2 focus:ring-[#d4a853]/40 transition-all cursor-pointer"
+                      className="w-full h-10 px-3.5 rounded-xl bg-[var(--bg-2)] border border-[var(--border)] text-[14px] text-[var(--text-1)] focus:outline-none focus:ring-2 focus:ring-[var(--border-accent)] transition-all cursor-pointer"
                     >
                       <option value="">Select</option>
                       <option value="SAT">SAT</option>
@@ -243,22 +243,22 @@ export default function SignupPage() {
                   </div>
                 </div>
                 <div className="space-y-1.5">
-                  <label className="block text-[13px] font-medium text-[#8d9ab0]">
-                    School <span className="text-[#4e5d72] font-normal">(optional)</span>
+                  <label className="block text-[13px] font-medium text-[var(--text-2)]">
+                    School <span className="text-[var(--text-3)] font-normal">(optional)</span>
                   </label>
                   <input
                     type="text"
                     value={school}
                     onChange={(e) => setSchool(e.target.value)}
                     placeholder="Your high school"
-                    className="w-full h-10 px-3.5 rounded-xl bg-[#0b0f1a] border border-white/[0.08] text-[14px] text-[#f0ece3] placeholder:text-[#4e5d72] focus:outline-none focus:ring-2 focus:ring-[#d4a853]/40 focus:border-[#d4a853]/40 transition-all"
+                    className="w-full h-10 px-3.5 rounded-xl bg-[var(--bg-2)] border border-[var(--border)] text-[14px] text-[var(--text-1)] placeholder:text-[var(--text-3)] focus:outline-none focus:ring-2 focus:ring-[var(--border-accent)] focus:border-[var(--border-accent)] transition-all"
                   />
                 </div>
                 <div className="flex gap-3 pt-1">
                   <button
                     type="button"
                     onClick={() => setStep(1)}
-                    className="flex-1 h-11 rounded-xl font-medium text-[14px] text-[#8d9ab0] bg-white/[0.04] border border-white/[0.08] hover:border-white/[0.14] transition-all"
+                    className="flex-1 h-11 rounded-xl font-medium text-[14px] text-[var(--text-2)] bg-white/[0.04] border border-[var(--border)] hover:border-[var(--border-2)] transition-all"
                   >
                     Back
                   </button>
@@ -266,8 +266,8 @@ export default function SignupPage() {
                     type="submit"
                     disabled={loading}
                     className={cn(
-                      "flex-1 h-11 rounded-xl font-bold text-[14px] bg-gradient-to-b from-[#e0b55c] to-[#c99438] text-black",
-                      "hover:from-[#eac068] hover:to-[#d4a045] shadow-lg shadow-[#d4a853]/20 transition-all",
+                      "flex-1 h-11 rounded-xl font-bold text-[14px] bg-gradient-to-b from-[var(--accent-bright)] to-[var(--accent)] text-black",
+                      "hover:from-[#e2c685] hover:to-[#cba961] shadow-lg shadow-[var(--accent-dim)] transition-all",
                       "disabled:opacity-60 disabled:cursor-not-allowed"
                     )}
                   >
@@ -278,9 +278,9 @@ export default function SignupPage() {
             )}
           </div>
 
-          <p className="text-center text-[13px] text-[#4e5d72] mt-5">
+          <p className="text-center text-[13px] text-[var(--text-3)] mt-5">
             Already have an account?{" "}
-            <Link href="/portal/login" className="text-[#d4a853] hover:underline font-medium">
+            <Link href="/portal/login" className="text-[var(--accent)] hover:underline font-medium">
               Sign in
             </Link>
           </p>
