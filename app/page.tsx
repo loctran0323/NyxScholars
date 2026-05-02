@@ -86,12 +86,12 @@ export default function HomePage() {
             transition={{ duration: 0.6, delay: 0.4, ease: EASE }}
             className="mt-12 flex flex-col sm:flex-row gap-4 items-start sm:items-center"
           >
-            <CTA href="/apply" size="lg">Book a free trial session</CTA>
+            <CTA href="/match" size="lg">Get matched in 12 minutes</CTA>
             <Link
               href="/tutors"
               className="group inline-flex items-center gap-2 text-[var(--text-2)] hover:text-[var(--text-1)] font-medium text-[15px] transition-colors"
             >
-              Meet the tutors
+              Or browse tutors
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
             </Link>
           </motion.div>
@@ -367,12 +367,12 @@ export default function HomePage() {
               right fit we&apos;ll re-match you, or you walk away.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <CTA href="/apply" size="lg">Book free trial session</CTA>
+              <CTA href="/match" size="lg">Take the 12-min intake</CTA>
               <Link
-                href="/pricing"
+                href="/tutors"
                 className="group inline-flex items-center gap-2 text-[var(--text-2)] hover:text-[var(--text-1)] text-[15px] font-medium transition-colors px-3 py-4"
               >
-                See packages
+                Browse tutors instead
                 <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
               </Link>
             </div>

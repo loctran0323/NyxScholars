@@ -107,8 +107,8 @@ export default function Navbar() {
               Sign In
             </Link>
           )}
-          <CTA href="/apply" size="default" trailingIcon={false} className="px-4 py-2 text-[13px]">
-            Book Free Trial
+          <CTA href="/match" size="default" trailingIcon={false} className="px-4 py-2 text-[13px]">
+            Get Matched
           </CTA>
         </div>
 
@@ -172,8 +172,8 @@ export default function Navbar() {
                     Sign In
                   </Link>
                 )}
-                <CTA href="/apply" size="default" trailingIcon={false} className="w-full py-3">
-                  Book Free Trial
+                <CTA href="/match" size="default" trailingIcon={false} className="w-full py-3">
+                  Get Matched
                 </CTA>
               </div>
             </div>

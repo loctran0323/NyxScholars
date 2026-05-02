@@ -74,7 +74,7 @@ export default function FaqPage() {
           <p className="text-[var(--text-2)] text-[16px] leading-[1.7] mb-10">
             The trial is the fastest answer. No commitment.
           </p>
-          <CTA href="/apply" size="lg">Book free trial</CTA>
+          <CTA href="/match" size="lg">Get matched in 12 minutes</CTA>
         </div>
       </section>
     </div>

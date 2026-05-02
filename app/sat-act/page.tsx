@@ -178,7 +178,7 @@ export default function HowItWorksPage() {
               Thirty minutes with a vetted Ivy tutor. No card. No commitment.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <CTA href="/apply" size="lg">Book free trial</CTA>
+              <CTA href="/match" size="lg">Take the 12-min intake</CTA>
               <Link
                 href="/tutors"
                 className="group inline-flex items-center gap-2 text-[var(--text-2)] hover:text-[var(--text-1)] text-[15px] font-medium transition-colors px-3 py-4"
