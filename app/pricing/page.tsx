@@ -1,7 +1,8 @@
 import { Check, Minus } from "lucide-react";
 import {
   Eyebrow, Heading, Text, CTA,
-  Drift, Arc, BlobGlow, SignatureLine,
+  BgConstellationGrid, BgInkWash, BgFade,
+  SignatureLine,
 } from "@/components/system";
 
 export const metadata = { title: "Pricing" };
@@ -66,37 +67,36 @@ const matrix: { feature: string; free: boolean; scholar: boolean; constellation:
 
 export default function PricingPage() {
   return (
-    <div className="relative overflow-hidden">
-      <section className="relative pt-[120px] md:pt-[160px] pb-20">
-        <Drift density="med" seed={101} />
-        <BlobGlow position="top-right" color="gold" size="xl" intensity={0.14} />
-
-        <div className="relative max-w-[1280px] mx-auto px-5 sm:px-8">
+    <div className="relative">
+      <section className="relative min-h-[520px] flex items-end overflow-hidden pt-[100px] md:pt-0">
+        <BgConstellationGrid />
+        <div
+          aria-hidden
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: "linear-gradient(180deg, transparent 0%, transparent 30%, rgba(7,9,20,0.85) 80%, var(--bg) 100%)" }}
+        />
+        <div className="relative w-full max-w-[1180px] mx-auto px-5 sm:px-8 pb-16 md:pb-20">
           <div className="max-w-3xl">
             <Eyebrow color="brass" className="mb-6">Pricing</Eyebrow>
             <h1
-              className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.02] tracking-[-0.02em] mb-8"
-              style={{ fontSize: "clamp(2.6rem, 6vw, 5.2rem)" }}
+              className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.0] tracking-[-0.02em] mb-7"
+              style={{ fontSize: "clamp(2.4rem, 5.5vw, 4.8rem)" }}
             >
               Simple plans.{" "}
               <span className="font-[family-name:var(--font-cormorant)] italic">Real outcomes.</span>
             </h1>
-            <Text variant="lead" className="max-w-2xl">
+            <p className="text-[var(--text-2)] text-[18px] leading-[1.7] max-w-2xl">
               Three tiers and one optional add-on. Cancel anytime. Tutoring is sold separately,
               never bundled into thousand-dollar packages.
-            </Text>
-            <SignatureLine width={180} className="mt-10" />
+            </p>
+            <SignatureLine width={180} className="mt-9" />
           </div>
         </div>
       </section>
 
-      <Arc direction="up" intensity="medium" />
-
-      {/* Tiers — middle one is elevated and tilted slightly */}
       <section className="relative py-20 md:py-24 overflow-hidden">
-        <Drift density="low" seed={37} className="opacity-40" />
-        <BlobGlow position="center" color="gold" size="lg" intensity={0.08} />
-
+        <BgInkWash />
+        <BgFade height={120} />
         <div className="relative max-w-[1280px] mx-auto px-5 sm:px-8">
           <div className="grid md:grid-cols-3 gap-8 md:gap-6 lg:gap-8 items-center">
             {tiers.map((t, i) => {
@@ -107,7 +107,7 @@ export default function PricingPage() {
                   className={`relative rounded-[28px] p-8 md:p-9 transition-all duration-500 ${
                     isMid
                       ? "bg-[var(--accent-dim)] border border-[var(--border-accent)] md:scale-[1.04] md:-translate-y-3 shadow-[0_28px_56px_rgba(0,0,0,0.45)]"
-                      : "bg-[var(--surface)]/70 backdrop-blur-sm border border-[var(--border)]"
+                      : "bg-[#0c1124]/70 backdrop-blur-sm border border-[var(--border)]"
                   }`}
                 >
                   {isMid ? (
@@ -141,16 +141,13 @@ export default function PricingPage() {
         </div>
       </section>
 
-      <Arc direction="down" intensity="subtle" />
-
-      {/* Feature matrix */}
-      <section className="relative py-24 md:py-28 bg-[var(--bg-2)]">
+      <section className="relative py-24 md:py-28">
         <div className="relative max-w-[1180px] mx-auto px-5 sm:px-8">
           <div className="mb-12">
             <Eyebrow color="moon" className="mb-4">Compare</Eyebrow>
             <Heading level={2}>Feature matrix</Heading>
           </div>
-          <div className="overflow-x-auto rounded-[24px] border border-[var(--border)] bg-[var(--surface)]/50 backdrop-blur-sm">
+          <div className="overflow-x-auto rounded-[24px] border border-[var(--border)] bg-[#0c1124]/40 backdrop-blur-sm">
             <table className="w-full text-left text-[14px]">
               <thead className="text-[var(--text-3)] uppercase text-[11px] tracking-[0.18em]">
                 <tr>

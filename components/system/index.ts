@@ -12,3 +12,25 @@ export { PlotEmbed } from "./PlotEmbed";
 export { HeroFrame } from "./HeroFrame";
 export { NyxMark, NyxLockup } from "./NyxMark";
 export { Drift, Arc, BlobGlow, SignatureLine } from "./Decoration";
+export {
+  SceneObservatory,
+  SceneTrajectory,
+  SceneStarChart,
+  SceneLanternDesk,
+  SceneCrescentField,
+  ScenePortraitVignette,
+} from "./Scenes";
+export {
+  BgDeepNight,
+  BgAuroraNebula,
+  BgShootingStars,
+  BgConstellationGrid,
+  BgCrescentMoon,
+  BgOrbital,
+  BgStardustField,
+  BgNorthStar,
+  BgParallaxStars,
+  BgEclipse,
+  BgInkWash,
+  BgFade,
+} from "./Backgrounds";

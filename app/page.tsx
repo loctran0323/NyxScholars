@@ -1,268 +1,226 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import {
-  Eyebrow, Heading, Text, CTA, PhotoFrame, PlotEmbed, NyxMark,
-  Drift, Arc, BlobGlow, SignatureLine,
+  Eyebrow, CTA, NyxMark,
+  BgAuroraNebula, BgShootingStars, BgConstellationGrid,
+  BgCrescentMoon, BgOrbital, BgNorthStar, BgInkWash, BgEclipse,
+  BgFade, SignatureLine,
 } from "@/components/system";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 28 },
-  show: (i: number) => ({
-    opacity: 1, y: 0,
-    transition: { delay: i * 0.08, duration: 0.7, ease: EASE },
-  }),
-};
-
 const principles = [
-  { n: "01", title: "Diagnose first.", body: "Thirty adaptive questions converge on a calibrated section score in under forty minutes — no guessing what to study." },
-  { n: "02", title: "Practice the gaps.", body: "Each session targets the skills at the edge of your ability, not the ones you have already mastered." },
-  { n: "03", title: "See the trajectory.", body: "Score curves, mastery heatmaps, time-to-target estimates — calibrated, not vibes." },
+  { n: "01", title: "Diagnose first.", body: "Thirty adaptive questions converge on a calibrated section score in under forty minutes." },
+  { n: "02", title: "Practice the gaps.", body: "Each session targets the skills at the edge of your ability, not the ones you already own." },
+  { n: "03", title: "See the trajectory.", body: "Score curves, mastery heatmaps, time-to-target — calibrated, not vibes." },
 ];
 
 export default function HomePage() {
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative">
 
       {/* ═══════════════════════════════════════════════════════════════
-         HERO — asymmetric, oversized italic display headline,
-         photo offset behind glow, eyebrow drifts in from the side
+         HERO — full-bleed shooting-stars background, typography sits
+         on the dark sky directly. No glass card on the score callout.
          ═══════════════════════════════════════════════════════════════ */}
-      <section className="relative pt-[120px] md:pt-[160px] pb-32 md:pb-40">
-        <Drift density="med" seed={11} />
-        <BlobGlow position="top-right" color="gold" size="xl" intensity={0.16} />
-        <BlobGlow position="bottom-left" color="moon" size="lg" intensity={0.10} />
+      <section className="relative min-h-[860px] md:min-h-[920px] flex items-center pt-[100px] md:pt-0 overflow-hidden">
+        <BgShootingStars />
+        {/* atmospheric darken on the typography side */}
+        <div
+          aria-hidden
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(90deg, rgba(7,9,20,0.85) 0%, rgba(7,9,20,0.55) 35%, transparent 70%)",
+          }}
+        />
+        <BgFade top={false} bottom height={120} />
 
-        <div className="relative max-w-[1280px] mx-auto px-5 sm:px-8">
-          <div className="grid lg:grid-cols-12 gap-10 lg:gap-6 items-center">
+        <div className="relative w-full max-w-[1320px] mx-auto px-5 sm:px-8">
+          <motion.div
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, ease: EASE }}
+            className="mb-7"
+          >
+            <Eyebrow color="brass">Adaptive SAT prep · Calibrated by Ivy-tier students</Eyebrow>
+          </motion.div>
 
-            {/* left rail — eyebrow + headline + CTAs */}
-            <div className="lg:col-span-7 relative">
-              <motion.div
-                initial={{ opacity: 0, x: -16 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, ease: EASE }}
-                className="mb-8 flex items-center gap-4"
-              >
-                <Eyebrow color="brass">Adaptive SAT prep · Calibrated by Ivy-tier students</Eyebrow>
-              </motion.div>
+          <motion.h1
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.05, ease: EASE }}
+            className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[0.96] tracking-[-0.02em] max-w-5xl"
+            style={{ fontSize: "clamp(2.8rem, 7vw, 6.5rem)" }}
+          >
+            The SAT,<br />
+            mapped to{" "}
+            <span className="font-[family-name:var(--font-cormorant)] italic font-normal text-gradient">your</span>{" "}
+            <span className="relative inline-block">
+              gaps.
+              <SignatureLine width={260} className="absolute -bottom-3 left-0 hidden md:block" />
+            </span>
+          </motion.h1>
 
-              <motion.h1
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.05, ease: EASE }}
-                className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[0.95] tracking-[-0.02em]"
-                style={{ fontSize: "clamp(2.8rem, 7vw, 6.5rem)" }}
-              >
-                The SAT,<br />
-                mapped to{" "}
-                <span className="font-[family-name:var(--font-cormorant)] italic font-normal text-gradient">your</span>{" "}
-                <span className="relative inline-block">
-                  gaps.
-                  <SignatureLine width={260} className="absolute -bottom-3 left-0 hidden md:block" />
-                </span>
-              </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.25, ease: EASE }}
+            className="mt-10 max-w-[520px] text-[var(--text-2)] text-[18px] leading-[1.7]"
+          >
+            Nyx is an adaptive preparation system that learns where you struggle, hands you the
+            exact questions that grow your score, and shows you the trajectory in real time.
+          </motion.p>
 
-              <motion.p
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.25, ease: EASE }}
-                className="mt-10 max-w-[520px] text-[var(--text-2)] text-[18px] leading-[1.7]"
-              >
-                Nyx is an adaptive preparation system that learns where you struggle, hands you the
-                exact questions that grow your score, and shows you the trajectory in real time.
-              </motion.p>
-
-              <motion.div
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4, ease: EASE }}
-                className="mt-12 flex flex-col sm:flex-row gap-4 items-start sm:items-center"
-              >
-                <CTA href="/apply" size="lg">Take the free diagnostic</CTA>
-                <Link
-                  href="/services"
-                  className="group inline-flex items-center gap-2 text-[var(--text-2)] hover:text-[var(--text-1)] font-medium text-[15px] transition-colors"
-                >
-                  How it works
-                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-                </Link>
-              </motion.div>
-
-              {/* drifting micro-trust strip — one inline line, not a card grid */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.6, ease: EASE }}
-                className="mt-16 flex flex-wrap items-center gap-x-8 gap-y-3 text-[var(--text-3)] text-[13px] font-mono uppercase tracking-[0.18em]"
-              >
-                <span className="flex items-center gap-2">
-                  <span className="w-1 h-1 rounded-full bg-[var(--accent)]" />
-                  Adaptive · IRT
-                </span>
-                <span className="flex items-center gap-2">
-                  <span className="w-1 h-1 rounded-full bg-[var(--accent)]" />
-                  Free diagnostic
-                </span>
-                <span className="flex items-center gap-2">
-                  <span className="w-1 h-1 rounded-full bg-[var(--accent)]" />
-                  Cancel anytime
-                </span>
-              </motion.div>
-            </div>
-
-            {/* right rail — offset photo + crescent overlay + drifting score callout */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.96, y: 30 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 1.1, delay: 0.2, ease: EASE }}
-              className="lg:col-span-5 relative h-[440px] lg:h-[560px]"
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4, ease: EASE }}
+            className="mt-12 flex flex-col sm:flex-row gap-4 items-start sm:items-center"
+          >
+            <CTA href="/apply" size="lg">Take the free diagnostic</CTA>
+            <Link
+              href="/services"
+              className="group inline-flex items-center gap-2 text-[var(--text-2)] hover:text-[var(--text-1)] font-medium text-[15px] transition-colors"
             >
-              {/* main hero photo — rotated slightly off-axis */}
-              <div className="absolute inset-0 lg:right-[-40px] lg:left-[20px] rotate-[1.5deg]">
-                <PhotoFrame
-                  alt="Late-night study"
-                  aspect="portrait"
-                  rounded="lg"
-                  seed="hero-primary"
-                  className="h-full"
-                />
-              </div>
+              How it works
+              <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+            </Link>
+          </motion.div>
 
-              {/* large floating crescent ornament behind */}
-              <NyxMark
-                size={200}
-                showRing
-                showStar
-                className="absolute -top-10 -left-10 opacity-30 pointer-events-none"
-              />
-
-              {/* floating score-callout card */}
-              <motion.div
-                initial={{ opacity: 0, y: 20, rotate: -6 }}
-                animate={{ opacity: 1, y: 0, rotate: -3 }}
-                transition={{ duration: 0.9, delay: 0.7, ease: EASE }}
-                className="absolute -bottom-6 -left-4 lg:-left-12 z-10 bg-[var(--surface-elevated)]/95 backdrop-blur-md border border-[var(--border-2)] rounded-2xl px-6 py-5 shadow-[0_24px_48px_rgba(0,0,0,0.5)]"
+          {/* Score callout — no card, lives on the sky itself */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.7, ease: EASE }}
+            className="mt-20 flex items-end gap-8 max-w-2xl"
+          >
+            <div>
+              <p className="font-mono text-[var(--text-3)] text-[10px] uppercase tracking-[0.24em] mb-2">Diagnostic · 6 weeks in</p>
+              <p
+                className="font-[family-name:var(--font-fraunces)] text-[var(--text-1)] leading-none"
+                style={{ fontSize: "clamp(2.4rem, 4.5vw, 3.6rem)" }}
               >
-                <p className="text-[var(--text-3)] text-[10px] font-mono uppercase tracking-[0.2em]">Diagnostic</p>
-                <p className="font-[family-name:var(--font-fraunces)] text-[var(--text-1)] text-[44px] leading-none mt-1">
-                  1,310<span className="text-[var(--text-3)] text-[18px]"> / 1600</span>
-                </p>
-                <p className="text-[var(--accent-2)] text-[12px] font-mono mt-2">+40 from last attempt</p>
-              </motion.div>
-            </motion.div>
-          </div>
+                1,310<span className="text-[var(--text-3)] text-[55%]">/1600</span>
+              </p>
+            </div>
+            <div className="pb-2">
+              <span className="font-mono text-[#7dd3fc] text-[13px]">+40</span>
+              <span className="block font-mono text-[var(--text-3)] text-[10px] uppercase tracking-[0.16em] mt-0.5">vs. last</span>
+            </div>
+            <div className="hidden sm:block w-px h-12 bg-[var(--border)]" />
+            <div className="hidden sm:block">
+              <p className="font-mono text-[var(--text-3)] text-[10px] uppercase tracking-[0.24em] mb-2">Target</p>
+              <p className="font-[family-name:var(--font-fraunces)] text-[var(--text-2)] text-[28px] leading-none">1,480</p>
+            </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* curved transition into manifesto */}
-      <Arc direction="up" intensity="medium" />
-
       {/* ═══════════════════════════════════════════════════════════════
-         MANIFESTO — pull-quote-led, no card around it.
-         Oversized italic display, photo bleeds in from the right edge.
+         MANIFESTO — InkWash bg (calm grid + soft washes, no stars
+         competing with text). Editorial typography column.
          ═══════════════════════════════════════════════════════════════ */}
-      <section className="relative py-32 md:py-40 bg-[var(--bg-2)] overflow-hidden">
-        <Drift density="low" seed={3} className="opacity-50" />
-        <BlobGlow position="top-left" color="gold" size="md" intensity={0.10} />
+      <section className="relative py-32 md:py-44 overflow-hidden">
+        <BgInkWash />
+        <BgFade height={96} />
 
-        <div className="relative max-w-[1280px] mx-auto px-5 sm:px-8">
-          <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-
-            <motion.div
-              initial="hidden" whileInView="show" viewport={{ once: true, margin: "-80px" }}
-              custom={0} variants={fadeUp}
-              className="lg:col-span-7 relative"
-            >
-              <Eyebrow color="brass" className="mb-8">Manifesto</Eyebrow>
-
-              <blockquote className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.1] tracking-[-0.015em]"
-                style={{ fontSize: "clamp(2rem, 4.5vw, 4rem)" }}
+        <div className="relative max-w-[1100px] mx-auto px-5 sm:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.8, ease: EASE }}
+            className="grid md:grid-cols-12 gap-8"
+          >
+            <div className="md:col-span-2">
+              <span className="block font-mono text-[var(--text-3)] text-[11px] uppercase tracking-[0.24em] mb-3">01</span>
+              <span className="block font-mono text-[var(--accent)] text-[11px] uppercase tracking-[0.24em]">Manifesto</span>
+            </div>
+            <div className="md:col-span-10">
+              <blockquote
+                className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.08] tracking-[-0.018em]"
+                style={{ fontSize: "clamp(2rem, 4.5vw, 4.2rem)" }}
               >
                 Generic prep is recycled noise.{" "}
                 <span className="font-[family-name:var(--font-cormorant)] italic text-[var(--accent)]">
                   We built the prep we wished we&apos;d had.
                 </span>
               </blockquote>
-
-              <div className="mt-12 max-w-xl space-y-6 text-[var(--text-2)] text-[16px] leading-[1.8]">
+              <div className="mt-14 grid md:grid-cols-2 gap-x-12 gap-y-6 max-w-3xl text-[var(--text-2)] text-[16px] leading-[1.8]">
                 <p>
-                  Most test prep is the same questions in a new wrapper, sold by tutors who took the
-                  SAT a decade ago. The exam has changed. The bar has changed. The prep hasn&apos;t.
+                  Most test prep is the same questions in a new wrapper, sold by tutors who took
+                  the SAT a decade ago. The exam has changed. The bar has changed.
                 </p>
                 <p>
                   Nyx is built around one idea: the fastest way to a higher score is the question
-                  you can&apos;t quite answer yet — delivered at the moment you&apos;re ready for it.
+                  you can&apos;t quite answer yet — delivered the moment you&apos;re ready for it.
                 </p>
               </div>
-
               <Link
                 href="/sat-act"
-                className="inline-flex items-center gap-2 mt-10 text-[var(--accent)] hover:text-[var(--accent-bright)] text-[14px] font-medium transition-colors group"
+                className="inline-flex items-center gap-2 mt-12 text-[var(--accent)] hover:text-[var(--accent-bright)] text-[12px] font-medium transition-colors group font-mono uppercase tracking-[0.24em]"
               >
                 Read the approach
-                <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
               </Link>
-            </motion.div>
-
-            {/* photo bleeds out the right edge, tilted */}
-            <motion.div
-              initial="hidden" whileInView="show" viewport={{ once: true, margin: "-80px" }}
-              custom={1} variants={fadeUp}
-              className="lg:col-span-5 relative h-[420px] lg:h-[600px] lg:-mr-12"
-            >
-              <div className="absolute inset-0 -rotate-[2deg]">
-                <PhotoFrame alt="Study scene" aspect="portrait" rounded="lg" seed="manifesto" mask="bottom" className="h-full" />
-              </div>
-              {/* dotted index marker */}
-              <div className="absolute top-8 -left-4 lg:-left-8 z-10">
-                <span className="block font-mono text-[var(--text-3)] text-[11px] uppercase tracking-[0.22em]">01 / Why Nyx</span>
-                <span className="block w-px h-16 bg-gradient-to-b from-[var(--accent)] to-transparent ml-3 mt-2" />
-              </div>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
-      <Arc direction="down" intensity="subtle" />
-
       {/* ═══════════════════════════════════════════════════════════════
-         TRAJECTORY — full-bleed plot with copy floating in negative space.
-         No card wrapping the plot — let the gradient breathe.
+         TRAJECTORY — Constellation Grid background (structural,
+         calm pattern). Score visualization sits over it as a real
+         drawn chart in the foreground.
          ═══════════════════════════════════════════════════════════════ */}
-      <section className="relative py-28 md:py-36 overflow-hidden">
-        <BlobGlow position="bottom-right" color="moon" size="lg" intensity={0.10} />
+      <section className="relative min-h-[760px] flex items-center overflow-hidden">
+        <BgConstellationGrid />
+        <BgFade height={120} />
+        {/* darken upper-left for typography */}
+        <div
+          aria-hidden
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(7,9,20,0.78) 0%, rgba(7,9,20,0.45) 35%, transparent 65%)",
+          }}
+        />
 
-        <div className="relative max-w-[1280px] mx-auto px-5 sm:px-8">
-          <div className="grid lg:grid-cols-12 gap-12 items-start">
-
+        <div className="relative w-full max-w-[1320px] mx-auto px-5 sm:px-8 py-20">
+          <div className="grid lg:grid-cols-12 gap-12 items-center">
             <motion.div
-              initial="hidden" whileInView="show" viewport={{ once: true, margin: "-80px" }}
-              custom={0} variants={fadeUp}
-              className="lg:col-span-4 lg:sticky lg:top-32"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.8, ease: EASE }}
+              className="lg:col-span-6"
             >
-              <span className="block font-mono text-[var(--accent)] text-[12px] uppercase tracking-[0.22em] mb-4">02 / Trajectory</span>
-              <Heading level={2} className="mb-6">
+              <span className="block font-mono text-[#7dd3fc] text-[11px] uppercase tracking-[0.24em] mb-5">
+                02 / Trajectory
+              </span>
+              <h2
+                className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.05] tracking-[-0.018em] mb-7"
+                style={{ fontSize: "clamp(2rem, 4.2vw, 3.6rem)" }}
+              >
                 You&apos;ll see your score{" "}
                 <span className="font-[family-name:var(--font-cormorant)] italic">move.</span>
-              </Heading>
-              <Text variant="body" className="mb-10">
-                Every session updates a calibrated estimate of your ability.
-                The trajectory plot shows you the path — and the time-to-target — without speculation.
-              </Text>
-
-              <ul className="space-y-7">
+              </h2>
+              <p className="text-[var(--text-2)] text-[17px] leading-[1.8] max-w-[440px] mb-12">
+                Every session updates a calibrated estimate of your ability. The trajectory plot
+                shows the path, the current confidence interval, and a real time-to-target.
+              </p>
+              <ul className="space-y-7 max-w-[460px]">
                 {principles.map((p) => (
                   <li key={p.n} className="flex gap-5">
-                    <span className="font-[family-name:var(--font-fraunces)] text-[var(--accent)] text-[28px] leading-none italic">
+                    <span className="font-[family-name:var(--font-fraunces)] italic text-[var(--accent)] text-[26px] leading-none pt-1">
                       {p.n}
                     </span>
                     <span>
-                      <span className="block text-[var(--text-1)] font-semibold mb-1.5 text-[16px]">{p.title}</span>
+                      <span className="block text-[var(--text-1)] font-semibold mb-1.5 text-[15.5px]">{p.title}</span>
                       <span className="block text-[var(--text-2)] text-[14px] leading-[1.7]">{p.body}</span>
                     </span>
                   </li>
@@ -270,109 +228,120 @@ export default function HomePage() {
               </ul>
             </motion.div>
 
+            {/* Score curve drawn directly on the page, no card frame */}
             <motion.div
-              initial="hidden" whileInView="show" viewport={{ once: true, margin: "-80px" }}
-              custom={1} variants={fadeUp}
-              className="lg:col-span-8 relative"
+              initial={{ opacity: 0, scale: 0.96 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 1.0, ease: EASE }}
+              className="lg:col-span-6 relative h-[420px] hidden lg:block"
             >
-              {/* faint ambient ring behind the plot */}
-              <div
-                aria-hidden
-                className="absolute -inset-8 rounded-[40px] pointer-events-none"
-                style={{
-                  background: "radial-gradient(ellipse 70% 50% at 50% 50%, rgba(232, 204, 126, 0.08), transparent 70%)",
-                }}
-              />
-              <PlotEmbed
-                caption="Score trajectory · sample student"
-                source="Nyx adaptive engine"
-                aspect="landscape"
-                className="relative !rounded-[28px]"
-              />
+              <TrajectoryChart />
             </motion.div>
           </div>
         </div>
       </section>
 
-      <Arc direction="up" intensity="medium" color="accent" />
-
       {/* ═══════════════════════════════════════════════════════════════
-         FOUNDERS — magazine spread. Two large rotated photos behind
-         oversized italic names; bios overlap the photo edges.
+         FOUNDERS — AuroraNebula bg (drifting cyan/violet, organic).
+         Each founder is a vignette with the bg tinted toward them, no
+         glass card overlays.
          ═══════════════════════════════════════════════════════════════ */}
-      <section className="relative py-32 md:py-40 bg-[var(--bg-2)] overflow-hidden">
-        <Drift density="low" seed={42} className="opacity-40" />
-        <BlobGlow position="top-right" color="gold" size="md" intensity={0.08} />
+      <section className="relative pt-24 md:pt-32 pb-24 md:pb-32 overflow-hidden">
+        <BgAuroraNebula />
+        <BgFade height={120} />
 
-        <div className="relative max-w-[1280px] mx-auto px-5 sm:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-20">
-            <div>
-              <Eyebrow color="moon" className="mb-5">The Founders</Eyebrow>
-              <Heading level={2} className="max-w-2xl">
+        <div className="relative max-w-[1320px] mx-auto px-5 sm:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7, ease: EASE }}
+            className="mb-20 grid md:grid-cols-12 gap-8"
+          >
+            <div className="md:col-span-2">
+              <span className="block font-mono text-[var(--text-3)] text-[11px] uppercase tracking-[0.24em] mb-3">03</span>
+              <span className="block font-mono text-[#7dd3fc] text-[11px] uppercase tracking-[0.24em]">Founders</span>
+            </div>
+            <div className="md:col-span-10">
+              <h2
+                className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.08] tracking-[-0.015em] max-w-3xl"
+                style={{ fontSize: "clamp(2rem, 4.2vw, 3.6rem)" }}
+              >
                 Built by students who{" "}
                 <span className="font-[family-name:var(--font-cormorant)] italic">just did it.</span>
-              </Heading>
+              </h2>
             </div>
-            <Link
-              href="/tutors"
-              className="group inline-flex items-center gap-2 text-[var(--text-2)] hover:text-[var(--text-1)] text-[14px] font-medium transition-colors shrink-0"
-            >
-              Meet the founders
-              <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-            </Link>
-          </div>
+          </motion.div>
 
-          {/* alternating spread */}
-          <div className="space-y-24 md:space-y-32">
+          <div className="space-y-32 md:space-y-40">
             {[
-              { name: "Loc",     role: "Product · Curriculum",   school: "Princeton, Class of 2028", side: "left" as const,  seed: "loc",     line: "The fastest path to a higher score is the question you can almost answer." },
-              { name: "Charles", role: "Engineering · Operations", school: "Princeton, Class of 2028", side: "right" as const, seed: "charles", line: "We owe students a real number, not a vibe." },
+              {
+                name: "Loc",
+                role: "Product · Curriculum",
+                school: "Princeton, Class of 2028",
+                accent: "moon" as const,
+                bio: "Loc designs the adaptive engine and authors much of the SAT bank. He scored in the 99th percentile on the digital SAT and has tutored 50+ students through the redesigned exam.",
+                quote: "The fastest path to a higher score is the question you can almost answer.",
+              },
+              {
+                name: "Charles",
+                role: "Engineering · Operations",
+                school: "Princeton, Class of 2028",
+                accent: "violet" as const,
+                bio: "Charles built the Nyx platform end to end and runs ops. He handles every adaptive feature — IRT calibration, dashboards, the report you read each week.",
+                quote: "We owe students a real number, not a vibe.",
+              },
             ].map((f, i) => (
               <motion.div
                 key={f.name}
-                initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }}
-                custom={i} variants={fadeUp}
-                className={`relative grid md:grid-cols-12 gap-8 md:gap-4 items-center ${f.side === "right" ? "md:[direction:rtl]" : ""}`}
+                initial={{ opacity: 0, y: 36 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.9, ease: EASE }}
+                className={`grid md:grid-cols-12 gap-x-12 gap-y-10 items-center ${i % 2 === 1 ? "md:[direction:rtl]" : ""}`}
               >
-                {/* Photo, rotated, with brand crescent ornament behind */}
-                <div className="md:col-span-7 md:[direction:ltr] relative h-[420px] md:h-[520px]">
-                  <NyxMark
-                    size={260}
-                    showRing
-                    className={`absolute ${f.side === "left" ? "-right-8 -top-8" : "-left-8 -top-8"} opacity-15 pointer-events-none`}
-                  />
-                  <div className={`absolute inset-0 ${f.side === "left" ? "rotate-[-2deg]" : "rotate-[2deg]"}`}>
-                    <PhotoFrame
-                      alt={f.name}
-                      aspect="portrait"
-                      rounded="lg"
-                      seed={f.seed}
-                      className="h-full"
+                {/* Portrait — uses Eclipse OR NorthStar mini-bg as a personal "sky" per founder */}
+                <div className="md:col-span-5 md:[direction:ltr] relative">
+                  <div className="relative aspect-[4/5] overflow-hidden">
+                    {i === 0 ? <BgNorthStar /> : <BgEclipse />}
+                    <div
+                      aria-hidden
+                      className="absolute inset-0 pointer-events-none"
+                      style={{
+                        background:
+                          "linear-gradient(180deg, transparent 50%, rgba(7,9,20,0.85) 100%)",
+                      }}
                     />
+                    <div className="absolute inset-0 border border-[var(--border)] pointer-events-none" />
+                    <div className="absolute top-6 left-6 z-10">
+                      <span className="block font-mono text-[var(--text-1)]/70 text-[10px] uppercase tracking-[0.28em]">
+                        0{i + 1} · Founder
+                      </span>
+                      <span className="block w-12 h-px bg-[#7dd3fc]/60 mt-3" />
+                    </div>
                   </div>
                 </div>
 
-                {/* Text overlay — name in oversized Cormorant italic, bio bleeds onto photo */}
-                <div className={`md:col-span-5 md:[direction:ltr] relative ${f.side === "left" ? "md:-ml-20" : "md:-mr-20"} z-10`}>
-                  <div className="bg-[var(--surface-elevated)]/90 backdrop-blur-md border border-[var(--border-2)] rounded-[28px] p-8 md:p-10 shadow-[0_30px_60px_rgba(0,0,0,0.4)]">
-                    <span className="block font-mono text-[var(--text-3)] text-[11px] uppercase tracking-[0.22em] mb-2">
-                      0{i + 1} / {f.role}
-                    </span>
-                    <h3
-                      className="font-[family-name:var(--font-cormorant)] italic font-normal text-[var(--text-1)] leading-none mb-4"
-                      style={{ fontSize: "clamp(3rem, 6vw, 5rem)" }}
-                    >
-                      {f.name}
-                    </h3>
-                    <p className="text-[var(--text-3)] text-[12px] font-mono uppercase tracking-[0.16em] mb-6">{f.school}</p>
-                    <p className="text-[var(--text-2)] text-[15px] leading-[1.8] mb-6">
-                      Authored and calibrated questions for the Nyx bank. Mentors students one-on-one
-                      in addition to platform sessions.
-                    </p>
-                    <p className="font-[family-name:var(--font-fraunces)] italic text-[var(--text-1)] text-[18px] leading-[1.5] border-l-2 border-[var(--accent)] pl-5">
-                      &ldquo;{f.line}&rdquo;
-                    </p>
-                  </div>
+                <div className="md:col-span-7 md:[direction:ltr] relative">
+                  <p className="font-mono text-[var(--text-3)] text-[11px] uppercase tracking-[0.24em] mb-4">
+                    {f.role}
+                  </p>
+                  <h3
+                    className="font-[family-name:var(--font-cormorant)] italic font-normal text-[var(--text-1)] leading-[0.92] mb-6"
+                    style={{ fontSize: "clamp(4rem, 9vw, 8rem)" }}
+                  >
+                    {f.name}
+                  </h3>
+                  <p className="font-mono text-[var(--text-3)] text-[11px] uppercase tracking-[0.18em] mb-8">
+                    {f.school}
+                  </p>
+                  <p className="text-[var(--text-2)] text-[16px] leading-[1.8] max-w-[480px] mb-10">
+                    {f.bio}
+                  </p>
+                  <p className="font-[family-name:var(--font-fraunces)] italic text-[var(--text-1)] text-[20px] leading-[1.45] max-w-[440px] border-l border-[var(--accent)] pl-6">
+                    &ldquo;{f.quote}&rdquo;
+                  </p>
                 </div>
               </motion.div>
             ))}
@@ -380,53 +349,121 @@ export default function HomePage() {
         </div>
       </section>
 
-      <Arc direction="up" intensity="strong" color="accent" />
-
       {/* ═══════════════════════════════════════════════════════════════
-         FINAL CTA — no card, large italic display, freestanding.
+         FINAL CTA — CrescentMoon background, brand-anchoring close.
          ═══════════════════════════════════════════════════════════════ */}
-      <section className="relative py-36 md:py-48 overflow-hidden">
-        <Drift density="high" seed={99} />
-        <BlobGlow position="center" color="gold" size="xl" intensity={0.18} />
+      <section className="relative min-h-[700px] flex items-center overflow-hidden">
+        <BgCrescentMoon position="upper-right" />
+        <div
+          aria-hidden
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(90deg, rgba(7,9,20,0.7) 0%, rgba(7,9,20,0.4) 35%, transparent 65%)",
+          }}
+        />
+        <BgFade height={120} />
 
-        <div className="relative max-w-3xl mx-auto px-5 text-center">
+        <div className="relative w-full max-w-[1320px] mx-auto px-5 sm:px-8">
           <motion.div
-            initial="hidden" whileInView="show" viewport={{ once: true }}
-            custom={0} variants={fadeUp}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.9, ease: EASE }}
+            className="max-w-2xl"
           >
-            <NyxMark size={88} showRing className="mx-auto mb-10 opacity-90" />
-
+            <span className="block font-mono text-[var(--accent)] text-[11px] uppercase tracking-[0.28em] mb-6">
+              04 / Begin
+            </span>
             <h2
-              className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.05] mb-8 tracking-[-0.02em]"
-              style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)" }}
+              className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.0] mb-10 tracking-[-0.02em]"
+              style={{ fontSize: "clamp(2.6rem, 6vw, 5.4rem)" }}
             >
               Take the diagnostic.<br />
               <span className="font-[family-name:var(--font-cormorant)] italic font-normal">
                 Then decide.
               </span>
             </h2>
-
-            <p className="text-[var(--text-2)] text-[18px] leading-[1.7] max-w-xl mx-auto mb-12">
+            <p className="text-[var(--text-2)] text-[18px] leading-[1.7] max-w-lg mb-12">
               Thirty adaptive questions. Forty minutes. A calibrated score and a real plan — at no cost.
             </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4">
               <CTA href="/apply" size="lg">Start the diagnostic</CTA>
               <Link
                 href="/pricing"
-                className="group inline-flex items-center justify-center gap-2 text-[var(--text-2)] hover:text-[var(--text-1)] text-[15px] font-medium transition-colors px-7 py-4"
+                className="group inline-flex items-center gap-2 text-[var(--text-2)] hover:text-[var(--text-1)] text-[15px] font-medium transition-colors px-3 py-4"
               >
                 See plans
                 <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
-
-            <p className="mt-12 text-[var(--text-3)] text-[12px] font-mono uppercase tracking-[0.18em]">
-              Nyx does not guarantee score increases or admissions outcomes
+            <p className="mt-14 font-mono text-[var(--text-3)] text-[10px] uppercase tracking-[0.24em]">
+              Per noctem ad lucem · Nyx does not guarantee score increases or admissions outcomes
             </p>
           </motion.div>
         </div>
       </section>
     </div>
+  );
+}
+
+/* ───────────────────────────────────────────────────────────
+ * Inline trajectory chart — drawn directly into the section so
+ * it doesn't read as a card "embed". Soft glow background, line
+ * that climbs from lower-left to upper-right with star data points.
+ * ─────────────────────────────────────────────────────────── */
+function TrajectoryChart() {
+  const pts = [
+    [40, 380], [120, 360], [200, 340], [280, 305], [360, 270],
+    [440, 240], [520, 205], [600, 175], [680, 140], [760, 110],
+    [840, 92], [920, 78],
+  ];
+  const path =
+    `M ${pts[0][0]} ${pts[0][1]} ` +
+    pts.slice(1).map(([x, y], i) => {
+      const [px, py] = pts[i];
+      const cx1 = px + 40;
+      const cx2 = x - 40;
+      return `C ${cx1} ${py}, ${cx2} ${y}, ${x} ${y}`;
+    }).join(" ");
+  const fill = `${path} L 920 420 L 40 420 Z`;
+  return (
+    <svg viewBox="0 0 960 440" className="w-full h-full">
+      <defs>
+        <linearGradient id="hp-tr" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0%" stopColor="#7dd3fc" stopOpacity="0.8" />
+          <stop offset="60%" stopColor="#bde9ff" stopOpacity="0.95" />
+          <stop offset="100%" stopColor="#e8cc7e" stopOpacity="1" />
+        </linearGradient>
+        <linearGradient id="hp-tr-fill" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stopColor="#7dd3fc" stopOpacity="0.18" />
+          <stop offset="100%" stopColor="#7dd3fc" stopOpacity="0" />
+        </linearGradient>
+        <radialGradient id="hp-tr-burst" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#bde9ff" stopOpacity="0.55" />
+          <stop offset="100%" stopColor="#bde9ff" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      {/* faint horizontal guides */}
+      {[120, 200, 280, 360].map((y) => (
+        <line key={y} x1="40" x2="920" y1={y} y2={y} stroke="#e6e9f5" strokeWidth="0.4" opacity="0.05" />
+      ))}
+      <path d={fill} fill="url(#hp-tr-fill)" />
+      <path d={path} fill="none" stroke="url(#hp-tr)" strokeWidth="2.5" strokeLinecap="round" />
+      {pts.map(([x, y], i) => (
+        <g key={i}>
+          <circle cx={x} cy={y} r="6" fill="url(#hp-tr-burst)" />
+          <path
+            d={`M ${x} ${y - 3.5} L ${x + 0.9} ${y - 0.9} L ${x + 3.5} ${y} L ${x + 0.9} ${y + 0.9} L ${x} ${y + 3.5} L ${x - 0.9} ${y + 0.9} L ${x - 3.5} ${y} L ${x - 0.9} ${y - 0.9} Z`}
+            fill={i === pts.length - 1 ? "#bde9ff" : "#e6e9f5"}
+            opacity={i === pts.length - 1 ? 1 : 0.85}
+          />
+        </g>
+      ))}
+      {/* target marker */}
+      <line x1="920" y1="40" x2="920" y2="78" stroke="#c8a24b" strokeWidth="0.6" strokeDasharray="2 3" opacity="0.7" />
+      <text x="884" y="36" fill="#c8a24b" fontSize="10" fontFamily="monospace" letterSpacing="2" opacity="0.85">TARGET 1480</text>
+      <text x="40" y="408" fill="#7a82a0" fontSize="9" fontFamily="monospace" letterSpacing="2" opacity="0.6">12 WEEKS</text>
+    </svg>
   );
 }
