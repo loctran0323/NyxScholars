@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { CheckCircle2, ArrowRight, Lock } from "lucide-react";
+import { CheckCircle2, ArrowRight, Lock, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const plans = [
@@ -19,6 +19,7 @@ const plans = [
       "Subject-specific study resources",
       "No commitment",
     ],
+    addons: [] as string[],
     cta: "Get Started",
     featured: false,
   },
@@ -35,8 +36,9 @@ const plans = [
       "Priority scheduling",
       "Consistent founder assignment",
       "Sessions + messaging + materials portal",
-      "Optional add-on: College Counseling +$150/mo",
+      "Extra sessions at $85/hr when you need more",
     ],
+    addons: ["Add College Counseling — +$150/mo ($499 total)"],
     cta: "Choose Scholar",
     featured: true,
   },
@@ -53,8 +55,8 @@ const plans = [
       "School list strategy + activity review",
       "Interview prep with mock sessions",
       "Admissions materials library",
-      "Optional add-on: Academic tutoring +$200/mo",
     ],
+    addons: ["Add Academic Tutoring — +$200/mo ($649 total)"],
     cta: "Choose Admissions",
     featured: false,
   },
@@ -114,6 +116,19 @@ export default function UpgradePage() {
                   <span className="text-[#c8d0de] text-[13px] leading-snug">{f}</span>
                 </li>
               ))}
+              {plan.addons.length > 0 && (
+                <>
+                  <li><div className="border-t border-white/[0.06] my-1" /></li>
+                  {plan.addons.map((a) => (
+                    <li key={a} className="flex items-start gap-2.5">
+                      <div className="w-[13px] h-[13px] rounded-full border border-[#d4a853]/40 bg-[#d4a853]/[0.08] flex items-center justify-center shrink-0 mt-0.5">
+                        <Plus size={7} strokeWidth={3} className="text-[#d4a853]" />
+                      </div>
+                      <span className="text-[#8d9ab0] text-[12px] leading-snug italic">{a}</span>
+                    </li>
+                  ))}
+                </>
+              )}
             </ul>
 
             <Link

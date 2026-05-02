@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Check } from "lucide-react";
+import { Check, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface PricingCardProps {
@@ -7,13 +7,16 @@ interface PricingCardProps {
   tagline: string;
   description: string;
   features: string[];
+  addons?: string[];
   cta: string;
   ctaHref: string;
   featured?: boolean;
+  price?: string;
+  priceNote?: string;
 }
 
 export default function PricingCard({
-  tier, tagline, description, features, cta, ctaHref, featured,
+  tier, tagline, description, features, addons, cta, ctaHref, featured, price, priceNote,
 }: PricingCardProps) {
   return (
     <div
@@ -36,11 +39,17 @@ export default function PricingCard({
       <div className="mb-7">
         <h3 className="text-[#f0ece3] font-bold text-[1.2rem] mb-1">{tier}</h3>
         <p className="text-[#d4a853] text-[11px] font-bold uppercase tracking-[0.12em] mb-3">{tagline}</p>
+        {price && (
+          <div className="mb-4">
+            <span className="text-[2rem] font-black text-[#f0ece3] tracking-tight">{price}</span>
+            {priceNote && <span className="text-[#8d9ab0] text-[13px] ml-1.5">{priceNote}</span>}
+          </div>
+        )}
         <p className="text-[#8d9ab0] text-[13.5px] leading-relaxed">{description}</p>
       </div>
 
       {/* Features */}
-      <ul className="space-y-3 mb-8 flex-1">
+      <ul className="space-y-3 flex-1">
         {features.map((f) => (
           <li key={f} className="flex items-start gap-3">
             <div className={cn(
@@ -52,20 +61,39 @@ export default function PricingCard({
             <span className="text-[#c8d0de] text-[13.5px] leading-snug">{f}</span>
           </li>
         ))}
+
+        {/* Add-ons separator + items */}
+        {addons && addons.length > 0 && (
+          <>
+            <li className="pt-1">
+              <div className="border-t border-white/[0.06]" />
+            </li>
+            {addons.map((a) => (
+              <li key={a} className="flex items-start gap-3">
+                <div className="w-[18px] h-[18px] rounded-full flex items-center justify-center shrink-0 mt-0.5 bg-[#d4a853]/[0.08] border border-[#d4a853]/20">
+                  <Plus size={9} strokeWidth={3} className="text-[#d4a853]" />
+                </div>
+                <span className="text-[#8d9ab0] text-[13px] leading-snug italic">{a}</span>
+              </li>
+            ))}
+          </>
+        )}
       </ul>
 
       {/* CTA */}
-      <Link
-        href={ctaHref}
-        className={cn(
-          "block w-full text-center py-3 rounded-xl font-bold text-[14px] transition-all",
-          featured
-            ? "bg-gradient-to-b from-[#e0b55c] to-[#c99438] text-black hover:from-[#eac068] hover:to-[#d4a045] shadow-[0_4px_20px_rgba(212,168,83,0.25)] hover:shadow-[0_8px_28px_rgba(212,168,83,0.35)]"
-            : "border border-white/10 text-[#c8d0de] hover:border-white/20 hover:bg-white/[0.04]"
-        )}
-      >
-        {cta}
-      </Link>
+      <div className="mt-8">
+        <Link
+          href={ctaHref}
+          className={cn(
+            "block w-full text-center py-3 rounded-xl font-bold text-[14px] transition-all",
+            featured
+              ? "bg-gradient-to-b from-[#e0b55c] to-[#c99438] text-black hover:from-[#eac068] hover:to-[#d4a045] shadow-[0_4px_20px_rgba(212,168,83,0.25)] hover:shadow-[0_8px_28px_rgba(212,168,83,0.35)]"
+              : "border border-white/10 text-[#c8d0de] hover:border-white/20 hover:bg-white/[0.04]"
+          )}
+        >
+          {cta}
+        </Link>
+      </div>
     </div>
   );
 }
