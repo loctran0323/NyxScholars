@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { X, CheckCircle, XCircle, Video, Send, ChevronDown, ChevronUp } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Send, CheckCircle, XCircle, ChevronRight, ArrowLeft, User } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import type { Session, Message } from "@/types/portal";
@@ -14,179 +14,186 @@ type MessageWithProfile = Message & {
   profiles: { full_name: string | null } | null;
 };
 
-function statusColor(status: string) {
+function statusBadge(status: string) {
   switch (status) {
-    case "confirmed": return "text-blue-400 bg-blue-500/10 border-blue-500/20";
-    case "completed": return "text-emerald-400 bg-emerald-500/10 border-emerald-500/20";
-    case "cancelled": return "text-red-400 bg-red-500/10 border-red-500/20";
-    default: return "text-[#d4a853] bg-[#d4a853]/10 border-[#d4a853]/20";
+    case "confirmed":  return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-400/10 text-blue-400">Confirmed</span>;
+    case "completed":  return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-400/10 text-emerald-400">Completed</span>;
+    case "cancelled":  return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-400/10 text-red-400">Cancelled</span>;
+    default:           return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#d4a853]/10 text-[#d4a853]">Pending</span>;
   }
 }
 
-function SessionRow({ session, onUpdate }: { session: SessionWithProfile; onUpdate: () => void }) {
-  const [expanded, setExpanded] = useState(false);
+function initials(name: string | null) {
+  if (!name) return "?";
+  return name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase();
+}
+
+/* ── Session detail panel ──────────────────────────────────── */
+function SessionDetail({ session, onBack, onUpdate }: {
+  session: SessionWithProfile;
+  onBack: () => void;
+  onUpdate: () => void;
+}) {
   const [tutorName, setTutorName] = useState(session.tutor_name ?? "");
   const [meetingLink, setMeetingLink] = useState(session.meeting_link ?? "");
   const [adminNotes, setAdminNotes] = useState(session.admin_notes ?? "");
   const [saving, setSaving] = useState(false);
+  const [savedKey, setSavedKey] = useState(0);
 
-  const handleUpdate = async (newStatus?: string) => {
+  const studentName = session.profiles?.full_name ?? "Unknown Student";
+
+  const patch = async (overrides: Record<string, unknown> = {}) => {
     setSaving(true);
     await fetch("/api/admin/sessions", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         id: session.id,
-        status: newStatus ?? session.status,
         tutor_name: tutorName || null,
         meeting_link: meetingLink || null,
         admin_notes: adminNotes || null,
+        ...overrides,
       }),
     });
     setSaving(false);
+    setSavedKey((k) => k + 1);
     onUpdate();
   };
 
-  const studentName = session.profiles?.full_name ?? "Unknown Student";
-
   return (
-    <div className="border border-[#2a3a52] rounded-xl overflow-hidden">
-      <div
-        className="flex items-center gap-3 px-4 py-3 bg-[#0f1623] cursor-pointer hover:bg-[#161e2e] transition-colors"
-        onClick={() => setExpanded(!expanded)}
+    <div>
+      <button
+        onClick={onBack}
+        className="flex items-center gap-1.5 text-[#8d9ab0] hover:text-[#f0ece3] text-[13px] transition-colors mb-6"
       >
-        <div className="flex-1 grid grid-cols-4 gap-4 min-w-0">
-          <span className="text-[#f0ede6] font-medium text-sm truncate">{studentName}</span>
-          <span className="text-[#8896a7] text-sm truncate">{session.subject}</span>
-          <span className="text-[#8896a7] text-xs">
-            {format(new Date(session.scheduled_at), "MMM d, h:mm a")}
-          </span>
-          <span className={cn(
-            "inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold border w-fit",
-            statusColor(session.status)
-          )}>
-            {session.status}
-          </span>
+        <ArrowLeft size={13} />
+        Back to sessions
+      </button>
+
+      {/* Header */}
+      <div className="flex items-start gap-4 mb-8">
+        <div className="w-11 h-11 rounded-full bg-[#d4a853]/10 border border-[#d4a853]/20 flex items-center justify-center shrink-0">
+          <span className="text-[12px] font-bold text-[#d4a853]">{initials(session.profiles?.full_name ?? null)}</span>
         </div>
-        {expanded ? <ChevronUp size={14} className="text-[#8896a7] shrink-0" /> : <ChevronDown size={14} className="text-[#8896a7] shrink-0" />}
+        <div>
+          <h3 className="text-[17px] font-bold text-[#f0ece3]">{studentName}</h3>
+          <p className="text-[#8d9ab0] text-[13px]">
+            {session.subject} · {format(new Date(session.scheduled_at), "MMM d, h:mm a")} · {session.duration_minutes} min
+          </p>
+          <div className="mt-2">{statusBadge(session.status)}</div>
+        </div>
       </div>
 
-      {expanded && (
-        <div className="px-4 pb-4 pt-3 bg-[#161e2e] border-t border-[#2a3a52] space-y-3">
-          <div className="grid grid-cols-3 gap-3">
-            <div>
-              <p className="text-[11px] text-[#8896a7] uppercase tracking-wide mb-1">Grade</p>
-              <p className="text-[#f0ede6] text-sm">{session.profiles?.grade ?? "—"}</p>
-            </div>
-            <div>
-              <p className="text-[11px] text-[#8896a7] uppercase tracking-wide mb-1">Target Test</p>
-              <p className="text-[#f0ede6] text-sm">{session.profiles?.target_test ?? "—"}</p>
-            </div>
-            <div>
-              <p className="text-[11px] text-[#8896a7] uppercase tracking-wide mb-1">Duration</p>
-              <p className="text-[#f0ede6] text-sm">{session.duration_minutes} min</p>
-            </div>
-          </div>
-
+      {/* Meta */}
+      {(session.profiles?.grade || session.profiles?.target_test || session.student_notes) && (
+        <div className="mb-6 space-y-2">
+          {session.profiles?.grade && (
+            <p className="text-[13px] text-[#8d9ab0]"><span className="text-[#4e5d72]">Grade</span> · {session.profiles.grade}</p>
+          )}
+          {session.profiles?.target_test && (
+            <p className="text-[13px] text-[#8d9ab0]"><span className="text-[#4e5d72]">Target test</span> · {session.profiles.target_test}</p>
+          )}
           {session.student_notes && (
-            <div>
-              <p className="text-[11px] text-[#8896a7] uppercase tracking-wide mb-1">Student Notes</p>
-              <p className="text-[#c8d0de] text-sm">{session.student_notes}</p>
+            <div className="mt-3 p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.05]">
+              <p className="text-[11px] text-[#4e5d72] font-medium uppercase tracking-wide mb-1.5">Student Notes</p>
+              <p className="text-[#c8d0de] text-[13px] leading-relaxed">{session.student_notes}</p>
             </div>
           )}
-
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="text-[11px] text-[#8896a7] uppercase tracking-wide mb-1 block">Tutor Name</label>
-              <input
-                type="text"
-                value={tutorName}
-                onChange={(e) => setTutorName(e.target.value)}
-                placeholder="Assign a tutor"
-                className="w-full h-8 px-3 rounded-lg bg-[#0f1623] border border-[#2a3a52] text-[13px] text-[#f0ede6] placeholder:text-[#4a5a6a] focus:outline-none focus:ring-1 focus:ring-amber-500/50"
-              />
-            </div>
-            <div>
-              <label className="text-[11px] text-[#8896a7] uppercase tracking-wide mb-1 block">Meeting Link</label>
-              <input
-                type="url"
-                value={meetingLink}
-                onChange={(e) => setMeetingLink(e.target.value)}
-                placeholder="https://daily.co/..."
-                className="w-full h-8 px-3 rounded-lg bg-[#0f1623] border border-[#2a3a52] text-[13px] text-[#f0ede6] placeholder:text-[#4a5a6a] focus:outline-none focus:ring-1 focus:ring-amber-500/50"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="text-[11px] text-[#8896a7] uppercase tracking-wide mb-1 block">Admin Notes (shown to student)</label>
-            <textarea
-              value={adminNotes}
-              onChange={(e) => setAdminNotes(e.target.value)}
-              rows={2}
-              placeholder="Any notes for the student..."
-              className="w-full px-3 py-2 rounded-lg bg-[#0f1623] border border-[#2a3a52] text-[13px] text-[#f0ede6] placeholder:text-[#4a5a6a] focus:outline-none focus:ring-1 focus:ring-amber-500/50 resize-none"
-            />
-          </div>
-
-          <div className="flex gap-2 pt-1">
-            {session.status === "pending" && (
-              <button
-                onClick={() => handleUpdate("confirmed")}
-                disabled={saving}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[12px] font-medium hover:bg-blue-500/15 transition-colors disabled:opacity-50"
-              >
-                <CheckCircle size={13} />
-                Confirm
-              </button>
-            )}
-            {session.status === "confirmed" && (
-              <button
-                onClick={() => handleUpdate("completed")}
-                disabled={saving}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[12px] font-medium hover:bg-emerald-500/15 transition-colors disabled:opacity-50"
-              >
-                <CheckCircle size={13} />
-                Mark Complete
-              </button>
-            )}
-            {session.status !== "cancelled" && session.status !== "completed" && (
-              <button
-                onClick={() => handleUpdate("cancelled")}
-                disabled={saving}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-[12px] font-medium hover:bg-red-500/15 transition-colors disabled:opacity-50"
-              >
-                <XCircle size={13} />
-                Cancel
-              </button>
-            )}
-            <button
-              onClick={() => handleUpdate()}
-              disabled={saving}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[12px] font-medium hover:bg-amber-500/15 transition-colors disabled:opacity-50 ml-auto"
-            >
-              <Video size={13} />
-              {saving ? "Saving…" : "Save"}
-            </button>
-          </div>
         </div>
       )}
+
+      {/* Editable fields */}
+      <div className="space-y-4 mb-6">
+        <div>
+          <label className="block text-[11px] text-[#4e5d72] font-medium uppercase tracking-wide mb-1.5">Tutor Name</label>
+          <input
+            type="text"
+            value={tutorName}
+            onChange={(e) => setTutorName(e.target.value)}
+            placeholder="Assign a tutor"
+            className="w-full h-9 px-3 rounded-lg bg-[#0b0f1a] border border-white/[0.07] text-[13px] text-[#f0ece3] placeholder:text-[#2e3a4a] focus:outline-none focus:ring-1 focus:ring-[#d4a853]/40 transition-all"
+          />
+        </div>
+        <div>
+          <label className="block text-[11px] text-[#4e5d72] font-medium uppercase tracking-wide mb-1.5">Meeting Link</label>
+          <input
+            type="url"
+            value={meetingLink}
+            onChange={(e) => setMeetingLink(e.target.value)}
+            placeholder="https://zoom.us/j/..."
+            className="w-full h-9 px-3 rounded-lg bg-[#0b0f1a] border border-white/[0.07] text-[13px] text-[#f0ece3] placeholder:text-[#2e3a4a] focus:outline-none focus:ring-1 focus:ring-[#d4a853]/40 transition-all"
+          />
+        </div>
+        <div>
+          <label className="block text-[11px] text-[#4e5d72] font-medium uppercase tracking-wide mb-1.5">Note to Student</label>
+          <textarea
+            value={adminNotes}
+            onChange={(e) => setAdminNotes(e.target.value)}
+            rows={2}
+            placeholder="Visible to student in their portal…"
+            className="w-full px-3 py-2 rounded-lg bg-[#0b0f1a] border border-white/[0.07] text-[13px] text-[#f0ece3] placeholder:text-[#2e3a4a] focus:outline-none focus:ring-1 focus:ring-[#d4a853]/40 transition-all resize-none"
+          />
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="flex flex-wrap items-center gap-2">
+        {session.status === "pending" && (
+          <button
+            onClick={() => patch({ status: "confirmed" })}
+            disabled={saving}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-400/10 text-blue-400 text-[13px] font-medium hover:bg-blue-400/15 transition-colors disabled:opacity-50"
+          >
+            <CheckCircle size={13} /> Confirm
+          </button>
+        )}
+        {session.status === "confirmed" && (
+          <button
+            onClick={() => patch({ status: "completed" })}
+            disabled={saving}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-400/10 text-emerald-400 text-[13px] font-medium hover:bg-emerald-400/15 transition-colors disabled:opacity-50"
+          >
+            <CheckCircle size={13} /> Mark Complete
+          </button>
+        )}
+        {session.status !== "cancelled" && session.status !== "completed" && (
+          <button
+            onClick={() => patch({ status: "cancelled" })}
+            disabled={saving}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-red-400/10 text-red-400 text-[13px] font-medium hover:bg-red-400/15 transition-colors disabled:opacity-50"
+          >
+            <XCircle size={13} /> Cancel
+          </button>
+        )}
+        <button
+          onClick={() => patch()}
+          disabled={saving}
+          className="ml-auto px-4 py-2 rounded-lg bg-[#d4a853]/10 text-[#d4a853] text-[13px] font-medium hover:bg-[#d4a853]/15 transition-colors disabled:opacity-50"
+        >
+          {saving ? "Saving…" : savedKey > 0 ? "Saved ✓" : "Save Changes"}
+        </button>
+      </div>
     </div>
   );
 }
 
-function MessageThread({ studentId, studentName, messages, onReply }: {
+/* ── Message thread ────────────────────────────────────────── */
+function MessageThread({ studentId, studentName, messages, onBack, onReply }: {
   studentId: string;
   studentName: string;
   messages: MessageWithProfile[];
+  onBack: () => void;
   onReply: () => void;
 }) {
-  const [expanded, setExpanded] = useState(false);
   const [reply, setReply] = useState("");
   const [sending, setSending] = useState(false);
-  const unread = messages.filter((m) => m.sender === "student" && !m.read).length;
+  const bottomRef = useRef<HTMLDivElement>(null);
 
-  const handleSend = async () => {
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const send = async () => {
     if (!reply.trim() || sending) return;
     setSending(true);
     await fetch("/api/admin/messages", {
@@ -199,181 +206,231 @@ function MessageThread({ studentId, studentName, messages, onReply }: {
     onReply();
   };
 
-  const lastMsg = messages[messages.length - 1];
-
   return (
-    <div className="border border-[#2a3a52] rounded-xl overflow-hidden">
-      <div
-        className="flex items-center gap-3 px-4 py-3 bg-[#0f1623] cursor-pointer hover:bg-[#161e2e] transition-colors"
-        onClick={() => setExpanded(!expanded)}
+    <div className="flex flex-col h-full">
+      <button
+        onClick={onBack}
+        className="flex items-center gap-1.5 text-[#8d9ab0] hover:text-[#f0ece3] text-[13px] transition-colors mb-6 shrink-0"
       >
-        <div className="w-8 h-8 rounded-full bg-[#d4a853]/10 border border-[#d4a853]/20 flex items-center justify-center shrink-0">
-          <span className="text-[10px] font-bold text-[#d4a853]">
-            {studentName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()}
-          </span>
+        <ArrowLeft size={13} />
+        Back to messages
+      </button>
+
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-6 shrink-0">
+        <div className="w-9 h-9 rounded-full bg-[#d4a853]/10 border border-[#d4a853]/20 flex items-center justify-center">
+          <span className="text-[11px] font-bold text-[#d4a853]">{initials(studentName)}</span>
         </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <span className="text-[#f0ede6] font-medium text-sm">{studentName}</span>
-            {unread > 0 && (
-              <span className="w-4 h-4 rounded-full bg-[#d4a853] text-black text-[9px] font-bold flex items-center justify-center">
-                {unread}
-              </span>
-            )}
-          </div>
-          {lastMsg && (
-            <p className="text-[#8896a7] text-xs truncate">
-              {lastMsg.sender === "nyx" ? "You: " : ""}{lastMsg.content}
-            </p>
-          )}
+        <div>
+          <p className="text-[15px] font-semibold text-[#f0ece3]">{studentName}</p>
+          <p className="text-[#4e5d72] text-[12px]">{messages.length} message{messages.length !== 1 ? "s" : ""}</p>
         </div>
-        <span className="text-[11px] text-[#4a5a6a] shrink-0">
-          {messages.length} msg{messages.length !== 1 ? "s" : ""}
-        </span>
-        {expanded ? <ChevronUp size={14} className="text-[#8896a7] shrink-0" /> : <ChevronDown size={14} className="text-[#8896a7] shrink-0" />}
       </div>
 
-      {expanded && (
-        <div className="bg-[#161e2e] border-t border-[#2a3a52]">
-          <div className="max-h-48 overflow-y-auto px-4 py-3 space-y-2">
-            {messages.map((msg) => (
-              <div key={msg.id} className={cn("flex gap-2", msg.sender === "nyx" ? "flex-row-reverse" : "")}>
-                <div className={cn(
-                  "px-3 py-2 rounded-xl text-[13px] max-w-[80%]",
-                  msg.sender === "nyx"
-                    ? "bg-amber-500/15 border border-amber-500/20 text-amber-200"
-                    : "bg-[#1e2a3a] border border-[#2a3a52] text-[#c8d0de]"
-                )}>
-                  {msg.content}
-                </div>
-              </div>
-            ))}
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto space-y-3 mb-5 min-h-0 max-h-64">
+        {messages.map((msg) => (
+          <div key={msg.id} className={cn("flex", msg.sender === "nyx" ? "justify-end" : "justify-start")}>
+            <div className={cn(
+              "max-w-[75%] px-3.5 py-2.5 rounded-2xl text-[13px] leading-relaxed",
+              msg.sender === "nyx"
+                ? "bg-[#d4a853]/15 text-[#f0ece3] rounded-br-md"
+                : "bg-white/[0.06] text-[#c8d0de] rounded-bl-md"
+            )}>
+              {msg.content}
+              <p className={cn("text-[10px] mt-1", msg.sender === "nyx" ? "text-[#d4a853]/50" : "text-[#4e5d72]")}>
+                {format(new Date(msg.created_at), "h:mm a")}
+              </p>
+            </div>
           </div>
-          <div className="flex gap-2 px-4 pb-3 pt-2 border-t border-[#2a3a52]">
-            <input
-              type="text"
-              value={reply}
-              onChange={(e) => setReply(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
-              placeholder="Reply as Nyx Scholars…"
-              className="flex-1 h-8 px-3 rounded-lg bg-[#0f1623] border border-[#2a3a52] text-[13px] text-[#f0ede6] placeholder:text-[#4a5a6a] focus:outline-none focus:ring-1 focus:ring-amber-500/50"
-            />
-            <button
-              onClick={handleSend}
-              disabled={!reply.trim() || sending}
-              className="w-8 h-8 rounded-lg bg-amber-500/15 border border-amber-500/20 text-amber-400 flex items-center justify-center hover:bg-amber-500/25 transition-colors disabled:opacity-40"
-            >
-              <Send size={13} />
-            </button>
-          </div>
-        </div>
-      )}
+        ))}
+        <div ref={bottomRef} />
+      </div>
+
+      {/* Reply */}
+      <div className="flex gap-2 shrink-0">
+        <input
+          type="text"
+          value={reply}
+          onChange={(e) => setReply(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && send()}
+          placeholder="Reply as Nyx Scholars…"
+          className="flex-1 h-9 px-3.5 rounded-xl bg-[#0b0f1a] border border-white/[0.07] text-[13px] text-[#f0ece3] placeholder:text-[#2e3a4a] focus:outline-none focus:ring-1 focus:ring-[#d4a853]/40 transition-all"
+        />
+        <button
+          onClick={send}
+          disabled={!reply.trim() || sending}
+          className="w-9 h-9 rounded-xl bg-[#d4a853]/15 text-[#d4a853] flex items-center justify-center hover:bg-[#d4a853]/25 transition-colors disabled:opacity-40"
+        >
+          <Send size={13} />
+        </button>
+      </div>
     </div>
   );
 }
 
+/* ── Main component ────────────────────────────────────────── */
 export default function AdminPortalSection() {
   const [tab, setTab] = useState<"sessions" | "messages">("sessions");
   const [sessions, setSessions] = useState<SessionWithProfile[]>([]);
   const [messages, setMessages] = useState<MessageWithProfile[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeSession, setActiveSession] = useState<SessionWithProfile | null>(null);
+  const [activeStudentId, setActiveStudentId] = useState<string | null>(null);
 
-  const loadData = async () => {
-    const [sessRes, msgRes] = await Promise.all([
+  const load = async () => {
+    const [sRes, mRes] = await Promise.all([
       fetch("/api/admin/sessions"),
       fetch("/api/admin/messages"),
     ]);
-    if (sessRes.ok) {
-      const d = await sessRes.json();
-      setSessions(d.sessions ?? []);
-    }
-    if (msgRes.ok) {
-      const d = await msgRes.json();
-      setMessages(d.messages ?? []);
-    }
+    if (sRes.ok) { const d = await sRes.json(); setSessions(d.sessions ?? []); }
+    if (mRes.ok) { const d = await mRes.json(); setMessages(d.messages ?? []); }
     setLoading(false);
   };
 
-  useEffect(() => { loadData(); }, []);
+  useEffect(() => { load(); }, []);
 
-  // Group messages by student
-  const messagesByStudent: Record<string, { studentName: string; messages: MessageWithProfile[] }> = {};
-  for (const msg of messages) {
-    if (!messagesByStudent[msg.student_id]) {
-      messagesByStudent[msg.student_id] = {
-        studentName: msg.profiles?.full_name ?? msg.student_id.slice(0, 8),
-        messages: [],
-      };
+  /* Group messages by student */
+  const byStudent: Record<string, { name: string; msgs: MessageWithProfile[]; unread: number }> = {};
+  for (const m of messages) {
+    if (!byStudent[m.student_id]) {
+      byStudent[m.student_id] = { name: m.profiles?.full_name ?? m.student_id.slice(0, 8), msgs: [], unread: 0 };
     }
-    messagesByStudent[msg.student_id].messages.push(msg);
+    byStudent[m.student_id].msgs.push(m);
+    if (m.sender === "student" && !m.read) byStudent[m.student_id].unread++;
   }
 
-  const pendingSessions = sessions.filter((s) => s.status === "pending").length;
-  const unreadMessages = messages.filter((m) => m.sender === "student" && !m.read).length;
+  const pendingCount  = sessions.filter((s) => s.status === "pending").length;
+  const unreadCount   = messages.filter((m) => m.sender === "student" && !m.read).length;
+
+  const activeStudent = activeStudentId ? byStudent[activeStudentId] : null;
 
   return (
-    <div className="mt-10">
-      <div className="flex items-center gap-1 border-b border-[#2a3a52] mb-5">
-        {(["sessions", "messages"] as const).map((t) => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            className={cn(
-              "px-4 py-2.5 text-[13px] font-medium capitalize border-b-2 -mb-px transition-colors flex items-center gap-2",
-              tab === t
-                ? "border-amber-400 text-amber-400"
-                : "border-transparent text-[#8896a7] hover:text-[#f0ede6]"
-            )}
-          >
-            {t}
-            {t === "sessions" && pendingSessions > 0 && (
-              <span className="w-4 h-4 rounded-full bg-[#d4a853] text-black text-[9px] font-bold flex items-center justify-center">
-                {pendingSessions}
-              </span>
-            )}
-            {t === "messages" && unreadMessages > 0 && (
-              <span className="w-4 h-4 rounded-full bg-[#d4a853] text-black text-[9px] font-bold flex items-center justify-center">
-                {unreadMessages}
-              </span>
-            )}
-          </button>
-        ))}
+    <section>
+      {/* Section tabs */}
+      <div className="flex items-center gap-0 mb-8 border-b border-white/[0.05]">
+        {(["sessions", "messages"] as const).map((t) => {
+          const badge = t === "sessions" ? pendingCount : unreadCount;
+          return (
+            <button
+              key={t}
+              onClick={() => { setTab(t); setActiveSession(null); setActiveStudentId(null); }}
+              className={cn(
+                "relative px-1 pb-3 mr-6 text-[14px] font-medium transition-colors capitalize flex items-center gap-2",
+                tab === t ? "text-[#f0ece3]" : "text-[#4e5d72] hover:text-[#8d9ab0]"
+              )}
+            >
+              {t}
+              {badge > 0 && (
+                <span className="w-4 h-4 rounded-full bg-[#d4a853] text-black text-[9px] font-bold flex items-center justify-center">
+                  {badge}
+                </span>
+              )}
+              {tab === t && (
+                <span className="absolute bottom-0 left-0 right-0 h-px bg-[#d4a853]" />
+              )}
+            </button>
+          );
+        })}
       </div>
 
       {loading ? (
-        <p className="text-[#8896a7] text-sm">Loading…</p>
+        <div className="py-16 text-center">
+          <p className="text-[#4e5d72] text-[13px]">Loading…</p>
+        </div>
       ) : tab === "sessions" ? (
-        <div className="space-y-2">
-          {sessions.length === 0 ? (
-            <p className="text-[#8896a7] text-sm text-center py-8">No session requests yet.</p>
-          ) : (
-            <>
-              <div className="grid grid-cols-4 gap-4 px-4 py-2 text-[11px] text-[#8896a7] uppercase tracking-wide">
-                <span>Student</span><span>Subject</span><span>Date</span><span>Status</span>
-              </div>
-              {sessions.map((s) => (
-                <SessionRow key={s.id} session={s} onUpdate={loadData} />
-              ))}
-            </>
-          )}
-        </div>
-      ) : (
-        <div className="space-y-2">
-          {Object.keys(messagesByStudent).length === 0 ? (
-            <p className="text-[#8896a7] text-sm text-center py-8">No student messages yet.</p>
-          ) : (
-            Object.entries(messagesByStudent).map(([studentId, { studentName, messages: msgs }]) => (
-              <MessageThread
-                key={studentId}
-                studentId={studentId}
-                studentName={studentName}
-                messages={msgs}
-                onReply={loadData}
-              />
-            ))
-          )}
-        </div>
-      )}
-    </div>
+        activeSession ? (
+          <SessionDetail
+            session={activeSession}
+            onBack={() => setActiveSession(null)}
+            onUpdate={load}
+          />
+        ) : sessions.length === 0 ? (
+          <div className="py-16 text-center">
+            <p className="text-[#4e5d72] text-[14px]">No session requests yet.</p>
+            <p className="text-[#2e3a4a] text-[13px] mt-1">Student bookings will appear here.</p>
+          </div>
+        ) : (
+          <div className="divide-y divide-white/[0.04]">
+            {sessions.map((s) => (
+              <button
+                key={s.id}
+                onClick={() => setActiveSession(s)}
+                className="w-full flex items-center gap-4 py-3.5 px-4 -mx-4 rounded-xl hover:bg-white/[0.03] transition-colors text-left group"
+              >
+                {/* Avatar */}
+                <div className="w-9 h-9 rounded-full bg-[#d4a853]/10 border border-[#d4a853]/20 flex items-center justify-center shrink-0">
+                  <span className="text-[11px] font-bold text-[#d4a853]">{initials(s.profiles?.full_name ?? null)}</span>
+                </div>
+
+                {/* Info */}
+                <div className="flex-1 min-w-0">
+                  <p className="text-[#f0ece3] text-[14px] font-medium">{s.profiles?.full_name ?? "Unknown Student"}</p>
+                  <p className="text-[#4e5d72] text-[12px]">
+                    {s.subject} · {format(new Date(s.scheduled_at), "MMM d, h:mm a")}
+                  </p>
+                </div>
+
+                {statusBadge(s.status)}
+                <ChevronRight size={14} className="text-[#2e3a4a] group-hover:text-[#8d9ab0] transition-colors shrink-0" />
+              </button>
+            ))}
+          </div>
+        )
+      ) : /* messages tab */
+        activeStudentId && activeStudent ? (
+          <MessageThread
+            studentId={activeStudentId}
+            studentName={activeStudent.name}
+            messages={activeStudent.msgs}
+            onBack={() => setActiveStudentId(null)}
+            onReply={load}
+          />
+        ) : Object.keys(byStudent).length === 0 ? (
+          <div className="py-16 text-center">
+            <p className="text-[#4e5d72] text-[14px]">No student messages yet.</p>
+            <p className="text-[#2e3a4a] text-[13px] mt-1">Messages from the portal will appear here.</p>
+          </div>
+        ) : (
+          <div className="divide-y divide-white/[0.04]">
+            {Object.entries(byStudent).map(([sid, { name, msgs, unread }]) => {
+              const last = msgs[msgs.length - 1];
+              return (
+                <button
+                  key={sid}
+                  onClick={() => setActiveStudentId(sid)}
+                  className="w-full flex items-center gap-4 py-3.5 px-4 -mx-4 rounded-xl hover:bg-white/[0.03] transition-colors text-left group"
+                >
+                  <div className="relative shrink-0">
+                    <div className="w-9 h-9 rounded-full bg-[#d4a853]/10 border border-[#d4a853]/20 flex items-center justify-center">
+                      <span className="text-[11px] font-bold text-[#d4a853]">{initials(name)}</span>
+                    </div>
+                    {unread > 0 && (
+                      <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-[#d4a853] text-black text-[8px] font-bold flex items-center justify-center">
+                        {unread}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[#f0ece3] text-[14px] font-medium">{name}</p>
+                    {last && (
+                      <p className="text-[#4e5d72] text-[12px] truncate">
+                        {last.sender === "nyx" ? "You: " : ""}{last.content}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-3 shrink-0">
+                    {last && <span className="text-[#2e3a4a] text-[11px]">{format(new Date(last.created_at), "MMM d")}</span>}
+                    <ChevronRight size={14} className="text-[#2e3a4a] group-hover:text-[#8d9ab0] transition-colors" />
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        )
+      }
+    </section>
   );
 }

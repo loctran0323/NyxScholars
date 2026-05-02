@@ -26,34 +26,30 @@ export default async function AdminDashboard() {
   );
 
   return (
-    <div className="pt-16 min-h-screen px-4 sm:px-6 lg:px-8 py-12">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-2xl font-bold text-[#f0ede6]">Admin Dashboard</h1>
-            <p className="text-[#8896a7] text-sm mt-1">
-              {leads.length} lead{leads.length !== 1 ? "s" : ""} submitted
+    <div className="min-h-screen bg-[#060912] pt-[68px]">
+      <div className="max-w-5xl mx-auto px-6 py-14">
+
+        {/* Page header */}
+        <div className="mb-12">
+          <p className="text-[#d4a853] text-[11px] font-bold uppercase tracking-[0.15em] mb-3">Nyx Scholars</p>
+          <h1 className="text-[2rem] font-bold text-[#f0ece3] tracking-tight">Admin Dashboard</h1>
+          {!isSupabaseConnected && (
+            <p className="mt-3 text-amber-400 text-[13px]">
+              ⚠ Supabase not configured — data won&apos;t persist.
             </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className={`w-2 h-2 rounded-full ${isSupabaseConnected ? "bg-green-400" : "bg-amber-400"}`} />
-            <span className="text-[#8896a7] text-xs">
-              {isSupabaseConnected ? "Supabase connected" : "Supabase not configured"}
-            </span>
-          </div>
+          )}
         </div>
 
-        {!isSupabaseConnected && (
-          <div className="mb-6 p-4 rounded-xl border border-amber-500/20 bg-amber-500/5 text-amber-400 text-sm">
-            Supabase is not configured. Leads submitted through the form are logged server-side only.
-            Set <code className="bg-[#0f1623] px-1 py-0.5 rounded">NEXT_PUBLIC_SUPABASE_URL</code>,{" "}
-            <code className="bg-[#0f1623] px-1 py-0.5 rounded">NEXT_PUBLIC_SUPABASE_ANON_KEY</code>, and{" "}
-            <code className="bg-[#0f1623] px-1 py-0.5 rounded">SUPABASE_SERVICE_ROLE_KEY</code> to enable lead storage.
+        {/* Leads */}
+        <section className="mb-16">
+          <div className="flex items-baseline justify-between mb-5">
+            <h2 className="text-[15px] font-semibold text-[#f0ece3]">Consultation Requests</h2>
+            <span className="text-[#4e5d72] text-[13px]">{leads.length} total</span>
           </div>
-        )}
+          <AdminLeadTable leads={leads} />
+        </section>
 
-        <AdminLeadTable leads={leads} />
+        {/* Sessions + Messages */}
         <AdminPortalSection />
       </div>
     </div>
