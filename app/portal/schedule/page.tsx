@@ -222,20 +222,21 @@ function TutorBookingFlow({ tutor }: { tutor: Tutor }) {
           </span>
         </h1>
         <p className="text-center text-[var(--text-2)] mb-8 leading-[1.7]">
-          Your {isTrial ? "free trial" : "session"} with{" "}
-          <span className="text-[var(--text-1)] italic" style={{ fontFamily: "var(--font-fraunces)" }}>{tutor.name}</span>{" "}
-          is on the calendar. We&apos;ll send the video link to your email and to{" "}
+          Your {isTrial ? "free trial" : "session"} with your matched{" "}
+          <span className="text-[var(--text-1)] italic" style={{ fontFamily: "var(--font-fraunces)" }}>{tutor.school}</span>{" "}
+          tutor is on the calendar. We&apos;ll send the video link and your tutor&apos;s name to
+          your email and to{" "}
           <Link href="/portal/messages" className="text-[#7dd3fc] hover:underline">your messages</Link>{" "}
           shortly.
         </p>
         <div className="bg-[#0c1124]/85 border border-[var(--border)] rounded-[14px] p-6 mb-8 grid grid-cols-2 gap-y-4 text-[14px]">
           <div>
             <p className="font-mono text-[10px] tracking-[0.2em] text-[var(--text-3)] mb-1">TUTOR</p>
-            <p className="text-[var(--text-1)] italic" style={{ fontFamily: "var(--font-fraunces)" }}>{tutor.name}</p>
+            <p className="text-[var(--text-1)] italic" style={{ fontFamily: "var(--font-fraunces)" }}>{tutor.school} undergrad</p>
           </div>
           <div>
-            <p className="font-mono text-[10px] tracking-[0.2em] text-[var(--text-3)] mb-1">FROM</p>
-            <p className="text-[var(--text-1)]">{tutor.school}</p>
+            <p className="font-mono text-[10px] tracking-[0.2em] text-[var(--text-3)] mb-1">CLASS OF</p>
+            <p className="text-[var(--text-1)]">{tutor.classOf}</p>
           </div>
           <div>
             <p className="font-mono text-[10px] tracking-[0.2em] text-[var(--text-3)] mb-1">WHEN</p>
@@ -278,31 +279,19 @@ function TutorBookingFlow({ tutor }: { tutor: Tutor }) {
       {/* Tutor card */}
       <div className="bg-[#0c1124]/85 border border-[var(--border)] rounded-[18px] p-6 md:p-8 mb-8">
         <div className="flex items-start justify-between gap-5 flex-wrap">
-          <div className="flex items-center gap-4">
-            <div
-              className="grid place-items-center shrink-0"
-              style={{
-                width: 56, height: 56, borderRadius: "50%",
-                background: "#141a30", border: "1px solid #3b7a99",
-                fontFamily: "var(--font-fraunces)", fontSize: 22, color: "#e6e9f5",
-              }}
+          <div>
+            <p className="font-mono text-[10px] tracking-[0.22em] text-[#7dd3fc] mb-2">
+              YOUR MATCHED TUTOR
+            </p>
+            <h1
+              className="italic mb-2"
+              style={{ fontFamily: "var(--font-fraunces)", fontSize: 30, color: "var(--text-1)", lineHeight: 1 }}
             >
-              {tutor.name[0]}
-            </div>
-            <div>
-              <p className="font-mono text-[10px] tracking-[0.22em] text-[#7dd3fc] mb-1">
-                BOOKING WITH
-              </p>
-              <h1
-                className="italic mb-1"
-                style={{ fontFamily: "var(--font-fraunces)", fontSize: 32, color: "var(--text-1)", lineHeight: 1 }}
-              >
-                {tutor.name}
-              </h1>
-              <p className="font-mono text-[11px] tracking-[0.18em] text-[var(--text-3)]">
-                {tutor.school.toUpperCase()} · CLASS OF {tutor.classOf} · SAT {tutor.satScore}
-              </p>
-            </div>
+              {tutor.school} undergrad
+            </h1>
+            <p className="font-mono text-[11px] tracking-[0.18em] text-[var(--text-3)]">
+              CLASS OF {tutor.classOf} · TEACHES {tutor.tags.slice(0, 2).join(", ").toUpperCase()}
+            </p>
           </div>
           <div className="text-right">
             <p className="font-mono text-[9px] tracking-[0.22em] text-[var(--text-3)]">RATE</p>
@@ -314,11 +303,10 @@ function TutorBookingFlow({ tutor }: { tutor: Tutor }) {
             </p>
           </div>
         </div>
-        <p
-          className="mt-5 italic text-[var(--text-1)] leading-[1.5]"
-          style={{ fontFamily: "var(--font-fraunces)", fontSize: 16 }}
-        >
-          &ldquo;{tutor.pitch}&rdquo;
+        <p className="mt-5 text-[var(--text-2)] text-[14px] leading-[1.7] max-w-xl">
+          You&rsquo;ll meet your tutor at the start of the trial session. They&rsquo;re vetted via
+          our four-step process — verified 1500+ SAT, currently enrolled, passed the teaching
+          audition.
         </p>
         <div className="mt-5 grid grid-cols-3 gap-4 pt-5" style={{ borderTop: "1px solid var(--border)" }}>
           <Stat icon={ShieldCheck} label="VETTED" value="1500+ SAT" />
@@ -441,7 +429,7 @@ function TutorBookingFlow({ tutor }: { tutor: Tutor }) {
           </p>
           {selectedSlot ? (
             <p className="text-[var(--text-1)] text-[15px]">
-              <span className="italic" style={{ fontFamily: "var(--font-fraunces)" }}>{tutor.name}</span>
+              <span className="italic" style={{ fontFamily: "var(--font-fraunces)" }}>{tutor.school} tutor</span>
               {" · "}
               <span className="font-mono">
                 {new Date(selectedSlot.iso).toLocaleString("en-US", { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}

@@ -75,8 +75,9 @@ export default function UpgradePage() {
           Choose your plan to get started.
         </h1>
         <p className="text-[var(--text-2)] text-[15px] max-w-lg mx-auto leading-relaxed">
-          All plans include direct access to Loc and Charles — no intermediaries, no matching algorithms.
-          Book a free call and we&apos;ll activate your access within 24 hours of payment.
+          All plans include direct access to your vetted matched tutor — no intermediaries, no
+          shifting tutors mid-package.
+          Book a free trial and we&apos;ll activate your access within 24 hours of payment.
         </p>
       </div>
 

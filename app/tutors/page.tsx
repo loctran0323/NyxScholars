@@ -2,124 +2,165 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ShieldCheck, GraduationCap, Video, ClipboardCheck } from "lucide-react";
 import {
   Eyebrow, CTA, NyxMark,
   BgInkWash, BgConstellationGrid, BgCrescentMoon, BgFade,
   SignatureLine,
 } from "@/components/system";
-import { TUTORS, HOURLY_RATE_USD } from "@/lib/mock/tutors";
+import { HOURLY_RATE_USD } from "@/lib/mock/tutors";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+const vettingSteps = [
+  {
+    n: "01",
+    icon: ClipboardCheck,
+    title: "Score floor.",
+    body: "Every applicant must have scored 1500 or higher on the digital SAT, with a verified score report. No exceptions, including for the founders themselves.",
+  },
+  {
+    n: "02",
+    icon: GraduationCap,
+    title: "Currently enrolled.",
+    body: "Tutors must be active undergraduates at a top-tier university — Princeton, Harvard, Yale, MIT, Stanford, Columbia, or peer schools. We re-verify each semester.",
+  },
+  {
+    n: "03",
+    icon: Video,
+    title: "Teaching audition.",
+    body: "Applicants run a 30-minute mock session with one of the founders, walking through a real student case. We're looking for clarity, patience, and the ability to find the next question to ask — not the answer.",
+  },
+  {
+    n: "04",
+    icon: ShieldCheck,
+    title: "Trial cohort.",
+    body: "Approved tutors take on two trial students with founder shadowing on the first session. Honest student feedback determines whether they stay on the platform.",
+  },
+];
 
 export default function TutorsPage() {
   return (
     <div className="relative">
 
       {/* HERO */}
-      <section className="relative pt-[120px] md:pt-[160px] pb-24 overflow-hidden">
+      <section className="relative pt-[120px] md:pt-[160px] pb-20 overflow-hidden">
         <BgInkWash />
         <BgFade top={false} bottom height={120} />
 
         <div className="relative max-w-[1100px] mx-auto px-5 sm:px-8">
           <div className="max-w-3xl">
-            <Eyebrow color="brass" className="mb-6">The tutors</Eyebrow>
+            <Eyebrow color="brass" className="mb-6">Vetting</Eyebrow>
             <h1
               className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.0] tracking-[-0.02em] mb-7"
               style={{ fontSize: "clamp(2.4rem, 5.5vw, 4.6rem)" }}
             >
-              Two of us, for now.
+              How we hire tutors.
             </h1>
             <p className="text-[var(--text-2)] text-[18px] leading-[1.7] max-w-2xl">
-              Nyx is two Princeton classmates tutoring SAT, ACT, AP, and admissions one student at
-              a time. We&rsquo;re hiring carefully. No mass-market roster, no commission tier of
-              random tutors — just us, until we find people we&rsquo;d trust to teach our siblings.
+              We don&rsquo;t list our tutors publicly — partly because we&rsquo;re early and the
+              roster is small, partly because the people who matter to your sessions are the ones we
+              put through this process before they ever meet a student. You meet your matched tutor
+              when you book a free trial.
             </p>
             <SignatureLine width={180} className="mt-9" />
           </div>
         </div>
       </section>
 
-      {/* FOUNDERS — clean magazine spreads, no fabricated stats */}
-      {TUTORS.map((t, i) => (
-        <section
-          key={t.id}
-          className={`relative pt-12 md:pt-16 pb-16 md:pb-24 overflow-hidden ${i % 2 === 1 ? "bg-[var(--bg-2)]" : ""}`}
-        >
-          {i === 0 ? <BgConstellationGrid /> : null}
-          {i === 0 ? <BgFade height={120} /> : null}
-          {i === 0 ? (
-            <div
-              aria-hidden
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                background:
-                  "linear-gradient(180deg, rgba(7,9,20,0.65) 0%, rgba(7,9,20,0.4) 40%, rgba(7,9,20,0.85) 100%)",
-              }}
-            />
-          ) : null}
+      {/* THE FOUR STEPS */}
+      <section className="relative py-20 md:py-28 overflow-hidden">
+        <BgConstellationGrid />
+        <BgFade height={120} />
+        <div
+          aria-hidden
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(7,9,20,0.65) 0%, rgba(7,9,20,0.4) 40%, rgba(7,9,20,0.85) 100%)",
+          }}
+        />
 
-          <div className="relative max-w-[1180px] mx-auto px-5 sm:px-8">
-            <motion.div
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, ease: EASE }}
-              className={`grid md:grid-cols-12 gap-x-12 gap-y-10 items-start ${i % 2 === 1 ? "md:[direction:rtl]" : ""}`}
-            >
-              {/* Left rail — name + key facts only */}
-              <div className="md:col-span-4 md:[direction:ltr]">
-                <p className="font-mono text-[var(--text-3)] text-[11px] uppercase tracking-[0.24em] mb-4">
-                  Founder · {t.tags.join(", ")}
-                </p>
-                <h2
-                  className="font-[family-name:var(--font-cormorant)] italic font-normal text-[var(--text-1)] leading-[0.9] mb-6"
-                  style={{ fontSize: "clamp(3.5rem, 7vw, 5.5rem)" }}
-                >
-                  {t.name}
-                </h2>
-                <dl className="space-y-3 text-[14px]">
-                  <Row label="School" value={`${t.school}, Class of ${t.classOf}`} />
-                  <Row label="SAT" value={`${t.satScore} (digital)`} />
-                  <Row label="Available" value={t.availability} />
-                  <Row label="Rate" value={`$${HOURLY_RATE_USD}/hr · free trial`} />
-                </dl>
-              </div>
-
-              {/* Right rail — bio + quote + book */}
-              <div className="md:col-span-8 md:[direction:ltr]">
-                <p className="text-[var(--text-2)] text-[16px] leading-[1.8] mb-8 max-w-2xl">
-                  {t.bio}
-                </p>
-                <p
-                  className="font-[family-name:var(--font-fraunces)] italic text-[var(--text-1)] leading-[1.45] border-l border-[var(--accent)] pl-6 mb-10 max-w-xl"
-                  style={{ fontSize: 20 }}
-                >
-                  &ldquo;{t.pitch}&rdquo;
-                </p>
-                <div className="flex items-center gap-5 flex-wrap">
-                  <Link
-                    href={`/portal/schedule?tutor=${t.id}`}
-                    className="inline-flex items-center gap-2 font-mono font-medium px-6 py-3 rounded-[3px] transition-all hover:brightness-110"
-                    style={{ background: "#7dd3fc", color: "#070914", fontSize: 11, letterSpacing: 4 }}
+        <div className="relative max-w-[1100px] mx-auto px-5 sm:px-8">
+          <div className="space-y-14 md:space-y-20 max-w-3xl">
+            {vettingSteps.map((s, i) => (
+              <motion.div
+                key={s.n}
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.7, ease: EASE, delay: i * 0.04 }}
+                className="grid md:grid-cols-12 gap-x-10 gap-y-5"
+              >
+                <div className="md:col-span-2 flex md:flex-col gap-4 md:gap-6 items-baseline md:items-start">
+                  <span
+                    className="font-[family-name:var(--font-fraunces)] italic text-[#7dd3fc]"
+                    style={{ fontSize: 32, lineHeight: 1 }}
                   >
-                    BOOK FREE TRIAL →
-                  </Link>
-                  <Link
-                    href={`/match`}
-                    className="inline-flex items-center gap-2 font-mono uppercase tracking-[0.16em] text-[12px] text-[var(--text-2)] hover:text-[var(--text-1)] transition-colors"
-                  >
-                    or get matched first
-                    <ArrowRight size={11} />
-                  </Link>
+                    {s.n}
+                  </span>
+                  <s.icon size={22} className="text-[#7dd3fc] opacity-80" />
                 </div>
-              </div>
-            </motion.div>
+                <div className="md:col-span-10">
+                  <h3
+                    className="font-[family-name:var(--font-fraunces)] font-medium text-[var(--text-1)] leading-[1.2] mb-3"
+                    style={{ fontSize: 24 }}
+                  >
+                    {s.title}
+                  </h3>
+                  <p className="text-[var(--text-2)] text-[16px] leading-[1.8] max-w-2xl">{s.body}</p>
+                </div>
+              </motion.div>
+            ))}
           </div>
-        </section>
-      ))}
+        </div>
+      </section>
 
-      {/* HONEST HIRING NOTE — replaces fake roster */}
+      {/* PROMISE STRIP — calm, just the numerical commitments */}
+      <section className="relative py-20 md:py-24 border-y border-[var(--border)]">
+        <div className="max-w-[1100px] mx-auto px-5 sm:px-8">
+          <div className="grid sm:grid-cols-3 gap-12 md:gap-16">
+            <div>
+              <p className="font-mono text-[10px] tracking-[0.24em] text-[var(--text-3)] mb-3">SCORE FLOOR</p>
+              <p
+                className="leading-none"
+                style={{ fontFamily: "var(--font-fraunces)", fontSize: 42, color: "var(--text-1)" }}
+              >
+                1500+
+              </p>
+              <p className="mt-3 text-[14px] leading-[1.6] text-[var(--text-2)]">
+                Verified digital SAT score, no exceptions.
+              </p>
+            </div>
+            <div>
+              <p className="font-mono text-[10px] tracking-[0.24em] text-[var(--text-3)] mb-3">SESSIONS</p>
+              <p
+                className="leading-none"
+                style={{ fontFamily: "var(--font-fraunces)", fontSize: 42, color: "var(--text-1)" }}
+              >
+                1:1
+              </p>
+              <p className="mt-3 text-[14px] leading-[1.6] text-[var(--text-2)]">
+                Online video, never group classes or recordings.
+              </p>
+            </div>
+            <div>
+              <p className="font-mono text-[10px] tracking-[0.24em] text-[var(--text-3)] mb-3">RATE</p>
+              <p
+                className="leading-none"
+                style={{ fontFamily: "var(--font-fraunces)", fontSize: 42, color: "var(--text-1)" }}
+              >
+                ${HOURLY_RATE_USD}<span style={{ fontSize: 18, color: "var(--text-3)" }}>/hr</span>
+              </p>
+              <p className="mt-3 text-[14px] leading-[1.6] text-[var(--text-2)]">
+                One honest rate; cadences pay less per hour.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* APPLY-TO-TUTOR PATH */}
       <section className="relative py-24 md:py-28 overflow-hidden">
         <BgInkWash />
         <BgFade height={120} />
@@ -127,10 +168,10 @@ export default function TutorsPage() {
           <div className="grid md:grid-cols-12 gap-8">
             <div className="md:col-span-3">
               <p className="font-mono text-[var(--text-3)] text-[11px] uppercase tracking-[0.24em] mb-2">
-                Hiring
+                Tutoring with us
               </p>
               <p className="font-mono text-[var(--accent)] text-[11px] uppercase tracking-[0.24em]">
-                Carefully
+                Apply
               </p>
             </div>
             <div className="md:col-span-9">
@@ -138,17 +179,16 @@ export default function TutorsPage() {
                 className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.1] tracking-[-0.015em] mb-6"
                 style={{ fontSize: "clamp(1.8rem, 3.4vw, 2.6rem)" }}
               >
-                We&rsquo;re adding tutors{" "}
-                <span className="font-[family-name:var(--font-cormorant)] italic">one at a time.</span>
+                Want to teach{" "}
+                <span className="font-[family-name:var(--font-cormorant)] italic">on Nyx?</span>
               </h2>
               <p className="text-[var(--text-2)] text-[16px] leading-[1.8] max-w-2xl mb-6">
-                If you&rsquo;re an undergrad at an Ivy or peer school who scored 1500+ on the digital
-                SAT, has tutored before, and would teach our siblings the way we&rsquo;d want them
-                taught — write to us.
+                If you cleared the criteria above and you&rsquo;d teach our siblings the way
+                you&rsquo;d want them taught — write to us.
               </p>
               <p className="text-[var(--text-2)] text-[16px] leading-[1.8] max-w-2xl mb-9">
-                We pay tutors well, take a small cut to keep the platform running, and don&rsquo;t
-                onboard anyone we wouldn&rsquo;t book ourselves.
+                We pay tutors well, take a small platform cut, and only onboard people we&rsquo;d
+                book ourselves.
               </p>
               <Link
                 href="mailto:tutors@nyxscholars.com"
@@ -179,35 +219,16 @@ export default function TutorsPage() {
               className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.0] mb-6 tracking-[-0.02em]"
               style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)" }}
             >
-              Pick one of us.
+              Meet your tutor in the trial.
             </h2>
             <p className="text-[var(--text-2)] text-[16px] leading-[1.7] mb-9">
-              Or take the 12-minute intake and we&rsquo;ll suggest who you&rsquo;d click with first.
+              The 12-minute intake matches you to whoever covers your gaps. Free 30 minutes after
+              that, no card.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <CTA href="/match" size="lg">Get matched</CTA>
-              <Link
-                href="/portal/schedule?tutor=loc"
-                className="group inline-flex items-center gap-2 text-[var(--text-2)] hover:text-[var(--text-1)] text-[15px] font-medium transition-colors px-3 py-4"
-              >
-                Or pick a tutor
-                <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-              </Link>
-            </div>
+            <CTA href="/match" size="lg">Get matched</CTA>
           </div>
         </div>
       </section>
-    </div>
-  );
-}
-
-function Row({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex items-baseline gap-3 py-1 border-b border-[var(--border)]/60">
-      <dt className="w-20 shrink-0 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--text-3)]">
-        {label}
-      </dt>
-      <dd className="text-[var(--text-1)] text-[14px]">{value}</dd>
     </div>
   );
 }

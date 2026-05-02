@@ -8,12 +8,12 @@ import {
   BgShootingStars, BgInkWash, BgCrescentMoon, BgFade,
   SignatureLine,
 } from "@/components/system";
-import { TUTORS, HOURLY_RATE_USD } from "@/lib/mock/tutors";
+import { HOURLY_RATE_USD } from "@/lib/mock/tutors";
 
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const promises = [
-  { n: "01", title: "Two of us, for now.", body: "Loc and Charles, both Princeton '28. We're hiring carefully — one tutor at a time, only people we'd trust to teach our siblings." },
+  { n: "01", title: "Vetted, not listed.", body: "Every tutor scored 1500+ on the digital SAT, is currently enrolled at a top-tier university, and ran a 30-minute teaching audition with the founders before taking on a student." },
   { n: "02", title: "One-on-one, online.", body: "Every session is over video with a shared whiteboard. No group classes, no recorded courses sold as 'tutoring,' no third-party assignments." },
   { n: "03", title: "One honest rate.", body: `$${HOURLY_RATE_USD} per hour pay-as-you-go. Or commit to a weekly cadence and pay less per hour. Free 30-minute trial either way.` },
 ];
@@ -163,7 +163,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* THE TUTORS — two cards, real, no fabricated stats */}
+      {/* VETTING PROMISE — replaces named tutor cards */}
       <section className="relative py-24 md:py-32 overflow-hidden border-t border-[var(--border)]">
         <div className="relative max-w-[1180px] mx-auto px-5 sm:px-8">
           <motion.div
@@ -174,29 +174,33 @@ export default function HomePage() {
             className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14"
           >
             <div>
-              <Eyebrow color="moon" className="mb-4">The tutors</Eyebrow>
+              <Eyebrow color="moon" className="mb-4">Vetting</Eyebrow>
               <h2
                 className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.05] tracking-[-0.015em] max-w-2xl"
                 style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)" }}
               >
-                Two Princeton students.{" "}
-                <span className="font-[family-name:var(--font-cormorant)] italic">That&rsquo;s it.</span>
+                You meet your tutor{" "}
+                <span className="font-[family-name:var(--font-cormorant)] italic">in the trial.</span>
               </h2>
             </div>
             <Link
               href="/tutors"
               className="group inline-flex items-center gap-2 text-[var(--text-2)] hover:text-[var(--text-1)] text-[14px] font-medium transition-colors shrink-0"
             >
-              Read our bios
+              Read the vetting process
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
             </Link>
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 gap-6">
-            {TUTORS.map((t) => (
+          <div className="grid sm:grid-cols-3 gap-6 max-w-4xl">
+            {[
+              { n: "01", title: "Score floor", body: "Verified 1500+ on the digital SAT. No exceptions, including for the founders." },
+              { n: "02", title: "Currently enrolled", body: "Active undergraduates at Princeton, Harvard, Yale, MIT, Stanford, Columbia, or peer schools." },
+              { n: "03", title: "Teaching audition", body: "Thirty-minute mock session with the founders. We hire only people we'd book ourselves." },
+            ].map((p) => (
               <article
-                key={t.id}
-                className="p-7 md:p-8 transition-colors duration-300 hover:border-[#7dd3fc]/40"
+                key={p.n}
+                className="p-6 md:p-7"
                 style={{
                   background: "rgba(12, 17, 36, 0.7)",
                   backdropFilter: "blur(6px)",
@@ -204,45 +208,19 @@ export default function HomePage() {
                   borderRadius: 6,
                 }}
               >
-                <div className="flex items-start gap-4 mb-5">
-                  <div
-                    className="grid place-items-center shrink-0"
-                    style={{
-                      width: 52, height: 52, borderRadius: "50%",
-                      background: "#141a30", border: "1px solid #3b7a99",
-                      fontFamily: "var(--font-fraunces)", fontSize: 18, color: "#e6e9f5",
-                    }}
-                  >
-                    {t.name[0]}
-                  </div>
-                  <div>
-                    <h3
-                      className="italic"
-                      style={{ fontFamily: "var(--font-fraunces)", fontSize: 26, color: "#e6e9f5", lineHeight: 1, marginBottom: 4 }}
-                    >
-                      {t.name}
-                    </h3>
-                    <p className="font-mono text-[10px] tracking-[0.2em] text-[#7a82a0]">
-                      {t.school.toUpperCase()} · CLASS OF {t.classOf} · SAT {t.satScore}
-                    </p>
-                  </div>
-                </div>
-
-                <p
-                  className="italic mb-5"
-                  style={{ fontFamily: "var(--font-fraunces)", fontSize: 15, color: "#e6e9f5", lineHeight: 1.45 }}
+                <span
+                  className="font-[family-name:var(--font-fraunces)] italic block mb-4"
+                  style={{ color: "#7dd3fc", fontSize: 28, lineHeight: 1 }}
                 >
-                  &ldquo;{t.pitch}&rdquo;
-                </p>
-                <p className="text-[#9aa5b8] text-[14px] leading-[1.7] mb-6">{t.bio}</p>
-
-                <Link
-                  href={`/portal/schedule?tutor=${t.id}`}
-                  className="inline-flex items-center gap-1.5 text-[#7dd3fc] hover:text-[#bde9ff] font-mono text-[11px] tracking-[0.16em] uppercase transition-colors group"
+                  {p.n}
+                </span>
+                <h3
+                  className="font-[family-name:var(--font-fraunces)] font-medium mb-3"
+                  style={{ fontSize: 20, color: "#e6e9f5" }}
                 >
-                  Book free trial
-                  <ArrowRight size={11} className="transition-transform group-hover:translate-x-0.5" />
-                </Link>
+                  {p.title}
+                </h3>
+                <p className="text-[#9aa5b8] text-[14px] leading-[1.7]">{p.body}</p>
               </article>
             ))}
           </div>

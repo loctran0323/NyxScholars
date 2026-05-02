@@ -29,7 +29,10 @@ export default function ConsultationDashboardPage() {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selectedSkill = ALL_SKILLS.find((s) => s.id === selectedId) ?? null;
-  const tutorName = "Loc";
+  // In production this comes from the matched tutor record; for the
+  // mock dashboard we use a generic label so the demo doesn't fabricate
+  // a specific tutor identity.
+  const tutorName = "your tutor";
 
   return (
     <div className="-mx-5 md:-mx-8 -my-7 md:-my-9 flex flex-col h-[calc(100dvh-56px)] md:h-[calc(100vh-0px)] min-h-[680px]">

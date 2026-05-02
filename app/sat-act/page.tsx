@@ -112,18 +112,19 @@ export default function HowItWorksPage() {
                 className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[1.05] tracking-[-0.018em] mb-6"
                 style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)" }}
               >
-                Loc and Charles —{" "}
+                You&rsquo;re matched to{" "}
                 <span className="font-[family-name:var(--font-cormorant)] italic">whoever covers your gaps.</span>
               </h2>
               <p className="text-[var(--text-2)] text-[16px] leading-[1.8] max-w-2xl mb-7">
-                We&rsquo;re two tutors today. The intake decides which of us is a better fit for the
-                skills you missed. Whichever you pick, the trial is free.
+                The intake tells us where you struggle; we shortlist the vetted tutor whose
+                specialties best cover those skills and whose schedule fits yours. You meet them in
+                the free trial.
               </p>
               <Link
                 href="/tutors"
                 className="inline-flex items-center gap-2 text-[var(--accent)] hover:text-[var(--accent-bright)] text-[12px] font-medium transition-colors group font-mono uppercase tracking-[0.24em]"
               >
-                Read our bios
+                See the vetting process
                 <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
               </Link>
             </div>

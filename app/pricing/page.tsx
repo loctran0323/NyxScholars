@@ -58,7 +58,7 @@ export default function PricingPage() {
               name="Free trial"
               priceLabel="$0"
               priceUnit="30 minutes"
-              summary="Meet Loc or Charles for half an hour. Drill a real problem. Decide if it's a fit."
+              summary="Meet your matched tutor for half an hour. Drill a real problem. Decide if it's a fit."
               ctaLabel="Book a trial"
               ctaHref="/match"
               bullets={[
@@ -144,8 +144,8 @@ export default function PricingPage() {
           </div>
           <div className="md:col-span-9">
             <p className="text-[var(--text-2)] text-[15px] leading-[1.7] max-w-2xl">
-              Essay review, school list strategy, mock interviews. Available on any package. Loc and
-              Charles handle these directly — no separate consultant, no upcharge for &quot;senior
+              Essay review, school list strategy, mock interviews. Available on any package and
+              handled by the same vetted tutors — no separate consultant, no upcharge for &quot;senior
               counselor&quot; tier.
             </p>
           </div>

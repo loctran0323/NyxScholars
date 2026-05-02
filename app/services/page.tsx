@@ -10,7 +10,7 @@ export const metadata = { title: "Services" };
 const services = [
   {
     n: "01", icon: Target, label: "SAT", price: "$110–$130 / hr",
-    body: "Digital SAT, both sections. The bulk of what we tutor. Loc and Charles teach this; so do Maya, Kenji, Nadia, and Theo. Free 30-minute trial with your matched tutor.",
+    body: "Digital SAT, both sections — Math and Reading & Writing. This is the bulk of what we tutor. Free 30-minute trial with your matched tutor.",
     href: "/sat-act",
   },
   {

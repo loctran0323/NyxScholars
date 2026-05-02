@@ -158,7 +158,7 @@ export function NextSessionCard({
  * before/after the session. Replaces the prior "DailyPlanCard"
  * which framed it as engine-generated.
  * ─────────────────────────────────────────────────────────── */
-export function AssignedDrillsCard({ assignedBy = "Loc" }: { assignedBy?: string }) {
+export function AssignedDrillsCard({ assignedBy = "your tutor" }: { assignedBy?: string }) {
   return (
     <SkyCard>
       <CardHeader title="ASSIGNED" right={`BY ${assignedBy.toUpperCase()}`} />

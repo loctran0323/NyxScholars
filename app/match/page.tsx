@@ -535,7 +535,7 @@ function Results({ theta, ci, answers }: { theta: number; ci: number; answers: D
         }}
       >
         {matched.map((t, i) => (
-          <TutorMatchCard key={t.id} tutor={t} weakSkills={gaps.map((g) => g.name)} primary={i === 0} />
+          <TutorMatchCard key={t.id} tutor={t} weakSkills={gaps.map((g) => g.name)} primary={i === 0} index={i} />
         ))}
       </div>
 
@@ -568,7 +568,7 @@ function Results({ theta, ci, answers }: { theta: number; ci: number; answers: D
   );
 }
 
-function TutorMatchCard({ tutor, weakSkills, primary }: { tutor: Tutor; weakSkills: string[]; primary?: boolean }) {
+function TutorMatchCard({ tutor, weakSkills, primary, index }: { tutor: Tutor; weakSkills: string[]; primary?: boolean; index: number }) {
   return (
     <article
       className="p-5 flex flex-col"
@@ -591,37 +591,25 @@ function TutorMatchCard({ tutor, weakSkills, primary }: { tutor: Tutor; weakSkil
           ★ BEST MATCH
         </div>
       ) : null}
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex items-center gap-3">
+      <div className="flex items-start justify-between mb-4">
+        <div>
+          <div className="font-mono" style={{ fontSize: 9, color: TEXT_DIM, letterSpacing: 3 }}>
+            MATCH {String(index + 1).padStart(2, "0")}
+          </div>
           <div
-            className="grid place-items-center shrink-0"
-            style={{
-              width: 40, height: 40, borderRadius: "50%",
-              background: NIGHT_3, border: `1px solid ${MOON_DIM}`,
-              fontFamily: "var(--font-fraunces)", fontSize: 14, color: TEXT,
-            }}
+            className="italic mt-1"
+            style={{ fontFamily: "var(--font-fraunces)", fontSize: 22, color: TEXT, lineHeight: 1 }}
           >
-            {tutor.name[0]}
+            {tutor.school} undergrad
           </div>
-          <div>
-            <div className="italic" style={{ fontFamily: "var(--font-fraunces)", fontSize: 18, color: TEXT }}>
-              {tutor.name}
-            </div>
-            <div className="font-mono" style={{ fontSize: 10, color: TEXT_DIM, letterSpacing: 2 }}>
-              {tutor.school.toUpperCase()} · &lsquo;{String(tutor.classOf).slice(2)}
-            </div>
+          <div className="font-mono mt-1.5" style={{ fontSize: 10, color: TEXT_DIM, letterSpacing: 2 }}>
+            CLASS OF {tutor.classOf}
           </div>
-        </div>
-        <div className="text-right">
-          <div className="font-mono" style={{ fontSize: 9, color: TEXT_DIM, letterSpacing: 2 }}>SAT</div>
-          <div className="font-mono tabular-nums" style={{ fontSize: 14, color: MOON }}>{tutor.satScore}</div>
         </div>
       </div>
-      <p className="italic mb-3" style={{ fontFamily: "var(--font-fraunces)", fontSize: 14, color: TEXT, lineHeight: 1.4 }}>
-        &ldquo;{tutor.pitch}&rdquo;
-      </p>
-      <p className="mb-4" style={{ fontSize: 12, color: TEXT_DIM, lineHeight: 1.6 }}>
-        {tutor.bio}
+      <p className="mb-4 leading-[1.6]" style={{ fontSize: 13, color: TEXT_DIM }}>
+        Vetted via the four-step process — verified 1500+ SAT, currently enrolled, passed the
+        teaching audition.
       </p>
       <div className="font-mono mb-4" style={{ fontSize: 10, color: TEXT_DIM, letterSpacing: 2 }}>
         SPECIALISES IN <span style={{ color: MOON }}>{weakSkills.slice(0, 2).join(" · ")}</span>
@@ -651,6 +639,9 @@ function TutorMatchCard({ tutor, weakSkills, primary }: { tutor: Tutor; weakSkil
         >
           BOOK FREE TRIAL →
         </Link>
+        <p className="mt-3 text-center font-mono" style={{ fontSize: 9, letterSpacing: 1.5, color: TEXT_FAINT }}>
+          You meet your tutor at the trial.
+        </p>
       </div>
     </article>
   );

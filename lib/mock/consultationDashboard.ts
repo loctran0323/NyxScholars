@@ -52,14 +52,14 @@ export const mockDashboard: ConsultationDashboardData = {
     { skill: "Standard English",         section: "RW",   mastery: 0.71 },
   ],
   upcomingSession: {
-    tutor: "Loc",
+    tutor: "Your tutor",
     topic: "Word problems · setup strategies",
     startsAt: "2026-05-05T17:00:00-04:00",
   },
   notes: [
-    { id: "n1", author: "Loc",     createdAt: "2026-04-29", body: "Strong on linear systems this week. Focus next on translating word problems before computation." },
-    { id: "n2", author: "Charles", createdAt: "2026-04-25", body: "Reading passages: pace is good; second-pass close-reading still costs 4–5 min on long passages. Drill skim-then-locate." },
-    { id: "n3", author: "Loc",     createdAt: "2026-04-22", body: "Great mock score. Math was up 30; RW flat. Investigate whether grammar drills are pulling time from passage practice." },
+    { id: "n1", author: "Your tutor", createdAt: "2026-04-29", body: "Strong on linear systems this week. Focus next on translating word problems before computation." },
+    { id: "n2", author: "Your tutor", createdAt: "2026-04-25", body: "Reading passages: pace is good; second-pass close-reading still costs 4–5 min on long passages. Drill skim-then-locate." },
+    { id: "n3", author: "Your tutor", createdAt: "2026-04-22", body: "Great mock score. Math was up 30; RW flat. Investigate whether grammar drills are pulling time from passage practice." },
   ],
   recommendations: [
     { id: "r1", title: "Drill word problems",    cta: "Start drill",   href: "/portal/sessions" },
