@@ -17,16 +17,25 @@ import {
   X,
 } from "lucide-react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
-import type { Profile } from "@/types/portal";
+import type { Profile, PlanType } from "@/types/portal";
 
-const navItems = [
-  { href: "/portal", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { href: "/portal/schedule", label: "Schedule Session", icon: CalendarPlus, exact: false },
-  { href: "/portal/sessions", label: "My Sessions", icon: Calendar, exact: false },
-  { href: "/portal/materials", label: "Practice Materials", icon: BookOpen, exact: false },
-  { href: "/portal/messages", label: "Messages", icon: MessageSquare, exact: false },
-  { href: "/portal/profile", label: "Profile", icon: User, exact: false },
+const allNavItems = [
+  { href: "/portal",           label: "Dashboard",         icon: LayoutDashboard, exact: true,  plans: ["session", "monthly", "counseling"] },
+  { href: "/portal/schedule",  label: "Schedule Session",  icon: CalendarPlus,    exact: false, plans: ["session", "monthly", "counseling"] },
+  { href: "/portal/sessions",  label: "My Sessions",       icon: Calendar,        exact: false, plans: ["session", "monthly", "counseling"] },
+  { href: "/portal/materials", label: "Practice Materials",icon: BookOpen,        exact: false, plans: ["monthly", "counseling", "session"] },
+  { href: "/portal/messages",  label: "Messages",          icon: MessageSquare,   exact: false, plans: ["session", "monthly", "counseling"] },
+  { href: "/portal/profile",   label: "Profile",           icon: User,            exact: false, plans: ["session", "monthly", "counseling"] },
 ];
+
+function planLabel(plan: PlanType | null): string {
+  switch (plan) {
+    case "session":   return "Session Plan";
+    case "monthly":   return "Scholar Plan";
+    case "counseling": return "Admissions Plan";
+    default:          return "Student";
+  }
+}
 
 interface PortalSidebarProps {
   profile: Profile | null;
@@ -35,19 +44,11 @@ interface PortalSidebarProps {
 }
 
 function NavItem({
-  href,
-  label,
-  icon: Icon,
-  exact,
-  unreadCount,
-  onClick,
+  href, label, icon: Icon, exact, unreadCount, onClick,
 }: {
-  href: string;
-  label: string;
+  href: string; label: string;
   icon: React.ComponentType<{ size?: number; className?: string }>;
-  exact: boolean;
-  unreadCount?: number;
-  onClick?: () => void;
+  exact: boolean; unreadCount?: number; onClick?: () => void;
 }) {
   const pathname = usePathname();
   const isActive = exact ? pathname === href : pathname.startsWith(href);
@@ -76,12 +77,14 @@ function NavItem({
 }
 
 function SidebarContent({
-  profile,
-  userEmail,
-  unreadCount,
-  onNavClick,
+  profile, userEmail, unreadCount, onNavClick,
 }: PortalSidebarProps & { onNavClick?: () => void }) {
   const router = useRouter();
+  const plan = profile?.plan ?? null;
+
+  const visibleNav = allNavItems.filter((item) =>
+    !plan || item.plans.includes(plan)
+  );
 
   const handleSignOut = async () => {
     const supabase = getSupabaseBrowserClient();
@@ -91,12 +94,7 @@ function SidebarContent({
   };
 
   const displayName = profile?.full_name || userEmail.split("@")[0];
-  const initials = displayName
-    .split(" ")
-    .map((n: string) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
+  const initials = displayName.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2);
 
   return (
     <>
@@ -121,35 +119,20 @@ function SidebarContent({
           </div>
           <div className="min-w-0">
             <p className="text-[13px] font-semibold text-[#f0ece3] truncate">{displayName}</p>
-            <p className="text-[11px] text-[#4e5d72] truncate">
-              {profile?.grade ? `Grade ${profile.grade}` : "Student"}
-              {profile?.target_test ? ` · ${profile.target_test}` : ""}
-            </p>
+            <p className="text-[11px] text-[#4e5d72] truncate">{planLabel(plan)}</p>
           </div>
         </div>
       </div>
 
-      {/* Nav items */}
+      {/* Nav */}
       <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
-        {navItems.map((item) => (
-          <NavItem
-            key={item.href}
-            {...item}
-            unreadCount={unreadCount}
-            onClick={onNavClick}
-          />
+        {visibleNav.map((item) => (
+          <NavItem key={item.href} {...item} unreadCount={unreadCount} onClick={onNavClick} />
         ))}
       </nav>
 
-      {/* Bottom actions */}
+      {/* Bottom */}
       <div className="px-3 py-4 border-t border-white/[0.06] space-y-1 shrink-0">
-        <Link
-          href="/apply"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium text-[#d4a853]/80 hover:text-[#d4a853] hover:bg-[#d4a853]/[0.05] transition-all border border-transparent"
-        >
-          <span className="text-[15px]">✦</span>
-          Book a Session
-        </Link>
         <button
           onClick={handleSignOut}
           className="flex items-center gap-3 px-3 py-2.5 w-full rounded-xl text-[13.5px] font-medium text-[#8d9ab0] hover:text-red-400 hover:bg-red-500/[0.05] transition-all"
@@ -198,21 +181,14 @@ export function PortalSidebar(props: PortalSidebarProps) {
         </div>
       </div>
 
-      {/* Mobile drawer overlay */}
       {mobileOpen && (
-        <div
-          className="md:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
-          onClick={() => setMobileOpen(false)}
-        />
+        <div className="md:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
       )}
 
-      {/* Mobile drawer */}
-      <aside
-        className={cn(
-          "md:hidden fixed top-0 left-0 bottom-0 z-50 w-72 bg-[#0b0f1a] border-r border-white/[0.06] flex flex-col transition-transform duration-300",
-          mobileOpen ? "translate-x-0" : "-translate-x-full"
-        )}
-      >
+      <aside className={cn(
+        "md:hidden fixed top-0 left-0 bottom-0 z-50 w-72 bg-[#0b0f1a] border-r border-white/[0.06] flex flex-col transition-transform duration-300",
+        mobileOpen ? "translate-x-0" : "-translate-x-full"
+      )}>
         <button
           onClick={() => setMobileOpen(false)}
           className="absolute top-4 right-4 w-8 h-8 rounded-lg flex items-center justify-center text-[#8d9ab0] hover:text-[#f0ece3] hover:bg-white/[0.07] transition-colors"

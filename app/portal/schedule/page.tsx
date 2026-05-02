@@ -1,50 +1,78 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { CalendarPlus, CheckCircle } from "lucide-react";
+import { CalendarPlus, CheckCircle, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
+import type { Profile, PlanType } from "@/types/portal";
 
-const SUBJECTS = [
-  "SAT Math",
-  "SAT Reading & Writing",
-  "ACT Math",
-  "ACT English",
-  "ACT Reading",
-  "ACT Science",
-  "Full SAT Prep",
-  "Full ACT Prep",
-  "AP Calculus",
-  "AP Chemistry",
-  "AP Physics",
-  "AP Biology",
-  "AP English",
-  "AP History",
-  "AP Statistics",
-  "Other AP Course",
-  "College Essay Review",
-  "Brainstorming Session",
-  "School List Strategy",
-  "Activity List Review",
-  "Interview Preparation",
-  "Full Application Strategy",
-  "Other",
-];
+const SAT_SUBJECTS   = ["SAT Math", "SAT Reading & Writing", "Full SAT Prep"];
+const ACT_SUBJECTS   = ["ACT Math", "ACT English", "ACT Reading", "ACT Science", "Full ACT Prep"];
+const AP_SUBJECTS    = ["AP Calculus", "AP Chemistry", "AP Physics", "AP Biology", "AP English", "AP History", "AP Statistics", "Other AP Course"];
+const ADMISSIONS_SUBJECTS = ["College Essay Review", "Brainstorming Session", "School List Strategy", "Activity List Review", "Interview Preparation", "Full Application Strategy"];
 
-const FORMATS = ["Online (Video Call)", "In-Person", "Either"];
+function getSubjectGroups(plan: PlanType | null, planSubject: string | null, addons: string[] | null) {
+  const hasCounseling = plan === "counseling" || addons?.includes("counseling");
+  const isTutoringPlan = plan === "monthly" || plan === "session";
+
+  if (plan === "session") {
+    // Locked to one category
+    switch (planSubject) {
+      case "SAT":               return [{ label: "SAT", subjects: SAT_SUBJECTS }];
+      case "ACT":               return [{ label: "ACT", subjects: ACT_SUBJECTS }];
+      case "AP":                return [{ label: "AP Courses", subjects: AP_SUBJECTS }];
+      case "College Admissions":return [{ label: "College Admissions", subjects: ADMISSIONS_SUBJECTS }];
+      default:                  return [{ label: "SAT", subjects: SAT_SUBJECTS }, { label: "ACT", subjects: ACT_SUBJECTS }, { label: "AP Courses", subjects: AP_SUBJECTS }];
+    }
+  }
+
+  const groups = [];
+  if (isTutoringPlan || plan === "counseling") {
+    if (plan !== "counseling") {
+      groups.push({ label: "SAT", subjects: SAT_SUBJECTS });
+      groups.push({ label: "ACT", subjects: ACT_SUBJECTS });
+      groups.push({ label: "AP Courses", subjects: AP_SUBJECTS });
+    }
+  }
+  if (hasCounseling) {
+    groups.push({ label: "College Admissions", subjects: ADMISSIONS_SUBJECTS });
+  }
+  if (plan === "counseling" && !isTutoringPlan) {
+    // Counseling-only plan: just admissions subjects (already added above)
+  }
+  return groups;
+}
+
+const FORMATS  = ["Online (Video Call)", "In-Person", "Either"];
 const DURATIONS = ["45 minutes", "60 minutes", "90 minutes", "2 hours"];
 
 export default function SchedulePage() {
-  const [subject, setSubject] = useState("");
+  const [profile, setProfile]       = useState<Profile | null>(null);
+  const [subject, setSubject]       = useState("");
   const [preferredDate, setPreferredDate] = useState("");
   const [preferredTime, setPreferredTime] = useState("");
-  const [format, setFormat] = useState("");
-  const [duration, setDuration] = useState("60 minutes");
-  const [notes, setNotes] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [format, setFormat]         = useState("");
+  const [duration, setDuration]     = useState("60 minutes");
+  const [notes, setNotes]           = useState("");
+  const [error, setError]           = useState("");
+  const [loading, setLoading]       = useState(false);
+  const [success, setSuccess]       = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const supabase = getSupabaseBrowserClient();
+    if (!supabase) return;
+    void supabase.auth.getUser().then(async (authRes: { data: { user: { id: string } | null } }) => {
+      const user = authRes.data.user;
+      if (!user) return;
+      const { data } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+      if (data) setProfile(data as Profile);
+    });
+  }, []);
+
+  const subjectGroups = getSubjectGroups(profile?.plan ?? null, profile?.plan_subject ?? null, profile?.plan_addons ?? null);
+  const planLocked    = profile?.plan === "session";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,19 +83,13 @@ export default function SchedulePage() {
     setLoading(true);
     setError("");
 
-    const scheduledAt = new Date(`${preferredDate}T${preferredTime}`).toISOString();
+    const scheduledAt     = new Date(`${preferredDate}T${preferredTime}`).toISOString();
     const durationMinutes = parseInt(duration);
 
     const res = await fetch("/api/portal/sessions", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        subject,
-        scheduled_at: scheduledAt,
-        duration_minutes: durationMinutes,
-        format,
-        student_notes: notes || null,
-      }),
+      body: JSON.stringify({ subject, scheduled_at: scheduledAt, duration_minutes: durationMinutes, format, student_notes: notes || null }),
     });
 
     const data = await res.json();
@@ -88,7 +110,7 @@ export default function SchedulePage() {
         </div>
         <h2 className="text-2xl font-bold text-[#f0ece3] mb-2">Request Submitted!</h2>
         <p className="text-[#8d9ab0] leading-relaxed mb-6">
-          Your session request has been received. The Nyx Scholars team will confirm your session and send you a meeting link within 24 hours.
+          Your session request has been received. We&apos;ll confirm and send you a meeting link within 24 hours.
         </p>
         <div className="flex gap-3 justify-center">
           <button
@@ -116,7 +138,9 @@ export default function SchedulePage() {
         <p className="text-[13px] text-[#4e5d72] uppercase tracking-wider font-semibold mb-1">Portal</p>
         <h1 className="text-[26px] font-bold text-[#f0ece3]">Schedule a Session</h1>
         <p className="text-[#8d9ab0] mt-1 text-[14px]">
-          Request a tutoring session. We&apos;ll confirm within 24 hours and send you a meeting link.
+          {planLocked
+            ? `Your Session plan includes ${profile?.plan_subject ?? "your chosen subject"}. Contact us to add more subjects.`
+            : "Request a session — we’ll confirm within 24 hours and send you a meeting link."}
         </p>
       </div>
 
@@ -130,8 +154,9 @@ export default function SchedulePage() {
 
           {/* Subject */}
           <div className="space-y-2">
-            <label className="block text-[13px] font-semibold text-[#8d9ab0]">
+            <label className="flex items-center gap-2 text-[13px] font-semibold text-[#8d9ab0]">
               Subject <span className="text-red-400">*</span>
+              {planLocked && <Lock size={11} className="text-[#4e5d72]" />}
             </label>
             <select
               value={subject}
@@ -139,32 +164,14 @@ export default function SchedulePage() {
               required
               className="w-full h-10 px-3.5 rounded-xl bg-[#0b0f1a] border border-white/[0.08] text-[14px] text-[#f0ece3] focus:outline-none focus:ring-2 focus:ring-[#d4a853]/40 focus:border-[#d4a853]/40 transition-all cursor-pointer"
             >
-              <option value="" className="text-[#4e5d72]">Select a subject</option>
-              <optgroup label="SAT" className="text-[#4e5d72]">
-                {SUBJECTS.filter((s) => s.includes("SAT")).map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </optgroup>
-              <optgroup label="ACT">
-                {SUBJECTS.filter((s) => s.includes("ACT")).map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </optgroup>
-              <optgroup label="AP Courses">
-                {SUBJECTS.filter((s) => s.includes("AP")).map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </optgroup>
-              <optgroup label="College Admissions">
-                {["College Essay Review", "Brainstorming Session", "School List Strategy", "Activity List Review", "Interview Preparation", "Full Application Strategy"].map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </optgroup>
-              <optgroup label="Other">
-                {["Other"].map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </optgroup>
+              <option value="">Select a subject</option>
+              {subjectGroups.map((group) => (
+                <optgroup key={group.label} label={group.label}>
+                  {group.subjects.map((s) => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </optgroup>
+              ))}
             </select>
           </div>
 
@@ -174,12 +181,7 @@ export default function SchedulePage() {
               <label className="block text-[13px] font-semibold text-[#8d9ab0]">
                 Preferred Date <span className="text-red-400">*</span>
               </label>
-              <input
-                type="date"
-                value={preferredDate}
-                min={today}
-                onChange={(e) => setPreferredDate(e.target.value)}
-                required
+              <input type="date" value={preferredDate} min={today} onChange={(e) => setPreferredDate(e.target.value)} required
                 className="w-full h-10 px-3.5 rounded-xl bg-[#0b0f1a] border border-white/[0.08] text-[14px] text-[#f0ece3] focus:outline-none focus:ring-2 focus:ring-[#d4a853]/40 focus:border-[#d4a853]/40 transition-all cursor-pointer"
               />
             </div>
@@ -187,11 +189,7 @@ export default function SchedulePage() {
               <label className="block text-[13px] font-semibold text-[#8d9ab0]">
                 Preferred Time <span className="text-red-400">*</span>
               </label>
-              <input
-                type="time"
-                value={preferredTime}
-                onChange={(e) => setPreferredTime(e.target.value)}
-                required
+              <input type="time" value={preferredTime} onChange={(e) => setPreferredTime(e.target.value)} required
                 className="w-full h-10 px-3.5 rounded-xl bg-[#0b0f1a] border border-white/[0.08] text-[14px] text-[#f0ece3] focus:outline-none focus:ring-2 focus:ring-[#d4a853]/40 focus:border-[#d4a853]/40 transition-all cursor-pointer"
               />
             </div>
@@ -200,32 +198,14 @@ export default function SchedulePage() {
           {/* Format + Duration */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="block text-[13px] font-semibold text-[#8d9ab0]">
-                Session Format <span className="text-red-400">*</span>
-              </label>
+              <label className="block text-[13px] font-semibold text-[#8d9ab0]">Session Format <span className="text-red-400">*</span></label>
               <div className="space-y-2">
                 {FORMATS.map((f) => (
                   <label key={f} className="flex items-center gap-3 cursor-pointer group">
-                    <div
-                      onClick={() => setFormat(f)}
-                      className={cn(
-                        "w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all",
-                        format === f
-                          ? "border-[#d4a853] bg-[#d4a853]"
-                          : "border-white/[0.2] hover:border-white/[0.4]"
-                      )}
-                    >
+                    <div onClick={() => setFormat(f)} className={cn("w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all", format === f ? "border-[#d4a853] bg-[#d4a853]" : "border-white/[0.2] hover:border-white/[0.4]")}>
                       {format === f && <div className="w-1.5 h-1.5 rounded-full bg-black" />}
                     </div>
-                    <span
-                      onClick={() => setFormat(f)}
-                      className={cn(
-                        "text-[13px] transition-colors",
-                        format === f ? "text-[#f0ece3]" : "text-[#8d9ab0] group-hover:text-[#c8d0de]"
-                      )}
-                    >
-                      {f}
-                    </span>
+                    <span onClick={() => setFormat(f)} className={cn("text-[13px] transition-colors", format === f ? "text-[#f0ece3]" : "text-[#8d9ab0] group-hover:text-[#c8d0de]")}>{f}</span>
                   </label>
                 ))}
               </div>
@@ -235,26 +215,10 @@ export default function SchedulePage() {
               <div className="space-y-2">
                 {DURATIONS.map((d) => (
                   <label key={d} className="flex items-center gap-3 cursor-pointer group">
-                    <div
-                      onClick={() => setDuration(d)}
-                      className={cn(
-                        "w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all",
-                        duration === d
-                          ? "border-[#d4a853] bg-[#d4a853]"
-                          : "border-white/[0.2] hover:border-white/[0.4]"
-                      )}
-                    >
+                    <div onClick={() => setDuration(d)} className={cn("w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all", duration === d ? "border-[#d4a853] bg-[#d4a853]" : "border-white/[0.2] hover:border-white/[0.4]")}>
                       {duration === d && <div className="w-1.5 h-1.5 rounded-full bg-black" />}
                     </div>
-                    <span
-                      onClick={() => setDuration(d)}
-                      className={cn(
-                        "text-[13px] transition-colors",
-                        duration === d ? "text-[#f0ece3]" : "text-[#8d9ab0] group-hover:text-[#c8d0de]"
-                      )}
-                    >
-                      {d}
-                    </span>
+                    <span onClick={() => setDuration(d)} className={cn("text-[13px] transition-colors", duration === d ? "text-[#f0ece3]" : "text-[#8d9ab0] group-hover:text-[#c8d0de]")}>{d}</span>
                   </label>
                 ))}
               </div>
@@ -266,18 +230,13 @@ export default function SchedulePage() {
             <label className="block text-[13px] font-semibold text-[#8d9ab0]">
               Additional Notes <span className="text-[#4e5d72] font-normal">(optional)</span>
             </label>
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows={3}
-              placeholder="Tell us about specific topics you'd like to cover, your current score, or any other details..."
+            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3}
+              placeholder="Specific topics, current score, or anything else you'd like us to know…"
               className="w-full px-3.5 py-2.5 rounded-xl bg-[#0b0f1a] border border-white/[0.08] text-[14px] text-[#f0ece3] placeholder:text-[#4e5d72] focus:outline-none focus:ring-2 focus:ring-[#d4a853]/40 focus:border-[#d4a853]/40 transition-all resize-none"
             />
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
+          <button type="submit" disabled={loading}
             className={cn(
               "w-full h-12 rounded-xl font-bold text-[15px] transition-all flex items-center justify-center gap-2",
               "bg-gradient-to-b from-[#e0b55c] to-[#c99438] text-black",

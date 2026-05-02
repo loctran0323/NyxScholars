@@ -269,22 +269,118 @@ function MessageThread({ studentId, studentName, messages, onBack, onReply }: {
   );
 }
 
+/* ── Student row (plan management) ────────────────────────── */
+type StudentRecord = {
+  id: string; email: string; full_name: string | null; grade: string | null;
+  plan: string | null; plan_status: string | null; plan_subject: string | null; plan_addons: string[] | null;
+};
+
+function StudentRow({ student, onSave }: { student: StudentRecord; onSave: () => void }) {
+  const [plan,        setPlan]        = useState(student.plan ?? "");
+  const [planStatus,  setPlanStatus]  = useState(student.plan_status ?? "");
+  const [planSubject, setPlanSubject] = useState(student.plan_subject ?? "");
+  const [counseling,  setCounseling]  = useState(student.plan_addons?.includes("counseling") ?? false);
+  const [saving,      setSaving]      = useState(false);
+  const [saved,       setSaved]       = useState(false);
+
+  const handleSave = async () => {
+    setSaving(true);
+    await fetch("/api/admin/students", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: student.id,
+        plan: plan || null,
+        plan_status: planStatus || null,
+        plan_subject: planSubject || null,
+        plan_addons: counseling ? ["counseling"] : [],
+      }),
+    });
+    setSaving(false);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+    onSave();
+  };
+
+  const displayName = student.full_name ?? student.email.split("@")[0];
+
+  return (
+    <div className="py-4 px-4 -mx-4 rounded-xl hover:bg-white/[0.02] transition-colors">
+      <div className="flex items-center gap-3 mb-3">
+        <div className="w-8 h-8 rounded-full bg-[#d4a853]/10 border border-[#d4a853]/20 flex items-center justify-center shrink-0">
+          <span className="text-[10px] font-bold text-[#d4a853]">{initials(student.full_name)}</span>
+        </div>
+        <div className="min-w-0">
+          <p className="text-[#f0ece3] text-[13px] font-medium">{displayName}</p>
+          <p className="text-[#4e5d72] text-[11px]">{student.email}{student.grade ? ` · Grade ${student.grade}` : ""}</p>
+        </div>
+        {student.plan && student.plan_status === "active" && (
+          <span className="ml-auto px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-400/10 text-emerald-400">Active</span>
+        )}
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <select value={plan} onChange={(e) => setPlan(e.target.value)}
+          className="h-8 px-2 rounded-lg bg-[#0b0f1a] border border-white/[0.07] text-[12px] text-[#f0ece3] focus:outline-none focus:ring-1 focus:ring-[#d4a853]/40">
+          <option value="">No plan</option>
+          <option value="session">Session</option>
+          <option value="monthly">Scholar Monthly</option>
+          <option value="counseling">Admissions Monthly</option>
+        </select>
+
+        <select value={planStatus} onChange={(e) => setPlanStatus(e.target.value)}
+          className="h-8 px-2 rounded-lg bg-[#0b0f1a] border border-white/[0.07] text-[12px] text-[#f0ece3] focus:outline-none focus:ring-1 focus:ring-[#d4a853]/40">
+          <option value="">No status</option>
+          <option value="active">Active</option>
+          <option value="paused">Paused</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+
+        {plan === "session" ? (
+          <select value={planSubject} onChange={(e) => setPlanSubject(e.target.value)}
+            className="h-8 px-2 rounded-lg bg-[#0b0f1a] border border-white/[0.07] text-[12px] text-[#f0ece3] focus:outline-none focus:ring-1 focus:ring-[#d4a853]/40">
+            <option value="">Subject category</option>
+            <option value="SAT">SAT</option>
+            <option value="ACT">ACT</option>
+            <option value="AP">AP</option>
+            <option value="College Admissions">College Admissions</option>
+          </select>
+        ) : (
+          <label className="flex items-center gap-2 h-8 px-2 cursor-pointer">
+            <input type="checkbox" checked={counseling} onChange={(e) => setCounseling(e.target.checked)}
+              className="w-3.5 h-3.5 accent-amber-400" />
+            <span className="text-[12px] text-[#8d9ab0]">+ Counseling add-on</span>
+          </label>
+        )}
+
+        <button onClick={handleSave} disabled={saving}
+          className="h-8 px-3 rounded-lg bg-[#d4a853]/10 text-[#d4a853] text-[12px] font-medium hover:bg-[#d4a853]/20 transition-colors disabled:opacity-50">
+          {saving ? "Saving…" : saved ? "Saved ✓" : "Save"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 /* ── Main component ────────────────────────────────────────── */
 export default function AdminPortalSection() {
-  const [tab, setTab] = useState<"sessions" | "messages">("sessions");
+  const [tab, setTab] = useState<"sessions" | "messages" | "students">("sessions");
   const [sessions, setSessions] = useState<SessionWithProfile[]>([]);
   const [messages, setMessages] = useState<MessageWithProfile[]>([]);
+  const [students, setStudents] = useState<StudentRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeSession, setActiveSession] = useState<SessionWithProfile | null>(null);
   const [activeStudentId, setActiveStudentId] = useState<string | null>(null);
 
   const load = async () => {
-    const [sRes, mRes] = await Promise.all([
+    const [sRes, mRes, stRes] = await Promise.all([
       fetch("/api/admin/sessions"),
       fetch("/api/admin/messages"),
+      fetch("/api/admin/students"),
     ]);
-    if (sRes.ok) { const d = await sRes.json(); setSessions(d.sessions ?? []); }
-    if (mRes.ok) { const d = await mRes.json(); setMessages(d.messages ?? []); }
+    if (sRes.ok)  { const d = await sRes.json();  setSessions(d.sessions ?? []); }
+    if (mRes.ok)  { const d = await mRes.json();  setMessages(d.messages ?? []); }
+    if (stRes.ok) { const d = await stRes.json(); setStudents(d.students ?? []); }
     setLoading(false);
   };
 
@@ -300,8 +396,9 @@ export default function AdminPortalSection() {
     if (m.sender === "student" && !m.read) byStudent[m.student_id].unread++;
   }
 
-  const pendingCount  = sessions.filter((s) => s.status === "pending").length;
-  const unreadCount   = messages.filter((m) => m.sender === "student" && !m.read).length;
+  const pendingCount = sessions.filter((s) => s.status === "pending").length;
+  const unreadCount  = messages.filter((m) => m.sender === "student" && !m.read).length;
+  const noplanCount  = students.filter((s) => !s.plan || s.plan_status !== "active").length;
 
   const activeStudent = activeStudentId ? byStudent[activeStudentId] : null;
 
@@ -309,8 +406,8 @@ export default function AdminPortalSection() {
     <section>
       {/* Section tabs */}
       <div className="flex items-center gap-0 mb-8 border-b border-white/[0.05]">
-        {(["sessions", "messages"] as const).map((t) => {
-          const badge = t === "sessions" ? pendingCount : unreadCount;
+        {(["sessions", "messages", "students"] as const).map((t) => {
+          const badge = t === "sessions" ? pendingCount : t === "messages" ? unreadCount : noplanCount;
           return (
             <button
               key={t}
@@ -377,7 +474,7 @@ export default function AdminPortalSection() {
             ))}
           </div>
         )
-      ) : /* messages tab */
+      ) : tab === "messages" ? (
         activeStudentId && activeStudent ? (
           <MessageThread
             studentId={activeStudentId}
@@ -428,6 +525,18 @@ export default function AdminPortalSection() {
                 </button>
               );
             })}
+          </div>
+        )
+      ) : /* students tab */
+        students.length === 0 ? (
+          <div className="py-16 text-center">
+            <p className="text-[#4e5d72] text-[14px]">No registered students yet.</p>
+          </div>
+        ) : (
+          <div className="divide-y divide-white/[0.04]">
+            {students.map((s) => (
+              <StudentRow key={s.id} student={s} onSave={load} />
+            ))}
           </div>
         )
       }

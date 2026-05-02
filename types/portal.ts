@@ -1,3 +1,6 @@
+export type PlanType = "session" | "monthly" | "counseling";
+export type PlanStatus = "active" | "paused" | "cancelled";
+
 export interface Profile {
   id: string;
   full_name: string | null;
@@ -7,6 +10,11 @@ export interface Profile {
   target_test: "SAT" | "ACT" | null;
   phone: string | null;
   created_at: string;
+  // subscription plan
+  plan: PlanType | null;
+  plan_status: PlanStatus | null;
+  plan_subject: string | null; // for session plan: 'SAT' | 'ACT' | 'AP' | 'College Admissions'
+  plan_addons: string[] | null; // e.g. ['counseling']
 }
 
 export type SessionStatus = "pending" | "confirmed" | "completed" | "cancelled";

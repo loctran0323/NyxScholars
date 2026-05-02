@@ -36,14 +36,36 @@ export async function proxy(request: NextRequest) {
   const isAuthPage =
     pathname === "/portal/login" || pathname === "/portal/signup";
 
+  // Redirect unauthenticated users to login
   if (!user && pathname.startsWith("/portal") && !isAuthPage) {
     const loginUrl = new URL("/portal/login", request.url);
     loginUrl.searchParams.set("from", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
+  // Redirect authenticated users away from auth pages
   if (user && isAuthPage) {
     return NextResponse.redirect(new URL("/portal", request.url));
+  }
+
+  // For authenticated non-auth pages, check if the user has an active plan
+  if (user && !isAuthPage) {
+    // These pages are always accessible regardless of plan
+    const alwaysAllowed = ["/portal/upgrade", "/portal/profile", "/portal/login", "/portal/signup"];
+    const isAlwaysAllowed = alwaysAllowed.some((p) => pathname === p || pathname.startsWith(p + "/"));
+
+    if (!isAlwaysAllowed) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("plan, plan_status")
+        .eq("id", user.id)
+        .single();
+
+      const hasActivePlan = profile?.plan && profile?.plan_status === "active";
+      if (!hasActivePlan) {
+        return NextResponse.redirect(new URL("/portal/upgrade", request.url));
+      }
+    }
   }
 
   return supabaseResponse;
