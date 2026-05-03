@@ -9,6 +9,7 @@ import {
   Tag,
   Megaphone,
   Activity,
+  Compass,
   type LucideIcon,
 } from "lucide-react";
 
@@ -21,6 +22,7 @@ export interface AdminNavItem {
 export const ADMIN_NAV: AdminNavItem[] = [
   { href: "/admin",             label: "Overview",    icon: LayoutDashboard },
   { href: "/admin/tutors",      label: "Tutors",      icon: GraduationCap },
+  { href: "/admin/match-queue", label: "Match queue", icon: Compass },
   { href: "/admin/students",    label: "Students",    icon: Users },
   { href: "/admin/questions",   label: "Questions",   icon: Sparkles },
   { href: "/admin/pricing",     label: "Pricing",     icon: Tag },
