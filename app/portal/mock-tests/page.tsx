@@ -1,89 +1,23 @@
-import Link from "next/link";
-import { FileCheck, Trophy, AlertCircle, ChevronRight } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { PortalHero } from "@/components/portal/PortalHero";
+import { ComingSoonPanel } from "@/components/portal/ComingSoonPanel";
 
 export const metadata = {
-  title: "Mock tests",
-  description: "Full-length digital SAT/ACT mocks, scored within the portal.",
+  title: "Mock tests · Coming soon",
+  description: "Full-length digital SAT/ACT mocks — coming soon.",
 };
-
-import { MOCKS } from "./content";
 
 export default function MockTestsPage() {
   return (
-    <div className="max-w-3xl">
-      <PortalHero
-        eyebrow="Portal"
-        title="Mock tests"
-        italic="full length"
-        subtitle="Adaptive digital SAT and ACT mocks — timed, branded, scored within the portal. New mock every two weeks."
-      />
-
-      <div className="rounded-2xl border border-[var(--border-accent)] bg-[var(--accent-dim)] p-4 mb-6 flex items-start gap-3">
-        <AlertCircle size={15} className="text-[var(--accent)] mt-0.5 shrink-0" />
-        <div className="text-[13px] text-[var(--text-1)] leading-relaxed">
-          Allocate the full duration in one sitting. We pause the timer if you close the tab, but
-          your scaled score reflects total elapsed time (the way College Board does it).
-        </div>
-      </div>
-
-      <div className="space-y-3">
-        {MOCKS.map((m) => (
-          <article
-            key={m.id}
-            className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5"
-          >
-            <div className="flex items-start justify-between gap-4">
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1.5 mb-1.5">
-                  <Badge variant={m.test === "SAT" ? "blue" : "purple"}>{m.test}</Badge>
-                  {m.status === "completed" && m.scoreRange && (
-                    <Badge variant="green">
-                      <Trophy size={10} /> {m.scoreRange.composite}
-                    </Badge>
-                  )}
-                  {m.status === "coming-soon" && <Badge variant="gold">Coming soon</Badge>}
-                </div>
-                <h2 className="text-[15px] font-semibold text-[var(--text-1)]">{m.title}</h2>
-                <p className="text-[12.5px] text-[var(--text-3)] mt-1">
-                  {m.questions} questions · {Math.floor(m.durationMin / 60)}h {m.durationMin % 60}m · released {m.released}
-                </p>
-                {m.status === "completed" && m.scoreRange && (
-                  <p className="text-[12.5px] text-[var(--text-2)] mt-2">
-                    Last attempt: <span className="text-[var(--text-1)] font-semibold">{m.scoreRange.composite}</span>{" "}
-                    (Math {m.scoreRange.math}, R&W {m.scoreRange.rw})
-                  </p>
-                )}
-              </div>
-              {m.status === "available" || m.status === "completed" ? (
-                <Link
-                  href={`/portal/mock-tests/${m.id}`}
-                  className="inline-flex items-center gap-1 px-3 py-2 rounded-xl bg-[var(--surface-elevated)] border border-[var(--border-accent)] text-[12.5px] font-semibold text-[var(--accent)]"
-                >
-                  {m.status === "completed" ? "Review" : "Start"} <ChevronRight size={12} />
-                </Link>
-              ) : (
-                <span className="px-3 py-2 rounded-xl border border-[var(--border)] text-[12.5px] text-[var(--text-3)]">
-                  Soon
-                </span>
-              )}
-            </div>
-          </article>
-        ))}
-      </div>
-
-      <div className="mt-8 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5">
-        <h2 className="text-[14px] font-semibold text-[var(--text-1)] mb-2 flex items-center gap-2">
-          <FileCheck size={14} className="text-[var(--text-3)]" />
-          How scoring works
-        </h2>
-        <p className="text-[13px] text-[var(--text-2)] leading-relaxed">
-          Each mock is hand-calibrated against three real test forms. We report a <strong>scaled score</strong> with
-          ±15-point precision (SAT) and ±1-point precision (ACT). Your section breakdowns flow back into your
-          constellation map and your weekly digest.
-        </p>
-      </div>
-    </div>
+    <ComingSoonPanel
+      feature="Mock tests"
+      title="Full-length, scored,"
+      italic="hand-calibrated"
+      blurb="We're building a rotation of full-length digital SAT and ACT mocks, each calibrated against three real test forms. Score reports flow directly into your sky map and your weekly digest."
+      highlights={[
+        "Adaptive section structure for digital SAT",
+        "Scaled scoring with ±15-point precision (SAT) and ±1-point (ACT)",
+        "New mock every two weeks once the rotation is live",
+      ]}
+      eta="Summer 2026"
+    />
   );
 }
