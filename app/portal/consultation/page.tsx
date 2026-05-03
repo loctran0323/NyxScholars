@@ -37,7 +37,7 @@ export default function ConsultationDashboardPage() {
   const tutorName = "your tutor";
 
   return (
-    <div className="-mx-6 md:-mx-10 -mt-8 md:-mt-12 -mb-32 flex flex-col h-[calc(100dvh-56px)] md:h-screen min-h-[680px]">
+    <div className="-mx-6 md:-mx-10 -my-8 md:-my-12 flex flex-col h-[calc(100dvh-56px)] md:h-screen min-h-[680px]">
       <StudentHeader
         studentName={d.student.name}
         studentInitials={d.student.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
