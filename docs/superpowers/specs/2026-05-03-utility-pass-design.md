@@ -36,9 +36,9 @@ Every link a user clicks lands on something real or on a polished placeholder. N
 
 ### Admin-facing changes
 
-- Delete `app/admin/broadcast/`, `app/admin/payouts/`, `app/admin/revenue/` directories. Genuine stubs with no logic worth keeping.
+- New `app/admin/_nav.ts` — single source of truth for admin sidebar entries (the original config in `app/admin/layout.tsx` was inline). This makes adding/removing entries a one-line edit.
+- **Correction to the original audit:** `/admin/broadcast`, `/admin/payouts`, and `/admin/revenue` are not stubs — they're functional admin/ops surfaces (audience-segmented `notifyMany`, Stripe Connect linking, MRR/ARR derived from real `profiles`/`sessions` rows). They stay visible. No admin pages are deleted in Phase C.
 - `/admin/students` and `/admin/tutors` stay as basic list views (already useful for ops; `/admin/tutors` will be promoted to full CRUD in Phase B).
-- New `app/admin/_nav.ts` — single source of truth for admin sidebar entries. Today's nav config is scattered; this consolidates it so adding/removing entries is one edit.
 
 ### Acceptance
 
