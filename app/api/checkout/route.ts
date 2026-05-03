@@ -5,7 +5,11 @@ import type { PlanType } from "@/types/portal";
 
 const VALID_PLANS: PlanType[] = ["session", "monthly", "counseling"];
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+// Use request origin so redirects always go back to whichever domain made the request
+function getSiteUrl(request: Request): string {
+  const origin = new URL(request.url).origin;
+  return origin !== "null" ? origin : (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000");
+}
 
 /**
  * POST /api/checkout
@@ -41,8 +45,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unknown plan" }, { status: 400 });
   }
 
-  const successUrl = `${SITE_URL}/portal/upgrade/success?plan=${plan}`;
-  const cancelUrl = `${SITE_URL}/portal/upgrade?cancelled=1`;
+  const siteUrl = getSiteUrl(request);
+  const successUrl = `${siteUrl}/portal/upgrade/success?plan=${plan}`;
+  const cancelUrl = `${siteUrl}/portal/upgrade?cancelled=1`;
 
   // Mock mode — Stripe not yet wired
   if (!isStripeConfigured()) {
