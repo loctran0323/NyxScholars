@@ -1,13 +1,15 @@
 import Link from "next/link";
-import { LayoutDashboard, Users, GraduationCap, DollarSign, FileSearch, Wallet } from "lucide-react";
+import { LayoutDashboard, Users, GraduationCap, DollarSign, FileSearch, Wallet, Sparkles, Tag } from "lucide-react";
 
 const NAV = [
-  { href: "/admin",          label: "Overview", icon: LayoutDashboard },
-  { href: "/admin/tutors",   label: "Tutors",   icon: GraduationCap },
-  { href: "/admin/students", label: "Students", icon: Users },
-  { href: "/admin/revenue",  label: "Revenue",  icon: DollarSign },
-  { href: "/admin/payouts",  label: "Payouts",  icon: Wallet },
-  { href: "/admin/audit",    label: "Audit",    icon: FileSearch },
+  { href: "/admin",           label: "Overview",  icon: LayoutDashboard },
+  { href: "/admin/tutors",    label: "Tutors",    icon: GraduationCap },
+  { href: "/admin/students",  label: "Students",  icon: Users },
+  { href: "/admin/questions", label: "Questions", icon: Sparkles },
+  { href: "/admin/pricing",   label: "Pricing",   icon: Tag },
+  { href: "/admin/revenue",   label: "Revenue",   icon: DollarSign },
+  { href: "/admin/payouts",   label: "Payouts",   icon: Wallet },
+  { href: "/admin/audit",     label: "Audit",     icon: FileSearch },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

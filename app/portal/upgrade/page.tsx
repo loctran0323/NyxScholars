@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CheckCircle2, ArrowRight, Lock, Plus, Gift, Sparkles, Award } from "lucide-react";
@@ -9,7 +9,8 @@ import type { PlanType } from "@/types/portal";
 import {
   ANNUAL_PREPAY_DISCOUNT_PCT,
   HOURLY_RATE,
-  PACKAGES,
+  PACKAGES as DEFAULT_PACKAGES,
+  type Package,
   annualPrepayPricing,
   fmtUsdWhole,
   revenueShareCopy,
@@ -29,58 +30,60 @@ interface PlanCard {
   featured?: boolean;
 }
 
-const fourWeek  = PACKAGES.find((p) => p.id === "month")!;
-const eightWeek = PACKAGES.find((p) => p.id === "two-month")!;
+const fourWeekDefault  = DEFAULT_PACKAGES.find((p) => p.id === "month")!;
+const eightWeekDefault = DEFAULT_PACKAGES.find((p) => p.id === "two-month")!;
 
-const plans: PlanCard[] = [
-  {
-    id: "session",
-    name: "Session",
-    tagline: "Pay as you go",
-    description: "Book individual sessions when you need them. One subject category per enrollment.",
-    features: [
-      "1:1 sessions with an Ivy League tutor",
-      "One subject focus (SAT, ACT, AP, or Admissions)",
-      "Portal: upcoming sessions + messaging",
-      "Subject-specific study resources",
-      "No commitment",
-    ],
-    addons: [],
-    cta: "Get Started",
-  },
-  {
-    id: "monthly",
-    name: "Scholar",
-    tagline: "Most popular",
-    description: `Recurring 2-session-per-week cadence with full subject flexibility — packaged at $${eightWeek.effectiveHourly}/hr (${eightWeek.discountPct}% off pay-as-you-go).`,
-    features: [
-      "8 sessions over 8 weeks (any SAT / ACT / AP mix)",
-      "Effective rate of $140/hr — 12% off pay-as-you-go",
-      "Full practice materials library",
-      "Priority scheduling",
-      "Consistent tutor assignment",
-      "Pause once per term, no penalty",
-    ],
-    addons: ["Add Admissions counseling — quoted per case"],
-    cta: "Choose Scholar",
-    featured: true,
-  },
-  {
-    id: "counseling",
-    name: "Concierge",
-    tagline: "College-focused",
-    description: "Dedicated lead tutor + admissions counseling, scoped to your timeline. We quote after a free intake call.",
-    features: [
-      "Dedicated lead tutor + admissions counselor",
-      "Essay review with line-level feedback",
-      "School list strategy + activity review",
-      "Interview prep with mock sessions",
-      "Admissions materials library",
-    ],
-    addons: ["Pair with Scholar tutoring — combined quote"],
-    cta: "Request a quote",
-  },
-];
+function buildPlans(scholar: Package): PlanCard[] {
+  return [
+    {
+      id: "session",
+      name: "Session",
+      tagline: "Pay as you go",
+      description: "Book individual sessions when you need them. One subject category per enrollment.",
+      features: [
+        "1:1 sessions with an Ivy League tutor",
+        "One subject focus (SAT, ACT, AP, or Admissions)",
+        "Portal: upcoming sessions + messaging",
+        "Subject-specific study resources",
+        "No commitment",
+      ],
+      addons: [],
+      cta: "Get Started",
+    },
+    {
+      id: "monthly",
+      name: "Scholar",
+      tagline: "Most popular",
+      description: `Recurring 2-session-per-week cadence with full subject flexibility — packaged at $${scholar.effectiveHourly}/hr (${scholar.discountPct}% off pay-as-you-go).`,
+      features: [
+        `${scholar.totalHours} sessions over ${scholar.weeks} weeks (any SAT / ACT / AP mix)`,
+        `Effective rate of $${scholar.effectiveHourly}/hr — ${scholar.discountPct}% off pay-as-you-go`,
+        "Full practice materials library",
+        "Priority scheduling",
+        "Consistent tutor assignment",
+        "Pause once per term, no penalty",
+      ],
+      addons: ["Add Admissions counseling — quoted per case"],
+      cta: "Choose Scholar",
+      featured: true,
+    },
+    {
+      id: "counseling",
+      name: "Concierge",
+      tagline: "College-focused",
+      description: "Dedicated lead tutor + admissions counseling, scoped to your timeline. We quote after a free intake call.",
+      features: [
+        "Dedicated lead tutor + admissions counselor",
+        "Essay review with line-level feedback",
+        "School list strategy + activity review",
+        "Interview prep with mock sessions",
+        "Admissions materials library",
+      ],
+      addons: ["Pair with Scholar tutoring — combined quote"],
+      cta: "Request a quote",
+    },
+  ];
+}
 
 export default function UpgradePage() {
   const router = useRouter();
@@ -89,8 +92,24 @@ export default function UpgradePage() {
   const [loadingPlan, setLoadingPlan] = useState<PlanType | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [annualPrepay, setAnnualPrepay] = useState(false);
+  const [scholar, setScholar] = useState<Package>(eightWeekDefault);
 
-  const monthlyPricing = useMemo(() => annualPrepayPricing(eightWeek), []);
+  // Pull live pricing so admin edits in /admin/pricing reflect immediately.
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/pricing")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (cancelled || !d?.packages) return;
+        const live = (d.packages as Package[]).find((p) => p.id === "two-month");
+        if (live) setScholar(live);
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
+
+  const plans = useMemo(() => buildPlans(scholar), [scholar]);
+  const monthlyPricing = useMemo(() => annualPrepayPricing(scholar), [scholar]);
   const revShare = useMemo(revenueShareCopy, []);
 
   async function startCheckout(plan: PlanType) {
@@ -134,7 +153,7 @@ export default function UpgradePage() {
         secondary: `/ month — ${ANNUAL_PREPAY_DISCOUNT_PCT}% off, billed yearly`,
       };
     }
-    return { primary: fmtUsdWhole(eightWeek.totalPrice), secondary: `/ ${eightWeek.weeks} weeks` };
+    return { primary: fmtUsdWhole(scholar.totalPrice), secondary: `/ ${scholar.weeks} weeks` };
   }
 
   return (

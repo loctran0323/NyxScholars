@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { notify } from "@/lib/notifications";
+import { seedSrsCards } from "@/lib/srs-seed";
 
 export const runtime = "nodejs";
 
@@ -90,6 +91,16 @@ export async function PATCH(req: Request) {
   const parsed = Submit.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Invalid", details: parsed.error.issues }, { status: 400 });
 
+  // Load the homework first so we can map results back to questions and
+  // surface the missed concepts as SRS cards.
+  const { data: hw } = await sb
+    .from("homework")
+    .select("id, questions, session_id")
+    .eq("id", parsed.data.homework_id)
+    .eq("student_id", user.id)
+    .maybeSingle();
+  if (!hw) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
   const { error } = await sb
     .from("homework")
     .update({
@@ -100,5 +111,26 @@ export async function PATCH(req: Request) {
     .eq("student_id", user.id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ ok: true });
+
+  // Seed SRS cards for every wrong answer so the concept resurfaces in
+  // /portal/practice over the next few days. Best-effort, never blocks.
+  const questions = (hw as { questions: { prompt: string; choices: string[]; correct_index: number; rationale?: string }[] }).questions ?? [];
+  const wrong: { userId: string; skillId: string; prompt: string; answer: string }[] = [];
+  parsed.data.results.forEach((r, i) => {
+    if (r.correct) return;
+    const q = questions[i];
+    if (!q) return;
+    const correctChoice = q.choices[q.correct_index] ?? "";
+    wrong.push({
+      userId: user.id,
+      skillId: "homework",
+      prompt: q.prompt,
+      answer: q.rationale ? `${correctChoice} — ${q.rationale}` : correctChoice,
+    });
+  });
+  if (wrong.length > 0) {
+    void seedSrsCards(wrong);
+  }
+
+  return NextResponse.json({ ok: true, seededForReview: wrong.length });
 }
