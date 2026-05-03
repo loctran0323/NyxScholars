@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/system/Toast";
 import { PortalHero } from "@/components/portal/PortalHero";
+import { InfoBanner } from "@/components/portal/InfoBanner";
 import { POOL, type BankQuestion } from "@/lib/diagnostic";
 
 interface SrsCard {
@@ -108,6 +109,11 @@ function SkillDrill({ skillId }: { skillId: string }) {
 
   return (
     <div className="max-w-xl mx-auto">
+      <InfoBanner tone="warn" className="mb-5">
+        Expanded question bank is being prepped — the current pool is a hand-built
+        starter set. New items roll in over the next few weeks.
+      </InfoBanner>
+
       <div className="flex items-center gap-3 mb-6">
         <Link href="/portal/consultation" className="text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors">
           <ArrowLeft size={16} />
