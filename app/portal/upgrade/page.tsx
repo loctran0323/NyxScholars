@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { CheckCircle2, ArrowRight, Lock, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { PlanType } from "@/types/portal";
+import { HOURLY_RATE, PACKAGES } from "@/lib/pricing";
 
 interface Plan {
   id: PlanType;
@@ -20,11 +21,14 @@ interface Plan {
   featured: boolean;
 }
 
+const fourWeek  = PACKAGES.find((p) => p.id === "month")!;
+const eightWeek = PACKAGES.find((p) => p.id === "two-month")!;
+
 const plans: Plan[] = [
   {
     id: "session",
     name: "Session",
-    price: "$160",
+    price: `$${HOURLY_RATE}`,
     per: "/ hr",
     tagline: "Pay as you go",
     description: "Book individual sessions when you need them. One subject category per enrollment.",
@@ -42,13 +46,13 @@ const plans: Plan[] = [
   {
     id: "monthly",
     name: "Scholar",
-    price: "$560",
-    per: "/ month",
+    price: `$${fourWeek.totalPrice.toLocaleString()}`,
+    per: "/ 4 weeks",
     tagline: "Most popular",
-    description: "4 sessions/month with full subject flexibility — that's $140/hr, 12% off pay-as-you-go.",
+    description: `4 sessions over 4 weeks with full subject flexibility — that's $${fourWeek.effectiveHourly}/hr, ${fourWeek.discountPct}% off pay-as-you-go.`,
     features: [
-      "4 sessions/month (any SAT / ACT / AP mix)",
-      "Effective rate of $140/hr — 12% off pay-as-you-go",
+      "4 sessions over 4 weeks (any SAT / ACT / AP mix)",
+      `Effective rate of $${fourWeek.effectiveHourly}/hr — ${fourWeek.discountPct}% off pay-as-you-go`,
       "Full practice materials library",
       "Priority scheduling",
       "Consistent tutor assignment",
