@@ -11,9 +11,11 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { CTA } from "@/components/system";
 
 const navLinks = [
-  { href: "/#how", label: "How it works" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/faq", label: "FAQ" },
+  { href: "/#how",          label: "How it works" },
+  { href: "/pricing",       label: "Pricing" },
+  { href: "/case-studies",  label: "Stories" },
+  { href: "/field-notes",   label: "Field notes" },
+  { href: "/faq",           label: "FAQ" },
 ];
 
 export default function Navbar() {

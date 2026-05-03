@@ -1,0 +1,33 @@
+{
+  "nav.dashboard":      "Dashboard",
+  "nav.intake":         "Intake",
+  "nav.schedule":       "Schedule",
+  "nav.sessions":       "Sessions",
+  "nav.materials":      "Materials",
+  "nav.messages":       "Messages",
+  "nav.profile":        "Profile",
+  "nav.billing":        "Billing",
+  "nav.settings":       "Settings",
+  "nav.signOut":        "Sign out",
+
+  "auth.signin.title":  "Sign in to Nyx",
+  "auth.signup.title":  "Create your Nyx account",
+
+  "checkout.cta":       "Choose {plan}",
+  "checkout.openPortal":"Open billing portal",
+
+  "dashboard.welcome":  "Welcome back, {name}.",
+  "dashboard.upcoming": "Upcoming",
+  "dashboard.completed":"Completed",
+  "dashboard.unread":   "Unread",
+
+  "settings.theme":     "Theme",
+  "settings.density":   "Density",
+  "settings.contrast":  "Contrast",
+  "settings.motion":    "Animation",
+
+  "common.save":        "Save",
+  "common.cancel":      "Cancel",
+  "common.continue":    "Continue",
+  "common.delete":      "Delete"
+}

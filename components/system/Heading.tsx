@@ -2,9 +2,13 @@ import { cn } from "@/lib/utils";
 import type { ElementType, ReactNode } from "react";
 
 type HeadingLevel = 1 | 2 | 3 | 4;
+type HeadingSize = "display" | "h1" | "h2" | "h3" | "h4";
 
 type HeadingProps = {
-  level: HeadingLevel;
+  /** Numeric level (1–4). Optional when `size` is provided. */
+  level?: HeadingLevel;
+  /** Semantic-but-bigger size variant. `display` is larger than `h1`. */
+  size?: HeadingSize;
   as?: "h1" | "h2" | "h3" | "h4";
   className?: string;
   children: ReactNode;
@@ -17,10 +21,19 @@ const LEVEL_CLASSES: Record<HeadingLevel, string> = {
   4: "font-sans font-semibold text-[1.125rem] leading-[1.35]",
 };
 
-export function Heading({ level, as, className, children }: HeadingProps) {
-  const Tag: ElementType = as ?? (`h${level}` as ElementType);
+const SIZE_TO_LEVEL: Record<HeadingSize, HeadingLevel> = {
+  display: 1,
+  h1: 1,
+  h2: 2,
+  h3: 3,
+  h4: 4,
+};
+
+export function Heading({ level, size, as, className, children }: HeadingProps) {
+  const resolvedLevel: HeadingLevel = level ?? (size ? SIZE_TO_LEVEL[size] : 2);
+  const Tag: ElementType = as ?? (`h${resolvedLevel}` as ElementType);
   return (
-    <Tag className={cn("text-[var(--text-1)]", LEVEL_CLASSES[level], className)}>
+    <Tag className={cn("text-[var(--text-1)]", LEVEL_CLASSES[resolvedLevel], className)}>
       {children}
     </Tag>
   );

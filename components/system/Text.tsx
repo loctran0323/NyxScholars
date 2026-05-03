@@ -12,10 +12,22 @@ const VARIANT_CLASSES: Record<TextVariant, string> = {
 
 type TextProps = {
   variant?: TextVariant;
+  /** Force the muted text token regardless of variant. */
+  muted?: boolean;
   className?: string;
   children: ReactNode;
 };
 
-export function Text({ variant = "body", className, children }: TextProps) {
-  return <p className={cn(VARIANT_CLASSES[variant], className)}>{children}</p>;
+export function Text({ variant = "body", muted, className, children }: TextProps) {
+  return (
+    <p
+      className={cn(
+        VARIANT_CLASSES[variant],
+        muted && "text-[var(--text-3)]",
+        className,
+      )}
+    >
+      {children}
+    </p>
+  );
 }

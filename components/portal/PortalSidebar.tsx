@@ -17,7 +17,10 @@ import {
   ChevronRight,
   Menu,
   X,
+  SlidersHorizontal,
+  CreditCard,
 } from "lucide-react";
+import { NotificationsBell } from "@/components/portal/NotificationsBell";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { NyxLockup } from "@/components/system";
 import type { Profile, PlanType } from "@/types/portal";
@@ -30,13 +33,16 @@ const studentNavItems = [
   { href: "/portal/sessions",     label: "My Sessions",      icon: Calendar,        exact: false, plans: ["session", "monthly", "counseling"] },
   { href: "/portal/materials",    label: "Materials",        icon: BookOpen,        exact: false, plans: ["session", "monthly", "counseling"] },
   { href: "/portal/messages",     label: "Messages",         icon: MessageSquare,   exact: false, plans: ["session", "monthly", "counseling"] },
-  { href: "/portal/profile",      label: "Profile",          icon: User,            exact: false, plans: ["session", "monthly", "counseling"] },
+  { href: "/portal/profile",      label: "Profile",          icon: User,              exact: false, plans: ["session", "monthly", "counseling"] },
+  { href: "/portal/billing",      label: "Billing",          icon: CreditCard,        exact: false, plans: ["session", "monthly", "counseling"] },
+  { href: "/portal/settings",     label: "Settings",         icon: SlidersHorizontal, exact: false, plans: ["session", "monthly", "counseling"] },
 ];
 
 const teacherNavItems = [
-  { href: "/portal/teacher",  label: "My Students", icon: LayoutDashboard, exact: true,  plans: [] },
-  { href: "/portal/messages", label: "Messages",    icon: MessageSquare,   exact: false, plans: [] },
-  { href: "/portal/profile",  label: "Profile",     icon: User,            exact: false, plans: [] },
+  { href: "/portal/teacher",  label: "My Students", icon: LayoutDashboard,   exact: true,  plans: [] },
+  { href: "/portal/messages", label: "Messages",    icon: MessageSquare,     exact: false, plans: [] },
+  { href: "/portal/profile",  label: "Profile",     icon: User,              exact: false, plans: [] },
+  { href: "/portal/settings", label: "Settings",    icon: SlidersHorizontal, exact: false, plans: [] },
 ];
 
 function planLabel(plan: PlanType | null, role?: string | null): string {
@@ -123,10 +129,11 @@ function SidebarContent({
           <div className="w-9 h-9 rounded-full bg-[var(--accent-dim)] border border-[var(--border-accent)] flex items-center justify-center shrink-0">
             <span className="text-[12px] font-bold text-[var(--accent)]">{initials}</span>
           </div>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <p className="text-[13px] font-semibold text-[var(--text-1)] truncate">{displayName}</p>
             <p className="text-[11px] text-[var(--text-3)] truncate">{planLabel(plan, role)}</p>
           </div>
+          <NotificationsBell />
         </div>
       </div>
 
@@ -163,13 +170,15 @@ export function PortalSidebar(props: PortalSidebarProps) {
           <NyxLockup size="sm" />
         </Link>
         <div className="flex items-center gap-2">
+          <NotificationsBell />
           {props.unreadCount ? (
-            <span className="w-5 h-5 rounded-full bg-[var(--accent)] text-black text-[10px] font-bold flex items-center justify-center">
+            <span className="w-5 h-5 rounded-full bg-[var(--accent)] text-[var(--on-accent)] text-[10px] font-bold flex items-center justify-center">
               {props.unreadCount > 9 ? "9+" : props.unreadCount}
             </span>
           ) : null}
           <button
             onClick={() => setMobileOpen(true)}
+            aria-label="Open navigation"
             className="w-9 h-9 rounded-lg flex items-center justify-center text-[var(--text-2)] hover:text-[var(--text-1)] hover:bg-white/[0.06] transition-colors"
           >
             <Menu size={18} />

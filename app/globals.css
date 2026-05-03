@@ -1,9 +1,15 @@
 @import "tailwindcss";
 
-:root {
-  /* ───────────────────────────────────────────────────────
-   * Surfaces — unified cool indigo, no more warm/cool clash
-   * ─────────────────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════
+ *  TOKENS — single source of truth.
+ *  Components must consume var(--token), never raw hex values.
+ *  Themes layered as: dark (default) → light → high-contrast modifier.
+ *  Density is independent of theme.
+ * ════════════════════════════════════════════════════════════════════ */
+
+:root,
+:root[data-theme="dark"] {
+  /* Surfaces */
   --bg:               #050816;
   --bg-2:             #0a0e1f;
   --surface:          #0c1124;
@@ -15,32 +21,45 @@
   --border-2:      rgba(230, 233, 245, 0.13);
   --border-accent: rgba(125, 211, 252, 0.32);
 
-  /* ───────────────────────────────────────────────────────
-   * Accents — cool blue primary, warm gold reserved for CTAs
-   * ─────────────────────────────────────────────────────── */
-  --accent:         #7dd3fc;       /* moonlight blue (primary) */
-  --accent-bright:  #bde9ff;       /* moonlight high */
-  --accent-deep:    #3b7a99;       /* moonlight dim */
+  /* Cool accent — moonlight blue */
+  --accent:         #7dd3fc;
+  --accent-bright:  #bde9ff;
+  --accent-deep:    #3b7a99;
   --accent-dim:     rgba(125, 211, 252, 0.10);
 
-  --gold:           #c8a24b;       /* used ONLY on primary CTA */
+  /* Warm accent — used on primary CTAs and verified badges */
+  --gold:           #c8a24b;
   --gold-bright:    #e8cc7e;
   --gold-deep:      #8c6f2e;
+  --gold-soft:      #d4a853;          /* historical hex used in components */
+  --gold-dim:       rgba(212, 168, 83, 0.10);
 
-  --accent-2:       #a78bfa;       /* violet — rare secondary accent */
+  /* Tertiary accent — rare violet */
+  --accent-2:       #a78bfa;
 
-  /* ───────────────────────────────────────────────────────
-   * Text — cool silver scale, all WCAG AA on --bg
-   * --text-1: 14.5:1 · --text-2: 7.6:1 · --text-3: 4.8:1
-   * ─────────────────────────────────────────────────────── */
+  /* Text — cool silver scale, all WCAG AA on --bg */
   --text-1: #e6e9f5;
   --text-2: #9aa5c0;
   --text-3: #6a7593;
 
-  /* Atmosphere — kept subtle, never neon */
+  /* Status palette */
+  --success:       #34d399;
+  --success-soft:  rgba(52, 211, 153, 0.10);
+  --warning:       #fbbf24;
+  --warning-soft:  rgba(251, 191, 36, 0.10);
+  --danger:        #f87171;
+  --danger-soft:   rgba(248, 113, 113, 0.10);
+
+  /* Inverse — when stamping content on the warm CTA */
+  --on-gold:        #050816;
+  --on-accent:      #050816;
+
+  /* Atmosphere — subtle never neon */
   --glow-hero:   radial-gradient(ellipse 65% 45% at 50% -8%, rgba(125, 211, 252, 0.06) 0%, transparent 60%);
   --glow-accent: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(125, 211, 252, 0.05) 0%, transparent 60%);
   --glow-side:   radial-gradient(circle at 100% 50%, rgba(167, 139, 250, 0.04) 0%, transparent 50%);
+  --bg-noise-opacity: 0.025;
+  --bg-stars-opacity: 0.45;
 
   /* Type scale — fixed steps */
   --fs-12: 0.75rem;
@@ -52,28 +71,125 @@
   --fs-48: 3rem;
   --fs-64: 4rem;
 
+  /* Density (comfortable defaults) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --row-h: 2.75rem;
+
   /* Motion */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
-  --dur-base: 0.6s;
-  --dur-hover: 0.2s;
+  --dur-base:      0.6s;
+  --dur-hover:     0.2s;
   --dur-transform: 0.3s;
+  --motion-scale:  1;
 
-  /* ───────────────────────────────────────────────────────
-   * Custom cursors — Nyx crescent + star, embedded SVG
-   * ─────────────────────────────────────────────────────── */
+  /* Radii */
+  --radius-sm: 0.5rem;
+  --radius:    0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+
+  /* Custom cursors — Nyx crescent + star, embedded SVG */
   --cursor-default: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><path d='M 18 6 A 8 8 0 1 0 18 22 A 6 8 0 1 1 18 6 Z' fill='%23bde9ff'/><path d='M 8 14 L 8.6 12.6 L 10 12 L 8.6 11.4 L 8 10 L 7.4 11.4 L 6 12 L 7.4 12.6 Z' fill='%237dd3fc'/></svg>") 14 14, default;
-
   --cursor-pointer: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'><circle cx='15' cy='15' r='13' fill='none' stroke='%237dd3fc' stroke-width='0.6' opacity='0.45'/><path d='M 19 7 A 8 8 0 1 0 19 23 A 6 8 0 1 1 19 7 Z' fill='%23bde9ff'/><path d='M 9 15 L 9.6 13.6 L 11 13 L 9.6 12.4 L 9 11 L 8.4 12.4 L 7 13 L 8.4 13.6 Z' fill='%237dd3fc'/></svg>") 15 15, pointer;
-
   --cursor-text: text;
+
+  color-scheme: dark;
 }
 
+/* ────────────── Light theme — warm cream + indigo ink ────────────── */
+:root[data-theme="light"] {
+  --bg:               #faf6ec;
+  --bg-2:             #f3eddf;
+  --surface:          #ffffff;
+  --surface-elevated: #ffffff;
+  --surface-3:        #ebe6d7;
+
+  --border:        rgba(20, 26, 48, 0.10);
+  --border-2:      rgba(20, 26, 48, 0.18);
+  --border-accent: rgba(28, 84, 130, 0.34);
+
+  --accent:         #1c5482;
+  --accent-bright:  #2d77b3;
+  --accent-deep:    #0f3a5a;
+  --accent-dim:     rgba(28, 84, 130, 0.08);
+
+  --gold:           #9a7820;
+  --gold-bright:    #c8a24b;
+  --gold-deep:      #5d4710;
+  --gold-soft:      #b8902a;
+  --gold-dim:       rgba(154, 120, 32, 0.10);
+
+  --accent-2:       #6d4cba;
+
+  --text-1: #14182d;
+  --text-2: #46506b;
+  --text-3: #6b7488;
+
+  --success:       #047857;
+  --success-soft:  rgba(4, 120, 87, 0.10);
+  --warning:       #b45309;
+  --warning-soft:  rgba(180, 83, 9, 0.10);
+  --danger:        #b91c1c;
+  --danger-soft:   rgba(185, 28, 28, 0.10);
+
+  --on-gold:        #ffffff;
+  --on-accent:      #ffffff;
+
+  --glow-hero:   radial-gradient(ellipse 65% 45% at 50% -8%, rgba(28, 84, 130, 0.07) 0%, transparent 60%);
+  --glow-accent: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(28, 84, 130, 0.05) 0%, transparent 60%);
+  --glow-side:   radial-gradient(circle at 100% 50%, rgba(109, 76, 186, 0.04) 0%, transparent 50%);
+  --bg-noise-opacity: 0.03;
+  --bg-stars-opacity: 0.18;
+
+  color-scheme: light;
+}
+
+/* ────────────── High-contrast modifier (works on either theme) ────────────── */
+:root[data-contrast="high"] {
+  --border:        color-mix(in srgb, var(--text-1) 22%, transparent);
+  --border-2:      color-mix(in srgb, var(--text-1) 36%, transparent);
+  --text-2:        color-mix(in srgb, var(--text-1) 88%, var(--bg));
+  --text-3:        color-mix(in srgb, var(--text-1) 70%, var(--bg));
+  --accent-dim:    color-mix(in srgb, var(--accent) 22%, transparent);
+  --gold-dim:      color-mix(in srgb, var(--gold) 22%, transparent);
+}
+
+/* ────────────── Density modifier ────────────── */
+:root[data-density="compact"] {
+  --space-3: 0.5rem;
+  --space-4: 0.75rem;
+  --space-5: 1rem;
+  --space-6: 1.25rem;
+  --space-8: 1.5rem;
+  --space-10: 2rem;
+  --row-h:  2.25rem;
+}
+
+/* ────────────── Tailwind theme bridge ────────────── */
 @theme inline {
   --color-background: var(--bg);
   --color-foreground: var(--text-1);
-  --font-sans:    var(--font-geist-sans);
-  --font-mono:    var(--font-geist-mono);
-  --font-display: var(--font-fraunces);
+  --color-surface:    var(--surface);
+  --color-border:     var(--border);
+  --color-accent:     var(--accent);
+  --color-accent-2:   var(--accent-2);
+  --color-gold:       var(--gold);
+  --color-success:    var(--success);
+  --color-warning:    var(--warning);
+  --color-danger:     var(--danger);
+  --color-text-1:     var(--text-1);
+  --color-text-2:     var(--text-2);
+  --color-text-3:     var(--text-3);
+  --font-sans:        var(--font-geist-sans);
+  --font-mono:        var(--font-geist-mono);
+  --font-display:     var(--font-fraunces);
 }
 
 @keyframes accordion-down { from { height: 0; opacity: 0 } to { height: var(--radix-accordion-content-height); opacity: 1 } }
@@ -82,20 +198,49 @@
 @keyframes float          { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-6px) } }
 @keyframes pulse-soft     { 0%, 100% { opacity: 0.4 } 50% { opacity: 0.85 } }
 @keyframes twinkle        { 0%, 100% { opacity: 0.25 } 50% { opacity: 0.6 } }
+@keyframes fade-in        { from { opacity: 0; transform: translateY(4px) } to { opacity: 1; transform: translateY(0) } }
+@keyframes slide-up-in    { from { opacity: 0; transform: translateY(8px) } to { opacity: 1; transform: translateY(0) } }
+@keyframes ring-pulse     { 0% { box-shadow: 0 0 0 0 var(--accent-dim) } 70% { box-shadow: 0 0 0 6px transparent } 100% { box-shadow: 0 0 0 0 transparent } }
 
 @theme inline {
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up:   accordion-up   0.2s ease-out;
   --animate-twinkle:        twinkle 4s var(--ease-out-soft) infinite;
+  --animate-fade-in:        fade-in 0.4s var(--ease-out-soft);
+  --animate-slide-up-in:    slide-up-in 0.45s var(--ease-out-soft);
+  --animate-ring-pulse:     ring-pulse 1.6s var(--ease-out-soft) infinite;
 }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 
-/* ───────────────────────────────────────────────────────────
- * Brand cursor on every page. Restored to text-cursor on
- * editable fields, and to pointer-cursor on interactive elements.
- * ─────────────────────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════
+ *  Reduced motion — respect the user. Also overridable via data-attr.
+ * ════════════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  :root { --motion-scale: 0; }
+  *, *::before, *::after {
+    animation-duration:  0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior:     auto !important;
+  }
+}
+:root[data-motion="reduced"] {
+  --motion-scale: 0;
+}
+:root[data-motion="reduced"] *,
+:root[data-motion="reduced"] *::before,
+:root[data-motion="reduced"] *::after {
+  animation-duration:  0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ *  Body — brand cursor on every page. Restored to text-cursor on
+ *  editable fields, and to pointer-cursor on interactive elements.
+ * ════════════════════════════════════════════════════════════════════ */
 body {
   background-color: var(--bg);
   background-image: var(--glow-hero);
@@ -120,6 +265,27 @@ textarea, [contenteditable="true"] { cursor: var(--cursor-text); }
 
 button:disabled, [disabled], [aria-disabled="true"] { cursor: not-allowed; }
 
+/* ════════════════════════════════════════════════════════════════════
+ *  Universal focus ring — visible on keyboard navigation, never the
+ *  default Chrome smudge. Always 2px, always tinted with the accent.
+ * ════════════════════════════════════════════════════════════════════ */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius);
+}
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="tab"]:focus-visible,
+[role="menuitem"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 /* Star field (decorative, parallax-free) */
 body::before {
   content: "";
@@ -138,7 +304,7 @@ body::before {
     radial-gradient(1px 1px at 81% 82%, rgba(230, 233, 245, 0.4),  transparent 60%);
   background-size: 1100px 900px;
   background-repeat: repeat;
-  opacity: 0.45;
+  opacity: var(--bg-stars-opacity);
 }
 
 body::after {
@@ -148,33 +314,28 @@ body::after {
   pointer-events: none;
   z-index: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-  opacity: 0.025;
+  opacity: var(--bg-noise-opacity);
   mix-blend-mode: overlay;
 }
 
 body > * { position: relative; z-index: 1; }
 
-::selection { background: rgba(125, 211, 252, 0.25); color: var(--text-1); }
+::selection { background: var(--accent-dim); color: var(--text-1); }
 
 ::-webkit-scrollbar       { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(125, 211, 252, 0.30); }
+::-webkit-scrollbar-thumb:hover { background: color-mix(in srgb, var(--accent) 30%, transparent); }
 
-/* ───────────────────────────────────────────────────────────
- * Reading-tuned typography — comfortable line lengths and
- * line-heights so long-form reads like an editorial page.
- * ─────────────────────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════════
+ *  Reading-tuned typography
+ * ════════════════════════════════════════════════════════════════════ */
 .read-narrow  { max-width: 60ch; }
 .read-default { max-width: 68ch; }
 .read-wide    { max-width: 78ch; }
 
-/* Calmed: no longer a luminous moonlight gradient — just a soft accent tone */
-.text-gradient {
-  color: var(--accent);
-}
+.text-gradient { color: var(--accent); }
 
-/* Card hover */
 .card-hover {
   transition:
     border-color    var(--dur-hover) var(--ease-out-soft),
@@ -218,3 +379,43 @@ body > * { position: relative; z-index: 1; }
 .photo-mask-both   { -webkit-mask-image: linear-gradient(180deg, transparent 0%, black 20%, black 80%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0%, black 20%, black 80%, transparent 100%); }
 
 .twinkle { animation: var(--animate-twinkle); }
+
+/* Skeleton shimmer */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface) 0%,
+    var(--surface-elevated) 50%,
+    var(--surface) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s var(--ease-out-soft) infinite;
+}
+
+/* Pulse for unread indicators / live status */
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--success);
+  position: relative;
+}
+.live-dot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 999px;
+  background: var(--success);
+  opacity: 0.4;
+  animation: pulse-soft 1.6s var(--ease-out-soft) infinite;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ *  Print mode — strip backgrounds, keep type readable.
+ * ════════════════════════════════════════════════════════════════════ */
+@media print {
+  body { background: white !important; color: black !important; }
+  body::before, body::after { display: none !important; }
+  a { color: black !important; text-decoration: underline; }
+  .no-print { display: none !important; }
+}

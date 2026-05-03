@@ -1,65 +1,66 @@
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 import { getServiceRoleClient } from "@/lib/supabase";
+import { LeadCreate, safeParseJson } from "@/lib/zod";
+import { rateLimit, clientKey } from "@/lib/rate-limit";
+import { track, EVENTS } from "@/lib/analytics";
+import { captureException } from "@/lib/observability";
 
-const schema = z.object({
-  student_name: z.string().min(2),
-  parent_name: z.string().optional(),
-  email: z.string().email(),
-  phone: z.string().optional(),
-  grade: z.string().min(1),
-  service: z.string().min(1),
-  ap_subject: z.string().optional(),
-  current_score: z.string().optional(),
-  target_score: z.string().optional(),
-  test_date: z.string().optional(),
-  tutoring_format: z.string().min(1),
-  availability_notes: z.string().optional(),
-  help_needed: z.string().optional(),
-  consent: z.boolean().refine((v) => v === true),
-});
+export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
+  const ip = clientKey(req, "lead:anon");
+  const limit = await rateLimit({ key: `lead:${ip}`, max: 5, windowMs: 60_000 });
+  if (!limit.allowed) {
+    return NextResponse.json(
+      { error: "Too many submissions. Try again in a minute." },
+      { status: 429, headers: { "Retry-After": String(Math.ceil((limit.resetAt - Date.now()) / 1000)) } },
+    );
+  }
+
+  let body: unknown;
   try {
-    const body = await req.json();
-    const parsed = schema.parse(body);
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid body" }, { status: 400 });
+  }
 
-    const leadData = {
-      student_name: parsed.student_name,
-      parent_name: parsed.parent_name || null,
-      email: parsed.email,
-      phone: parsed.phone || null,
-      grade: parsed.grade,
-      service: parsed.service,
-      ap_subject: parsed.ap_subject || null,
-      current_score: parsed.current_score || null,
-      target_score: parsed.target_score || null,
-      test_date: parsed.test_date || null,
-      tutoring_format: parsed.tutoring_format,
-      availability_notes: parsed.availability_notes || null,
-      help_needed: parsed.help_needed || null,
-    };
+  const parsed = safeParseJson(LeadCreate, body);
+  if (!parsed.ok) {
+    return NextResponse.json({ error: parsed.error, details: parsed.details }, { status: 400 });
+  }
+  const data = parsed.data;
 
-    // Try Supabase first
+  const leadData = {
+    student_name:        data.student_name,
+    parent_name:         data.parent_name        ?? null,
+    email:               data.email,
+    phone:               data.phone              ?? null,
+    grade:               data.grade,
+    service:             data.service,
+    ap_subject:          data.ap_subject         ?? null,
+    current_score:       data.current_score      ?? null,
+    target_score:        data.target_score       ?? null,
+    test_date:           data.test_date          ?? null,
+    tutoring_format:     data.tutoring_format,
+    availability_notes:  data.availability_notes ?? null,
+    help_needed:         data.help_needed        ?? null,
+  };
+
+  try {
     const client = getServiceRoleClient();
     if (client) {
       const { error } = await client.from("leads").insert([leadData]);
-      if (error) {
-        console.error("[leads] Supabase insert error:", error);
-        // Fall through to log-only fallback
-      } else {
+      if (!error) {
+        track(EVENTS.LEAD_SUBMITTED, { service: data.service, format: data.tutoring_format });
         return NextResponse.json({ success: true, stored: "supabase" });
       }
+      console.error("[leads] Supabase insert error:", error);
     }
-
-    // Fallback: log to server console
-    console.log("[leads] New inquiry (Supabase not configured):", JSON.stringify(leadData, null, 2));
-    return NextResponse.json({ success: true, stored: "log" });
   } catch (err) {
-    if (err instanceof z.ZodError) {
-      return NextResponse.json({ error: "Invalid form data", details: err.issues }, { status: 400 });
-    }
-    console.error("[leads] Unexpected error:", err);
-    return NextResponse.json({ error: "Server error. Please try again." }, { status: 500 });
+    captureException(err, { route: "leads.POST" });
   }
+
+  console.log("[leads] New inquiry (Supabase not configured):", JSON.stringify(leadData));
+  track(EVENTS.LEAD_SUBMITTED, { service: data.service, format: data.tutoring_format, fallback: "log" });
+  return NextResponse.json({ success: true, stored: "log" });
 }

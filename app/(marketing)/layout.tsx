@@ -1,5 +1,6 @@
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
+import { LiveChat } from "@/components/marketing/LiveChat";
 
 /**
  * Marketing-site chrome lives here, NOT in the root layout. This keeps
@@ -15,8 +16,9 @@ export default function MarketingLayout({
   return (
     <>
       <Navbar />
-      <main className="flex-1">{children}</main>
+      <main id="main" className="flex-1">{children}</main>
       <Footer />
+      <LiveChat />
     </>
   );
 }

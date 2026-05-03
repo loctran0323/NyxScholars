@@ -1,0 +1,22 @@
+{
+  "name": "Nyx Scholars",
+  "short_name": "Nyx",
+  "description": "1:1 SAT/ACT/AP/admissions tutoring with vetted Ivy League undergraduates.",
+  "start_url": "/portal",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#050816",
+  "theme_color": "#050816",
+  "categories": ["education", "productivity"],
+  "icons": [
+    { "src": "/design/stacked-lockup.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/design/stacked-lockup.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ],
+  "shortcuts": [
+    { "name": "Dashboard",     "url": "/portal" },
+    { "name": "Schedule",      "url": "/portal/schedule" },
+    { "name": "Messages",      "url": "/portal/messages" },
+    { "name": "Take intake",   "url": "/portal/diagnostic" }
+  ]
+}
