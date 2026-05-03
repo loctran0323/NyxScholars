@@ -218,7 +218,7 @@ export default function ProfilePage() {
               "w-full h-11 rounded-xl font-bold text-[14px] flex items-center justify-center gap-2 transition-all",
               saved
                 ? "bg-emerald-500/15 border border-emerald-500/25 text-emerald-400"
-                : "bg-gradient-to-b from-[var(--accent-bright)] to-[var(--accent)] text-black hover:from-[#e2c685] hover:to-[#cba961] shadow-lg shadow-[var(--accent-dim)]",
+                : "bg-[#0c1124] border border-[var(--accent)]/45 text-[var(--text-1)] font-semibold hover:bg-[#141a30] hover:border-[var(--accent)]",
               "disabled:opacity-60 disabled:cursor-not-allowed"
             )}
           >

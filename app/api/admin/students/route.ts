@@ -20,7 +20,7 @@ export async function GET() {
   // Get all profiles
   const { data: profiles, error } = await client
     .from("profiles")
-    .select("id, full_name, grade, plan, plan_status, plan_subject, plan_addons, created_at")
+    .select("id, full_name, grade, role, plan, plan_status, plan_subject, plan_addons, created_at")
     .order("created_at", { ascending: false });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });

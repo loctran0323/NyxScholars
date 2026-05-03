@@ -34,54 +34,58 @@ export default function HomePage() {
         </div>
         <BgFade top={false} bottom height={120} />
 
-        <div className="relative max-w-[1200px] mx-auto px-6 sm:px-10">
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: EASE }}
-            className="font-mono text-[var(--accent)] text-[12px] uppercase tracking-[0.28em] mb-7"
-          >
-            <span className="gold-line" />1:1 SAT tutoring · online
-          </motion.p>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.1, ease: EASE }}
-            className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[0.98] tracking-[-0.02em] read-default"
-            style={{ fontSize: "clamp(2.5rem, 6vw, 5.4rem)" }}
-          >
-            Tutoring,{" "}
-            <span className="font-[family-name:var(--font-cormorant)] italic font-normal text-gradient">
-              honestly.
-            </span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.25, ease: EASE }}
-            className="mt-10 read-narrow text-[var(--text-2)] text-[18px] leading-[1.75]"
-          >
-            Vetted Princeton-tier undergrads. ${HOURLY_RATE_USD} per hour, paid by the session.
-            Free 30-minute trial — no card.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4, ease: EASE }}
-            className="mt-12 flex flex-col sm:flex-row gap-5 items-start sm:items-center"
-          >
-            <CTA href="/match" size="lg">Get matched in 12 minutes</CTA>
-            <Link
-              href="#how"
-              className="group inline-flex items-center gap-2 text-[var(--text-2)] hover:text-[var(--text-1)] font-medium text-[15px] transition-colors"
+        <div className="relative max-w-[1200px] mx-auto px-6 sm:px-10 grid lg:grid-cols-[1fr_auto] gap-12 items-start">
+          <div>
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: EASE }}
+              className="font-mono text-[var(--accent)] text-[12px] uppercase tracking-[0.28em] mb-7"
             >
-              See how it works
-              <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-            </Link>
-          </motion.div>
+              <span className="gold-line" />1:1 SAT tutoring · online
+            </motion.p>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.1, ease: EASE }}
+              className="font-[family-name:var(--font-fraunces)] font-light text-[var(--text-1)] leading-[0.98] tracking-[-0.02em] read-default"
+              style={{ fontSize: "clamp(2.5rem, 6vw, 5.4rem)" }}
+            >
+              Tutoring,{" "}
+              <span className="font-[family-name:var(--font-cormorant)] italic font-normal text-gradient">
+                honestly.
+              </span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.25, ease: EASE }}
+              className="mt-10 read-narrow text-[var(--text-2)] text-[18px] leading-[1.75]"
+            >
+              Vetted Princeton-tier undergrads. ${HOURLY_RATE_USD} per hour, paid by the session.
+              Free 30-minute trial — no card.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4, ease: EASE }}
+              className="mt-12 flex flex-col sm:flex-row gap-5 items-start sm:items-center"
+            >
+              <CTA href="/match" size="lg">Get matched in 12 minutes</CTA>
+              <Link
+                href="#how"
+                className="group inline-flex items-center gap-2 text-[var(--text-2)] hover:text-[var(--text-1)] font-medium text-[15px] transition-colors"
+              >
+                See how it works
+                <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+              </Link>
+            </motion.div>
+          </div>
+
+          <IvyBadges />
         </div>
       </section>
 
@@ -288,5 +292,67 @@ function PriceRow({
         ) : null}
       </div>
     </div>
+  );
+}
+
+/* ───────────────────────────────────────────────────────────────────────
+ * IvyBadges
+ * Six university logos floating freely in the right half of the hero.
+ * Each logo sits on its own soft translucent disc so the (often dark)
+ * wordmarks read clearly against the night sky. Positions are hand-
+ * placed for an asymmetric, unforced arrangement — no connecting lines.
+ * ─────────────────────────────────────────────────────────────────────── */
+const IVY_LOGOS = [
+  { src: "/ivy/Princeton.png", label: "Princeton", x: 52, y: 12, size: 108 },
+  { src: "/ivy/Yale.png",      label: "Yale",      x: 90, y: 32, size: 96  },
+  { src: "/ivy/Columbia.png",  label: "Columbia",  x: 72, y: 76, size: 100 },
+  { src: "/ivy/MIT.png",       label: "MIT",       x: 40, y: 52, size: 104 },
+  { src: "/ivy/Stanford.png",  label: "Stanford",  x: 14, y: 78, size: 96  },
+  { src: "/ivy/UPenn.png",     label: "UPenn",     x: 8,  y: 30, size: 96  },
+];
+
+function IvyBadges() {
+  return (
+    <motion.aside
+      initial={{ opacity: 0, x: 24 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.9, delay: 0.2, ease: EASE }}
+      className="hidden lg:block relative"
+      style={{ width: 380, height: 380 }}
+      aria-label="Tutors come from Princeton, Yale, Columbia, MIT, Stanford, and UPenn"
+    >
+      <p className="absolute -top-6 left-1/2 -translate-x-1/2 font-mono text-[10px] tracking-[0.32em] uppercase text-[var(--text-3)] whitespace-nowrap">
+        Tutors from
+      </p>
+
+      {IVY_LOGOS.map((p, i) => (
+        <motion.div
+          key={p.label}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.7, delay: 0.35 + i * 0.08, ease: EASE }}
+          className="absolute -translate-x-1/2 -translate-y-1/2 grid place-items-center rounded-full"
+          style={{
+            left: `${p.x}%`,
+            top: `${p.y}%`,
+            width: p.size,
+            height: p.size,
+            background:
+              "radial-gradient(circle at 50% 50%, rgba(230,233,245,0.92) 0%, rgba(230,233,245,0.78) 55%, rgba(230,233,245,0.55) 80%, rgba(230,233,245,0) 100%)",
+          }}
+          title={`${p.label} University`}
+        >
+          <Image
+            src={p.src}
+            alt={`${p.label} University`}
+            width={p.size}
+            height={p.size}
+            sizes={`${p.size}px`}
+            className="object-contain"
+            style={{ width: "72%", height: "72%", objectFit: "contain" }}
+          />
+        </motion.div>
+      ))}
+    </motion.aside>
   );
 }

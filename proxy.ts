@@ -48,20 +48,45 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/portal", request.url));
   }
 
-  // For authenticated non-auth pages, check if the user has an active plan
+  // Authenticated, on a portal page → role + plan checks.
   if (user && !isAuthPage) {
-    // These pages are always accessible regardless of plan
-    const alwaysAllowed = ["/portal/upgrade", "/portal/profile", "/portal/login", "/portal/signup"];
-    const isAlwaysAllowed = alwaysAllowed.some((p) => pathname === p || pathname.startsWith(p + "/"));
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role, plan, plan_status")
+      .eq("id", user.id)
+      .single();
+
+    const role = (profile?.role as "student" | "teacher" | null) ?? "student";
+
+    // Teachers live under /portal/teacher and skip the paywall entirely.
+    if (role === "teacher") {
+      const onTeacherRoute =
+        pathname.startsWith("/portal/teacher") ||
+        pathname === "/portal/profile" ||
+        pathname === "/portal/messages" ||
+        pathname.startsWith("/portal/messages/");
+      if (!onTeacherRoute) {
+        return NextResponse.redirect(new URL("/portal/teacher", request.url));
+      }
+      return supabaseResponse;
+    }
+
+    // Students: a small allow-list bypasses the paywall.
+    const studentAlwaysAllowed = [
+      "/portal/upgrade",
+      "/portal/profile",
+    ];
+    const isAlwaysAllowed = studentAlwaysAllowed.some(
+      (p) => pathname === p || pathname.startsWith(p + "/")
+    );
+    // Students should never see the teacher portal.
+    if (pathname.startsWith("/portal/teacher")) {
+      return NextResponse.redirect(new URL("/portal", request.url));
+    }
 
     if (!isAlwaysAllowed) {
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("plan, plan_status")
-        .eq("id", user.id)
-        .single();
-
-      const hasActivePlan = profile?.plan && profile?.plan_status === "active";
+      const hasActivePlan =
+        profile?.plan && profile?.plan_status === "active";
       if (!hasActivePlan) {
         return NextResponse.redirect(new URL("/portal/upgrade", request.url));
       }

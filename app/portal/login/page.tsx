@@ -16,7 +16,7 @@ export default function LoginPage() {
   const [resetSent, setResetSent] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const from = searchParams.get("from") ?? "/portal";
+  const from = searchParams.get("from");
 
   const supabase = getSupabaseBrowserClient();
 
@@ -34,14 +34,24 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    const { error: signInError } = await supabase!.auth.signInWithPassword({ email, password });
+    const { data, error: signInError } = await supabase!.auth.signInWithPassword({ email, password });
     if (signInError) {
       setError(signInError.message);
       setLoading(false);
-    } else {
-      router.push(from);
-      router.refresh();
+      return;
     }
+
+    let dest = from;
+    if (!dest && data.user) {
+      const { data: profile } = await supabase!
+        .from("profiles")
+        .select("role")
+        .eq("id", data.user.id)
+        .single();
+      dest = profile?.role === "teacher" ? "/portal/teacher" : "/portal";
+    }
+    router.push(dest ?? "/portal");
+    router.refresh();
   }
 
   async function handleForgot() {

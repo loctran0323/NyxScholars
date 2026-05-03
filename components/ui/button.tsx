@@ -11,7 +11,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-gradient-to-b from-[#e0b55c] to-[#c99438] text-black hover:from-[#eac068] hover:to-[#d4a045] shadow-[0_4px_20px_rgba(212,168,83,0.25)] hover:shadow-[0_8px_28px_rgba(212,168,83,0.35)]",
+          "bg-[#0c1124] border border-[var(--accent)]/45 text-[var(--text-1)] hover:bg-[#141a30] hover:border-[var(--accent)]",
         outline:
           "border border-white/10 text-[#c8d0de] hover:border-white/20 hover:bg-white/[0.04]",
         ghost: "text-[#8d9ab0] hover:text-[#f0ece3] hover:bg-white/[0.05]",

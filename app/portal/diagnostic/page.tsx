@@ -4,10 +4,21 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { NyxMark } from "@/components/system";
 import {
-  DIAGNOSTIC_QUESTIONS, POST_DIAGNOSTIC_SKILLS,
-  type DiagnosticQuestion, type DiagnosticAnswer,
+  POST_DIAGNOSTIC_SKILLS,
+  type DiagnosticAnswer,
 } from "@/lib/mock/diagnostic";
+import {
+  POOL,
+  initState,
+  applyAnswer,
+  selectNext,
+  type AdaptiveState,
+  type BankQuestion,
+} from "@/lib/diagnostic";
 import { matchTutors, HOURLY_RATE_USD, type Tutor } from "@/lib/mock/tutors";
+
+/** A diagnostic question shape compatible with the existing Runner UI. */
+type DiagnosticQuestion = BankQuestion;
 
 const NIGHT = "#070914";
 const NIGHT_2 = "#0c1124";
@@ -22,43 +33,81 @@ const MOON_HI = "#bde9ff";
 
 type Phase = "welcome" | "calibration" | "running" | "paused" | "results";
 
-const TOTAL = 8;
+const TOTAL = 14;
 
 export default function DiagnosticPage() {
   const [phase, setPhase] = useState<Phase>("welcome");
+  const [pool, setPool] = useState<BankQuestion[]>(POOL);
+  const [state, setState] = useState<AdaptiveState>(() => initState());
+  const [current, setCurrent] = useState<BankQuestion | null>(() => selectNext(initState(), POOL));
   const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<DiagnosticAnswer[]>([]);
-  const [theta, setTheta] = useState(0);
-  const [ci, setCI] = useState(2.0);
+
+  // Optionally fold in admin-curated DB items once on mount.
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/diagnostic/pool")
+      .then((r) => r.ok ? r.json() : null)
+      .then((d) => {
+        if (cancelled || !d?.pool) return;
+        const merged: BankQuestion[] = d.pool;
+        setPool(merged);
+        setCurrent((cur) => cur ?? selectNext(initState(), merged));
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
 
   function recordAnswer(picked: number, ms: number) {
-    const q = DIAGNOSTIC_QUESTIONS[questionIndex % DIAGNOSTIC_QUESTIONS.length];
-    const correct = picked === q.correct;
-    const diff = (q.difficulty - 3) * 0.6;
-    const delta = correct
-      ? Math.max(0.08, 0.35 - Math.abs(theta - diff) * 0.1)
-      : -Math.max(0.08, 0.35 - Math.abs(theta - diff) * 0.1);
-    const newTheta = Math.max(-3, Math.min(3, theta + delta));
-    const newCI = Math.max(0.18, ci - 0.06);
-    setTheta(newTheta);
-    setCI(newCI);
+    if (!current) return;
+    const correct = picked === current.correct;
+    const next = applyAnswer(state, current, correct);
+    setState(next);
     setAnswers((a) => [
       ...a,
-      { qid: q.id, picked, correct, ms, theta: newTheta, ci: newCI, skill: q.skill, difficulty: q.difficulty },
+      {
+        qid: current.id, picked, correct, ms,
+        theta: next.theta, ci: next.ci,
+        skill: current.skill, difficulty: current.difficulty,
+      },
     ]);
+    // Fire-and-forget: log the attempt for re-tuning later. Anonymous if signed out.
+    fetch("/api/diagnostic/attempt", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        question_id: current.id,
+        skill_id: current.skillId,
+        picked_index: picked,
+        correct,
+        ms,
+        theta_after: next.theta,
+        ci_after: next.ci,
+      }),
+    }).catch(() => {});
   }
 
   function nextQuestion() {
-    if (questionIndex >= TOTAL - 1) setPhase("results");
-    else setQuestionIndex((i) => i + 1);
+    if (questionIndex >= TOTAL - 1) {
+      setPhase("results");
+      return;
+    }
+    const nxt = selectNext(state, pool);
+    if (!nxt) {
+      setPhase("results");
+      return;
+    }
+    setCurrent(nxt);
+    setQuestionIndex((i) => i + 1);
   }
 
   function reset() {
+    const fresh = initState();
     setPhase("welcome");
     setQuestionIndex(0);
     setAnswers([]);
-    setTheta(0);
-    setCI(2.0);
+    setState(fresh);
+    setCurrent(selectNext(fresh, pool));
   }
 
   return (
@@ -71,16 +120,16 @@ export default function DiagnosticPage() {
         phase={phase}
         questionIndex={questionIndex}
         total={TOTAL}
-        theta={theta}
-        ci={ci}
+        theta={state.theta}
+        ci={state.ci}
         onPause={() => setPhase("paused")}
       />
 
       {phase === "welcome" && <Welcome onStart={() => setPhase("calibration")} />}
       {phase === "calibration" && <Calibration onContinue={() => setPhase("running")} />}
-      {phase === "running" && (
+      {phase === "running" && current && (
         <Runner
-          q={DIAGNOSTIC_QUESTIONS[questionIndex % DIAGNOSTIC_QUESTIONS.length]}
+          q={current}
           questionIndex={questionIndex}
           onAnswer={recordAnswer}
           onNext={nextQuestion}
@@ -88,7 +137,7 @@ export default function DiagnosticPage() {
       )}
       {phase === "paused" && <Paused onResume={() => setPhase("running")} />}
       {phase === "results" && (
-        <Results theta={theta} ci={ci} answers={answers} onRestart={reset} />
+        <Results theta={state.theta} ci={state.ci} answers={answers} onRestart={reset} />
       )}
     </div>
   );

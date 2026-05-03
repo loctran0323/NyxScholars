@@ -22,7 +22,7 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { NyxLockup } from "@/components/system";
 import type { Profile, PlanType } from "@/types/portal";
 
-const allNavItems = [
+const studentNavItems = [
   { href: "/portal",              label: "Dashboard",        icon: LayoutDashboard, exact: true,  plans: ["session", "monthly", "counseling"] },
   { href: "/portal/consultation", label: "My Sky",           icon: Compass,         exact: false, plans: ["session", "monthly", "counseling"] },
   { href: "/portal/diagnostic",   label: "Intake",           icon: Sparkles,        exact: false, plans: ["session", "monthly", "counseling"] },
@@ -33,7 +33,14 @@ const allNavItems = [
   { href: "/portal/profile",      label: "Profile",          icon: User,            exact: false, plans: ["session", "monthly", "counseling"] },
 ];
 
-function planLabel(plan: PlanType | null): string {
+const teacherNavItems = [
+  { href: "/portal/teacher",  label: "My Students", icon: LayoutDashboard, exact: true,  plans: [] },
+  { href: "/portal/messages", label: "Messages",    icon: MessageSquare,   exact: false, plans: [] },
+  { href: "/portal/profile",  label: "Profile",     icon: User,            exact: false, plans: [] },
+];
+
+function planLabel(plan: PlanType | null, role?: string | null): string {
+  if (role === "teacher") return "Teacher";
   switch (plan) {
     case "session":    return "Session Plan";
     case "monthly":    return "Scholar Plan";
@@ -86,8 +93,12 @@ function SidebarContent({
 }: PortalSidebarProps & { onNavClick?: () => void }) {
   const router = useRouter();
   const plan = profile?.plan ?? null;
+  const role = profile?.role ?? null;
 
-  const visibleNav = allNavItems.filter((item) => !plan || item.plans.includes(plan));
+  const visibleNav =
+    role === "teacher"
+      ? teacherNavItems
+      : studentNavItems.filter((item) => !plan || item.plans.includes(plan));
 
   const handleSignOut = async () => {
     const supabase = getSupabaseBrowserClient();
@@ -114,7 +125,7 @@ function SidebarContent({
           </div>
           <div className="min-w-0">
             <p className="text-[13px] font-semibold text-[var(--text-1)] truncate">{displayName}</p>
-            <p className="text-[11px] text-[var(--text-3)] truncate">{planLabel(plan)}</p>
+            <p className="text-[11px] text-[var(--text-3)] truncate">{planLabel(plan, role)}</p>
           </div>
         </div>
       </div>

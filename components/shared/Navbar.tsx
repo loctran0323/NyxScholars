@@ -74,14 +74,14 @@ export default function Navbar() {
     >
       <nav className="relative max-w-7xl mx-auto px-6 sm:px-10 h-[72px] flex items-center justify-between">
 
-        {/* Brand lockup */}
+        {/* Brand mark — crescent only */}
         <Link href="/" className="shrink-0 group" aria-label="Nyx Scholars">
           <Image
-            src="/design/primary-lockup.png"
+            src="/design/crescent-alone.png"
             alt="Nyx Scholars"
-            width={150}
+            width={40}
             height={40}
-            className="h-9 w-auto opacity-95 group-hover:opacity-100 transition-opacity"
+            className="h-9 w-9 opacity-95 group-hover:opacity-100 transition-opacity"
             priority
           />
         </Link>
@@ -111,8 +111,7 @@ export default function Navbar() {
                     <svg width="8" height="8" viewBox="0 0 8 8" aria-hidden>
                       <path
                         d="M 4 0.5 L 4.7 3.3 L 7.5 4 L 4.7 4.7 L 4 7.5 L 3.3 4.7 L 0.5 4 L 3.3 3.3 Z"
-                        fill="#bde9ff"
-                        style={{ filter: "drop-shadow(0 0 3px #7dd3fc)" }}
+                        fill="#7dd3fc"
                       />
                     </svg>
                   </motion.span>

@@ -55,7 +55,7 @@ export default function PricingPage() {
                 recommended={pkg.recommended}
               />
             ))}
-            <Row label="Admissions" sub="essays · school list · interviews" price="$150 / session" />
+            <Row label="Admissions" sub="essays · school list · interviews" price="Quoted per case" />
           </div>
 
           <div className="mt-14 max-w-[680px]">

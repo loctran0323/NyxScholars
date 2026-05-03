@@ -9,8 +9,11 @@ import { AuthShell, FormField, authInputClass, AuthError, AuthSubmit } from "@/c
 
 const GRADES = ["8", "9", "10", "11", "12", "College Freshman", "Other"];
 
+type Role = "student" | "teacher";
+
 export default function SignupPage() {
   const [step, setStep] = useState<1 | 2>(1);
+  const [role, setRole] = useState<Role>("student");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -50,7 +53,7 @@ export default function SignupPage() {
     setError(null);
     const { data, error: signUpError } = await supabase!.auth.signUp({
       email, password,
-      options: { data: { full_name: fullName } },
+      options: { data: { full_name: fullName, role } },
     });
     if (signUpError) {
       setError(signUpError.message);
@@ -61,14 +64,15 @@ export default function SignupPage() {
       await supabase!.from("profiles").upsert({
         id: data.user.id,
         full_name: fullName || null,
-        grade: grade || null,
-        target_test: targetTest || null,
+        role,
+        grade: role === "student" ? (grade || null) : null,
+        target_test: role === "student" ? (targetTest || null) : null,
         school: school || null,
       });
     }
     setLoading(false);
     if (data.session) {
-      router.push("/portal");
+      router.push(role === "teacher" ? "/portal/teacher" : "/portal");
       router.refresh();
     } else {
       setSuccess(true);
@@ -134,8 +138,7 @@ export default function SignupPage() {
                   className="h-full transition-all duration-500"
                   style={{
                     width: step >= s ? "100%" : "0%",
-                    background: "linear-gradient(90deg, #3b7a99, #7dd3fc, #bde9ff)",
-                    boxShadow: step >= s ? "0 0 6px #7dd3fc" : "none",
+                    background: "var(--accent)",
                   }}
                 />
               </div>
@@ -145,6 +148,26 @@ export default function SignupPage() {
           {step === 1 ? (
             <form onSubmit={handleStep1} className="space-y-5">
               <AuthError message={error} />
+              <FormField label="I am signing up as">
+                <div className="grid grid-cols-2 gap-2">
+                  {(["student", "teacher"] as Role[]).map((r) => (
+                    <button
+                      key={r}
+                      type="button"
+                      onClick={() => setRole(r)}
+                      className="h-11 rounded-[10px] font-mono uppercase tracking-[0.18em] transition-all border"
+                      style={{
+                        background: role === r ? "rgba(125,211,252,0.10)" : "transparent",
+                        borderColor: role === r ? "var(--border-accent)" : "var(--border)",
+                        color: role === r ? "var(--accent)" : "var(--text-2)",
+                        fontSize: 11,
+                      }}
+                    >
+                      {r === "student" ? "Student" : "Teacher"}
+                    </button>
+                  ))}
+                </div>
+              </FormField>
               <FormField label="Email">
                 <input
                   type="email"
@@ -203,38 +226,52 @@ export default function SignupPage() {
                   className={authInputClass()}
                 />
               </FormField>
-              <div className="grid grid-cols-2 gap-3">
-                <FormField label="Grade">
-                  <select
-                    value={grade}
-                    onChange={(e) => setGrade(e.target.value)}
+              {role === "student" ? (
+                <>
+                  <div className="grid grid-cols-2 gap-3">
+                    <FormField label="Grade">
+                      <select
+                        value={grade}
+                        onChange={(e) => setGrade(e.target.value)}
+                        className={authInputClass()}
+                      >
+                        <option value="">Select</option>
+                        {GRADES.map((g) => <option key={g} value={g}>{g}</option>)}
+                      </select>
+                    </FormField>
+                    <FormField label="Target test">
+                      <select
+                        value={targetTest}
+                        onChange={(e) => setTargetTest(e.target.value as "SAT" | "ACT" | "")}
+                        className={authInputClass()}
+                      >
+                        <option value="">Select</option>
+                        <option value="SAT">SAT</option>
+                        <option value="ACT">ACT</option>
+                      </select>
+                    </FormField>
+                  </div>
+                  <FormField label="School" optional>
+                    <input
+                      type="text"
+                      value={school}
+                      onChange={(e) => setSchool(e.target.value)}
+                      placeholder="Your high school"
+                      className={authInputClass()}
+                    />
+                  </FormField>
+                </>
+              ) : (
+                <FormField label="School / institution" optional>
+                  <input
+                    type="text"
+                    value={school}
+                    onChange={(e) => setSchool(e.target.value)}
+                    placeholder="Princeton, Harvard, etc."
                     className={authInputClass()}
-                  >
-                    <option value="">Select</option>
-                    {GRADES.map((g) => <option key={g} value={g}>{g}</option>)}
-                  </select>
+                  />
                 </FormField>
-                <FormField label="Target test">
-                  <select
-                    value={targetTest}
-                    onChange={(e) => setTargetTest(e.target.value as "SAT" | "ACT" | "")}
-                    className={authInputClass()}
-                  >
-                    <option value="">Select</option>
-                    <option value="SAT">SAT</option>
-                    <option value="ACT">ACT</option>
-                  </select>
-                </FormField>
-              </div>
-              <FormField label="School" optional>
-                <input
-                  type="text"
-                  value={school}
-                  onChange={(e) => setSchool(e.target.value)}
-                  placeholder="Your high school"
-                  className={authInputClass()}
-                />
-              </FormField>
+              )}
               <div className="flex gap-3 pt-1">
                 <button
                   type="button"

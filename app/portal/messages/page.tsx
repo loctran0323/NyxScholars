@@ -149,7 +149,7 @@ export default function MessagesPage() {
                           className={cn(
                             "px-4 py-3 rounded-2xl",
                             isStudent
-                              ? "bg-gradient-to-b from-[var(--accent-bright)] to-[var(--accent)] text-black rounded-br-md"
+                              ? "bg-[#0c1124] border border-[var(--accent)]/45 text-[var(--text-1)] font-semibold hover:bg-[#141a30] hover:border-[var(--accent)] rounded-br-md"
                               : "bg-[var(--surface-elevated)] border border-[var(--border)] text-[var(--text-1)] rounded-bl-md"
                           )}
                         >
@@ -190,7 +190,7 @@ export default function MessagesPage() {
               className={cn(
                 "w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all",
                 newMessage.trim() && !sending
-                  ? "bg-gradient-to-b from-[var(--accent-bright)] to-[var(--accent)] text-black hover:from-[#e2c685] hover:to-[#cba961] shadow-md shadow-[var(--accent-dim)]"
+                  ? "bg-[#0c1124] border border-[var(--accent)]/45 text-[var(--text-1)] font-semibold hover:bg-[#141a30] hover:border-[var(--accent)]"
                   : "bg-white/[0.06] text-[var(--text-3)] cursor-not-allowed"
               )}
             >

@@ -2,6 +2,7 @@ import { getServiceRoleClient } from "@/lib/supabase";
 import { Lead } from "@/types/lead";
 import AdminLeadTable from "@/components/shared/AdminLeadTable";
 import AdminPortalSection from "@/components/shared/AdminPortalSection";
+import AdminAssignmentsSection from "@/components/shared/AdminAssignmentsSection";
 
 async function getLeads(): Promise<Lead[]> {
   const client = getServiceRoleClient();
@@ -47,6 +48,11 @@ export default async function AdminDashboard() {
             <span className="text-[var(--text-3)] text-[13px]">{leads.length} total</span>
           </div>
           <AdminLeadTable leads={leads} />
+        </section>
+
+        {/* Assignments */}
+        <section className="mb-16">
+          <AdminAssignmentsSection />
         </section>
 
         {/* Sessions + Messages */}

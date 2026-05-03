@@ -1,5 +1,6 @@
 export type PlanType = "session" | "monthly" | "counseling";
 export type PlanStatus = "active" | "paused" | "cancelled";
+export type UserRole = "student" | "teacher";
 
 export interface Profile {
   id: string;
@@ -10,11 +11,22 @@ export interface Profile {
   target_test: "SAT" | "ACT" | null;
   phone: string | null;
   created_at: string;
-  // subscription plan
+  // role
+  role: UserRole | null;
+  // subscription plan (students only)
   plan: PlanType | null;
   plan_status: PlanStatus | null;
   plan_subject: string | null; // for session plan: 'SAT' | 'ACT' | 'AP' | 'College Admissions'
   plan_addons: string[] | null; // e.g. ['counseling']
+}
+
+export interface Assignment {
+  id: string;
+  student_id: string;
+  teacher_id: string;
+  subject: string | null;
+  active: boolean;
+  created_at: string;
 }
 
 export type SessionStatus = "pending" | "confirmed" | "completed" | "cancelled";

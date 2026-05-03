@@ -48,6 +48,8 @@ export default async function PortalLayout({
     .eq("id", user.id)
     .single();
 
+  const typedProfile = profile as Profile | null;
+
   const { count: unreadCount } = await supabase
     .from("messages")
     .select("*", { count: "exact", head: true })
@@ -58,7 +60,7 @@ export default async function PortalLayout({
   return (
     <div className="fixed inset-0 z-[100] bg-[var(--bg)] flex overflow-hidden">
       <PortalSidebar
-        profile={profile as Profile | null}
+        profile={typedProfile}
         userEmail={user.email ?? ""}
         unreadCount={unreadCount ?? 0}
       />
