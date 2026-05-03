@@ -216,7 +216,7 @@ export function Sky({ hoveredId, setHoveredId, selectedId, setSelectedId, master
         })()}
       </svg>
 
-      <div className="absolute top-6 left-7 pointer-events-none">
+      <div className="absolute top-4 left-5 pointer-events-none rounded-xl px-4 py-3" style={{ background: "rgba(5,8,22,0.65)", backdropFilter: "blur(10px)" }}>
         <div className="font-mono text-[9px] tracking-[0.32em]" style={{ color: TEXT_DIM }}>
           YOUR SKY · MAY 2026
         </div>

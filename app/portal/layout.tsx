@@ -70,16 +70,15 @@ export default async function PortalLayout({
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
         {/* Mobile spacer for top bar */}
         <div className="md:hidden h-14 shrink-0" />
-        <main id="main" className="flex-1 overflow-y-auto overscroll-contain">
-          {/* Atmospheric fade behind content */}
-          <div
-            aria-hidden
-            className="fixed inset-0 pointer-events-none -z-10"
-            style={{
-              backgroundImage:
-                "radial-gradient(ellipse 80% 40% at 60% -10%, var(--accent-dim) 0%, transparent 60%)",
-            }}
-          />
+        <main
+          id="main"
+          className="flex-1 overflow-y-auto overscroll-contain"
+          style={{
+            backgroundImage:
+              "radial-gradient(ellipse 80% 40% at 60% -10%, var(--accent-dim) 0%, transparent 60%)",
+            backgroundAttachment: "local",
+          }}
+        >
           <div className="max-w-[1080px] mx-auto px-6 py-8 md:px-10 md:py-12 pb-32">
             {children}
           </div>
