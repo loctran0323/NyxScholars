@@ -374,7 +374,7 @@ function ConstellationGlyph({
       <g pointerEvents="none">
         <text
           x={bx + bw / 2}
-          y={Math.max(by - 18, 90)}
+          y={Math.max(by - 18, (bx + bw / 2) < w * 0.25 ? 140 : 20)}
           fill={TEXT}
           fontFamily="var(--font-fraunces), serif"
           fontStyle="italic"
