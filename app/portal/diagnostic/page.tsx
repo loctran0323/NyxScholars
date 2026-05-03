@@ -61,7 +61,12 @@ export default function DiagnosticPage() {
   function recordAnswer(picked: number, ms: number) {
     if (!current) return;
     const correct = picked === current.correct;
+    // Compute next state synchronously so the setTimeout below sees fresh
+    // values — avoids the stale-closure bug that caused question repeats.
     const next = applyAnswer(state, current, correct);
+    const capturedIndex = questionIndex;
+    const capturedPool = pool;
+
     setState(next);
     setAnswers((a) => [
       ...a,
@@ -71,7 +76,7 @@ export default function DiagnosticPage() {
         skill: current.skill, difficulty: current.difficulty,
       },
     ]);
-    // Fire-and-forget: log the attempt for re-tuning later. Anonymous if signed out.
+
     fetch("/api/diagnostic/attempt", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -85,41 +90,40 @@ export default function DiagnosticPage() {
         ci_after: next.ci,
       }),
     }).catch(() => {});
+
+    // Advance after the brief "Recording…" feedback delay.
+    // Uses `next` (fresh) so asked-set is up-to-date — no repeats.
+    setTimeout(() => {
+      if (capturedIndex >= TOTAL - 1) {
+        finalizeWithState(next, capturedIndex + 1);
+        return;
+      }
+      const nxt = selectNext(next, capturedPool);
+      if (!nxt) {
+        finalizeWithState(next, capturedIndex + 1);
+        return;
+      }
+      setCurrent(nxt);
+      setQuestionIndex(capturedIndex + 1);
+    }, 700);
   }
 
-  function nextQuestion() {
-    if (questionIndex >= TOTAL - 1) {
-      finalizeAndShowResults();
-      return;
-    }
-    const nxt = selectNext(state, pool);
-    if (!nxt) {
-      finalizeAndShowResults();
-      return;
-    }
-    setCurrent(nxt);
-    setQuestionIndex((i) => i + 1);
-  }
-
-  /** Persist a summary so /portal/consultation can show real mastery. */
-  function finalizeAndShowResults() {
+  function finalizeWithState(freshState: AdaptiveState, count: number) {
     setPhase("results");
     const perSkill: Record<string, number> = {};
-    for (const skillId of Object.keys(state.skillTheta)) {
-      // Map θ in [-3, 3] to mastery in [0, 1] via the same logistic the
-      // adaptive engine uses. Clamp so absurd values don't escape.
-      const t = state.skillTheta[skillId];
+    for (const skillId of Object.keys(freshState.skillTheta)) {
+      const t = freshState.skillTheta[skillId];
       const m = 1 / (1 + Math.exp(-1.7 * t));
       perSkill[skillId] = Math.max(0, Math.min(1, m));
     }
-    const predictedScore = Math.round(1200 + state.theta * 130);
+    const predictedScore = Math.round(1200 + freshState.theta * 130);
     void fetch("/api/portal/diagnostic-complete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        theta: state.theta,
-        ci: state.ci,
-        questionsAsked: questionIndex + 1,
+        theta: freshState.theta,
+        ci: freshState.ci,
+        questionsAsked: count,
         predictedScore,
         perSkill,
       }),
@@ -157,7 +161,6 @@ export default function DiagnosticPage() {
           q={current}
           questionIndex={questionIndex}
           onAnswer={recordAnswer}
-          onNext={nextQuestion}
         />
       )}
       {phase === "paused" && <Paused onResume={() => setPhase("running")} />}
@@ -510,12 +513,11 @@ function Calibration({ onContinue }: { onContinue: () => void }) {
  * Question Runner
  * ─────────────────────────────────────────────────────────── */
 function Runner({
-  q, questionIndex, onAnswer, onNext,
+  q, questionIndex, onAnswer,
 }: {
   q: DiagnosticQuestion;
   questionIndex: number;
   onAnswer: (picked: number, ms: number) => void;
-  onNext: () => void;
 }) {
   const [picked, setPicked] = useState<number | null>(null);
   const [submitted, setSubmitted] = useState(false);
@@ -538,7 +540,6 @@ function Runner({
     if (picked === null || submitted) return;
     setSubmitted(true);
     onAnswer(picked, Date.now() - startTime);
-    setTimeout(() => onNext(), 700);
   }
 
   const mins = Math.floor(elapsed / 60);

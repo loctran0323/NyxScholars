@@ -374,7 +374,7 @@ function ConstellationGlyph({
       <g pointerEvents="none">
         <text
           x={bx + bw / 2}
-          y={by - 18}
+          y={Math.max(by - 18, 90)}
           fill={TEXT}
           fontFamily="var(--font-fraunces), serif"
           fontStyle="italic"
@@ -416,7 +416,7 @@ export function SkillSheet({ skill, onClose, onDrill }: SkillSheetProps) {
   const m = skill.mastery;
   return (
     <div
-      className="absolute top-6 right-6 w-[320px] p-6 z-20"
+      className="absolute top-6 right-6 w-[320px] p-6 z-30 pointer-events-auto"
       style={{
         background: NIGHT_2,
         border: `1px solid ${MOON_DIM}`,

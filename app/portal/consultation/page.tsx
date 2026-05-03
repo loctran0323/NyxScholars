@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { Text, Card } from "@/components/system";
 import { mockDashboard, type ConsultationDashboardData } from "@/lib/mock/consultationDashboard";
@@ -25,6 +26,7 @@ function formatDate(iso: string): string {
 
 export default function ConsultationDashboardPage() {
   const d: ConsultationDashboardData = mockDashboard;
+  const router = useRouter();
   const [view, setView] = useState<"sky" | "metrics">("sky");
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -35,7 +37,7 @@ export default function ConsultationDashboardPage() {
   const tutorName = "your tutor";
 
   return (
-    <div className="-mx-5 md:-mx-8 -my-7 md:-my-9 flex flex-col h-[calc(100dvh-56px)] md:h-[calc(100vh-0px)] min-h-[680px]">
+    <div className="-mx-6 md:-mx-10 -my-8 md:-my-12 flex flex-col h-[calc(100dvh-56px)] md:h-screen min-h-[680px]">
       <StudentHeader
         studentName={d.student.name}
         studentInitials={d.student.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
@@ -55,7 +57,11 @@ export default function ConsultationDashboardPage() {
               selectedId={selectedId}
               setSelectedId={setSelectedId}
             />
-            <SkillSheet skill={selectedSkill} onClose={() => setSelectedId(null)} />
+            <SkillSheet
+              skill={selectedSkill}
+              onClose={() => setSelectedId(null)}
+              onDrill={(skill) => router.push(`/portal/practice?skill=${skill.id}`)}
+            />
           </div>
         ) : (
           <div className="h-full overflow-y-auto px-5 md:px-7 py-7" style={{ color: "#e6e9f5" }}>
