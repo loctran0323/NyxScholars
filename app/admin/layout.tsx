@@ -1,18 +1,5 @@
 import Link from "next/link";
-import { LayoutDashboard, Users, GraduationCap, DollarSign, FileSearch, Wallet, Sparkles, Tag, Megaphone, Activity } from "lucide-react";
-
-const NAV = [
-  { href: "/admin",             label: "Overview",    icon: LayoutDashboard },
-  { href: "/admin/tutors",      label: "Tutors",      icon: GraduationCap },
-  { href: "/admin/students",    label: "Students",    icon: Users },
-  { href: "/admin/questions",   label: "Questions",   icon: Sparkles },
-  { href: "/admin/pricing",     label: "Pricing",     icon: Tag },
-  { href: "/admin/broadcast",   label: "Broadcast",   icon: Megaphone },
-  { href: "/admin/revenue",     label: "Revenue",     icon: DollarSign },
-  { href: "/admin/payouts",     label: "Payouts",     icon: Wallet },
-  { href: "/admin/audit",       label: "Audit",       icon: FileSearch },
-  { href: "/admin/diagnostics", label: "Diagnostics", icon: Activity },
-];
+import { ADMIN_NAV } from "./_nav";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -27,7 +14,7 @@ function AdminNav() {
   return (
     <nav className="border-b border-[var(--border)] bg-[var(--bg-2)]">
       <div className="max-w-6xl mx-auto px-6 flex flex-wrap items-center gap-1 py-2">
-        {NAV.map((item) => {
+        {ADMIN_NAV.map((item) => {
           const Icon = item.icon;
           return (
             <Link
