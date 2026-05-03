@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { PortalHero } from "@/components/portal/PortalHero";
 import {
   GIFT_CARD_PRESETS_CENTS,
   GIFT_CARD_MIN_CENTS,
@@ -69,16 +70,12 @@ export default function GiftCardPage() {
 
   return (
     <div className="max-w-2xl">
-      <div className="mb-7">
-        <p className="text-[12px] text-[var(--text-3)] uppercase tracking-[0.18em] font-semibold mb-1">Portal</p>
-        <h1 className="text-[26px] font-semibold text-[var(--text-1)] leading-tight flex items-center gap-2">
-          <Gift size={20} className="text-[var(--accent)]" />
-          Send a Nyx gift card
-        </h1>
-        <p className="text-[var(--text-2)] mt-1.5 text-[14.5px]">
-          The recipient gets a code by email and can apply it to any plan at checkout.
-        </p>
-      </div>
+      <PortalHero
+        eyebrow="Portal"
+        title="Gift card"
+        italic="for someone you love"
+        subtitle="The recipient gets a code by email and can apply it to any plan at checkout."
+      />
 
       <form onSubmit={purchase} className="space-y-6">
         <section className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">

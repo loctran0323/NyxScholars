@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Timer, FileCheck, Trophy, AlertCircle, ChevronRight } from "lucide-react";
+import { FileCheck, Trophy, AlertCircle, ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { PortalHero } from "@/components/portal/PortalHero";
 
 export const metadata = {
   title: "Mock tests",
@@ -61,16 +62,12 @@ const MOCKS: MockTest[] = [
 export default function MockTestsPage() {
   return (
     <div className="max-w-3xl">
-      <header className="mb-7">
-        <p className="text-[12px] text-[var(--text-3)] uppercase tracking-[0.18em] font-semibold mb-1">Portal</p>
-        <h1 className="text-[26px] font-semibold text-[var(--text-1)] leading-tight flex items-center gap-2">
-          <Timer size={20} className="text-[var(--accent)]" />
-          Full-length mock tests
-        </h1>
-        <p className="text-[var(--text-2)] mt-1.5 text-[14.5px]">
-          Adaptive digital SAT and ACT mocks — timed, branded, scored within the portal. New mock every two weeks.
-        </p>
-      </header>
+      <PortalHero
+        eyebrow="Portal"
+        title="Mock tests"
+        italic="full length"
+        subtitle="Adaptive digital SAT and ACT mocks — timed, branded, scored within the portal. New mock every two weeks."
+      />
 
       <div className="rounded-2xl border border-[var(--border-accent)] bg-[var(--accent-dim)] p-4 mb-6 flex items-start gap-3">
         <AlertCircle size={15} className="text-[var(--accent)] mt-0.5 shrink-0" />

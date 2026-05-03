@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ShieldCheck, Download, Trash2, Lock, FileSearch, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DeleteAccountButton } from "./DeleteAccountButton";
+import { PortalHero } from "@/components/portal/PortalHero";
 
 export const metadata = {
   title: "Privacy & data",
@@ -11,13 +12,12 @@ export const metadata = {
 export default function LegalPage() {
   return (
     <div className="max-w-3xl">
-      <header className="mb-8">
-        <p className="text-[12px] text-[var(--text-3)] uppercase tracking-[0.18em] font-semibold mb-1">Portal</p>
-        <h1 className="text-[26px] font-semibold text-[var(--text-1)] leading-tight">Privacy &amp; data controls</h1>
-        <p className="text-[var(--text-2)] mt-1.5 text-[14.5px]">
-          Full visibility and control over the data Nyx stores about you. Self-serve export and deletion below.
-        </p>
-      </header>
+      <PortalHero
+        eyebrow="Portal"
+        title="Privacy"
+        italic="& data controls"
+        subtitle="Full visibility and control over the data Nyx stores about you. Self-serve export and deletion below."
+      />
 
       <Section title="Your rights" icon={ShieldCheck}>
         <p>

@@ -6,6 +6,7 @@ import { Sparkles, Check, X, RotateCw, Inbox } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/system/Toast";
+import { PortalHero } from "@/components/portal/PortalHero";
 
 interface Card {
   id: string;
@@ -83,18 +84,16 @@ export default function PracticePage() {
 
   return (
     <div className="max-w-xl mx-auto">
-      <header className="mb-6 flex items-center justify-between">
-        <div>
-          <p className="text-[12px] text-[var(--accent)] uppercase tracking-[0.22em] font-semibold">Daily 8 minutes</p>
-          <h1 className="text-[24px] font-semibold text-[var(--text-1)] mt-0.5 flex items-center gap-2">
-            <Sparkles size={18} className="text-[var(--accent)]" />
-            Spaced practice
-          </h1>
-        </div>
-        <p className="text-[12px] text-[var(--text-3)]">
-          {cards.length} card{cards.length === 1 ? "" : "s"} left
-        </p>
-      </header>
+      <PortalHero
+        eyebrow="Daily 8 minutes"
+        title="Spaced practice"
+        italic="re-surface what slipped"
+        actions={
+          <span className="text-[11.5px] font-mono uppercase tracking-[0.18em] text-[var(--text-3)]">
+            {cards.length} card{cards.length === 1 ? "" : "s"} left
+          </span>
+        }
+      />
 
       <article className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8 min-h-72 flex flex-col">
         <p className="text-[10.5px] uppercase tracking-wider text-[var(--text-3)] mb-3">{current.skill_id}</p>

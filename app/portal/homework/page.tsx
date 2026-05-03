@@ -3,6 +3,7 @@ import { ClipboardList, ArrowRight, CheckCircle2 } from "lucide-react";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { formatDistanceToNow } from "date-fns";
+import { PortalHero } from "@/components/portal/PortalHero";
 
 export const metadata = { title: "Homework" };
 
@@ -34,16 +35,12 @@ export default async function HomeworkPage() {
 
   return (
     <div className="max-w-3xl">
-      <header className="mb-7">
-        <p className="text-[12px] text-[var(--text-3)] uppercase tracking-[0.18em] font-semibold mb-1">Portal</p>
-        <h1 className="text-[26px] font-semibold text-[var(--text-1)] leading-tight flex items-center gap-2">
-          <ClipboardList size={20} className="text-[var(--accent)]" />
-          Homework
-        </h1>
-        <p className="text-[var(--text-2)] mt-1.5 text-[14.5px]">
-          Sets pushed by your tutor at the end of each session. Results flow back into your sky.
-        </p>
-      </header>
+      <PortalHero
+        eyebrow="Portal"
+        title="Homework"
+        italic="this week"
+        subtitle="Sets your tutor pushed at the end of each session. Results flow back into your sky."
+      />
 
       {items.length === 0 ? (
         <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-10 text-center">

@@ -3,6 +3,7 @@
 import * as React from "react";
 import { CreditCard, FileText, ShieldCheck, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PortalHero } from "@/components/portal/PortalHero";
 
 export default function BillingPage() {
   const [loading, setLoading] = React.useState(false);
@@ -28,13 +29,12 @@ export default function BillingPage() {
 
   return (
     <div className="max-w-2xl">
-      <div className="mb-7">
-        <p className="text-[12px] text-[var(--text-3)] uppercase tracking-[0.18em] font-semibold mb-1">Portal</p>
-        <h1 className="text-[26px] font-semibold text-[var(--text-1)] leading-tight">Billing & invoices</h1>
-        <p className="text-[var(--text-2)] mt-1.5 text-[14.5px]">
-          Manage your payment method, view receipts, change plan, or cancel — all in Stripe&apos;s secure portal.
-        </p>
-      </div>
+      <PortalHero
+        eyebrow="Portal"
+        title="Billing"
+        italic="& invoices"
+        subtitle="Manage your payment method, view receipts, change plan, or cancel — all in Stripe's secure portal."
+      />
 
       <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 mb-6">
         <div className="flex items-start gap-4">

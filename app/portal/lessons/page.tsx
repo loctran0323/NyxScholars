@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Play, Clock, BookOpen } from "lucide-react";
+import { Play, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { PortalHero } from "@/components/portal/PortalHero";
 
 export const metadata = {
   title: "Video micro-lessons",
@@ -64,16 +65,12 @@ const LESSONS: Lesson[] = [
 export default function LessonsPage() {
   return (
     <div className="max-w-4xl">
-      <header className="mb-7">
-        <p className="text-[12px] text-[var(--text-3)] uppercase tracking-[0.18em] font-semibold mb-1">Portal</p>
-        <h1 className="text-[26px] font-semibold text-[var(--text-1)] leading-tight flex items-center gap-2">
-          <BookOpen size={20} className="text-[var(--accent)]" />
-          Video micro-lessons
-        </h1>
-        <p className="text-[var(--text-2)] mt-1.5 text-[14.5px]">
-          Three- to five-minute videos by Nyx tutors. One skill, one walkthrough, no fluff.
-        </p>
-      </header>
+      <PortalHero
+        eyebrow="Portal"
+        title="Video lessons"
+        italic="three minutes each"
+        subtitle="One skill, one walkthrough, no fluff. Recorded by the tutors actually working with students this week."
+      />
 
       <div className="grid sm:grid-cols-2 gap-4">
         {LESSONS.map((l) => (

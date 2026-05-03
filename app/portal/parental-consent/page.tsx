@@ -3,6 +3,7 @@ import { ShieldCheck, AlertCircle, Mail } from "lucide-react";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { ParentalConsentForm } from "./ParentalConsentForm";
+import { PortalHero } from "@/components/portal/PortalHero";
 
 export const metadata = {
   title: "Parental consent",
@@ -25,17 +26,12 @@ export default async function ParentalConsentPage() {
 
   return (
     <div className="max-w-2xl">
-      <header className="mb-7">
-        <p className="text-[12px] text-[var(--text-3)] uppercase tracking-[0.18em] font-semibold mb-1">Portal</p>
-        <h1 className="text-[26px] font-semibold text-[var(--text-1)] leading-tight flex items-center gap-2">
-          <ShieldCheck size={20} className="text-[var(--accent)]" />
-          Parental consent
-        </h1>
-        <p className="text-[var(--text-2)] mt-1.5 text-[14.5px]">
-          Required by COPPA / FERPA when the student is under 13. We won&apos;t collect anything beyond
-          the email used to sign in until consent is on file.
-        </p>
-      </header>
+      <PortalHero
+        eyebrow="Portal"
+        title="Parental consent"
+        italic="for under-13 students"
+        subtitle="Required by COPPA / FERPA when the student is under 13. We won't collect anything beyond the email used to sign in until consent is on file."
+      />
 
       {consented ? (
         <div className="rounded-2xl border border-[var(--success)]/35 bg-[var(--success-soft)] p-5 mb-6">
