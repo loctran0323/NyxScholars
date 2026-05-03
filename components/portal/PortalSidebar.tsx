@@ -25,6 +25,7 @@ import {
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { NyxLockup } from "@/components/system";
 import { NotificationsBell } from "@/components/portal/NotificationsBell";
+import { NavBadge } from "@/components/portal/NavBadge";
 import type { Profile, PlanType } from "@/types/portal";
 
 interface NavItemDef {
@@ -34,6 +35,7 @@ interface NavItemDef {
   exact?: boolean;
   plans?: PlanType[];
   badgeKey?: "messages";
+  soon?: boolean;
 }
 
 interface NavGroup {
@@ -57,8 +59,8 @@ const studentNavGroups: NavGroup[] = [
       { href: "/portal/consultation", label: "Your sky",     icon: Compass },
       { href: "/portal/diagnostic",   label: "Adaptive intake", icon: Sparkles },
       { href: "/portal/homework",     label: "Homework",     icon: ClipboardList },
-      { href: "/portal/lessons",      label: "Video lessons", icon: PlayCircle },
-      { href: "/portal/mock-tests",   label: "Mock tests",   icon: Timer },
+      { href: "/portal/lessons",      label: "Video lessons", icon: PlayCircle, soon: true },
+      { href: "/portal/mock-tests",   label: "Mock tests",   icon: Timer, soon: true },
       { href: "/portal/materials",    label: "Materials",    icon: BookOpen },
     ],
   },
@@ -140,6 +142,8 @@ function NavItem({ item, unreadCount, onClick }: { item: NavItemDef; unreadCount
         <span className="px-1.5 h-4 min-w-4 rounded-full bg-[var(--accent)] text-[var(--on-accent)] text-[9.5px] font-bold flex items-center justify-center">
           {unreadCount! > 9 ? "9+" : unreadCount}
         </span>
+      ) : item.soon ? (
+        <NavBadge variant="soon" />
       ) : null}
     </Link>
   );
