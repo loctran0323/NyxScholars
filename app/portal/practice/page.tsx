@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/components/system/Toast";
 import { PortalHero } from "@/components/portal/PortalHero";
 import { InfoBanner } from "@/components/portal/InfoBanner";
-import { POOL, type BankQuestion } from "@/lib/diagnostic";
 
 interface SrsCard {
   id: string;
@@ -21,32 +20,62 @@ interface SrsCard {
 
 // ─── Skill Drill Mode ───────────────────────────────────────────────────────
 
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
+interface DrillItem {
+  id: string;
+  skillId: string;
+  skill: string;
+  prompt: string;
+  choices: string[];
+  correct: number;
+  rationale?: string;
+  source: "db" | "static";
 }
 
 function SkillDrill({ skillId }: { skillId: string }) {
-  const questions = React.useMemo(
-    () => shuffle(POOL.filter((q) => q.skillId === skillId)),
-    [skillId],
-  );
+  const [questions, setQuestions] = React.useState<DrillItem[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [usedFallback, setUsedFallback] = React.useState(false);
+
+  React.useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    fetch(`/api/practice/drill?skill=${encodeURIComponent(skillId)}&n=10`, { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+      .then((data) => {
+        if (cancelled) return;
+        setQuestions((data.items ?? []) as DrillItem[]);
+        setUsedFallback(Boolean(data.fallback));
+        setLoading(false);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setQuestions([]);
+        setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [skillId]);
 
   const [index, setIndex] = React.useState(0);
   const [picked, setPicked] = React.useState<number | null>(null);
   const [score, setScore] = React.useState(0);
   const [done, setDone] = React.useState(false);
 
-  const q: BankQuestion | undefined = questions[index];
+  const q: DrillItem | undefined = questions[index];
   const skillName = q?.skill ?? skillId;
 
   React.useEffect(() => {
     setPicked(null);
   }, [index]);
+
+  if (loading) {
+    return (
+      <div className="max-w-md mx-auto pt-16 text-center text-[var(--text-3)] text-[13px]">
+        Loading drill…
+      </div>
+    );
+  }
 
   function confirm() {
     if (picked === null || !q) return;
@@ -109,10 +138,12 @@ function SkillDrill({ skillId }: { skillId: string }) {
 
   return (
     <div className="max-w-xl mx-auto">
-      <InfoBanner tone="warn" className="mb-5">
-        Expanded question bank is being prepped — the current pool is a hand-built
-        starter set. New items roll in over the next few weeks.
-      </InfoBanner>
+      {usedFallback && (
+        <InfoBanner tone="warn" className="mb-5">
+          We mixed in a few starter items because the live bank for this skill
+          is still being seeded. New questions are added each week.
+        </InfoBanner>
+      )}
 
       <div className="flex items-center gap-3 mb-6">
         <Link href="/portal/consultation" className="text-[var(--text-3)] hover:text-[var(--text-1)] transition-colors">
