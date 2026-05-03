@@ -11,7 +11,7 @@ import { QUESTION_BANK, type BankQuestion } from "./bank";
 import { mint, GENERATORS } from "./generators";
 import { SKILLS } from "./skills";
 
-const MIN_PER_SKILL = 4;
+const MIN_PER_SKILL = 8;
 
 function combineBank(): BankQuestion[] {
   const out: BankQuestion[] = [...QUESTION_BANK];

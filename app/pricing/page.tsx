@@ -10,7 +10,7 @@ export const metadata = { title: "Pricing" };
 
 const includedEverywhere = [
   "Free 30-minute trial — no card",
-  "1:1 video sessions with a vetted Princeton-tier undergrad",
+  "1:1 video sessions with a vetted Ivy League tutor",
   "Shared progress map (your sky)",
   "Cancel any session up to 12 hours before",
   "Refundable until halfway through any cadence",

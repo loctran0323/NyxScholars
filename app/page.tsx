@@ -64,7 +64,7 @@ export default function HomePage() {
               transition={{ duration: 0.7, delay: 0.25, ease: EASE }}
               className="mt-10 read-narrow text-[var(--text-2)] text-[18px] leading-[1.75]"
             >
-              Vetted Princeton-tier undergrads. ${HOURLY_RATE_USD} per hour, paid by the session.
+              Vetted Ivy League tutors. ${HOURLY_RATE_USD} per hour, paid by the session.
               Free 30-minute trial — no card.
             </motion.p>
 
@@ -146,10 +146,10 @@ export default function HomePage() {
 
           <ol className="space-y-10">
             {[
-              { n: "01", title: "Verified 1500+ digital SAT.", body: "Score reports checked. No exceptions, including for the founders." },
+              { n: "01", title: "Verified 1500+ digital SAT.", body: "Score reports checked. No exceptions — every Ivy tutor on the platform has hit the bar themselves." },
               { n: "02", title: "Currently enrolled.", body: "Active undergrads at Princeton, Harvard, Yale, MIT, Stanford, Columbia, or peer schools — re-verified each semester." },
-              { n: "03", title: "Teaching audition.", body: "Thirty-minute mock session with a founder, walking through a real student case before they meet anyone." },
-              { n: "04", title: "Trial cohort.", body: "Approved tutors take on two trial students with founder shadowing on the first session. Honest feedback decides whether they stay." },
+              { n: "03", title: "Teaching audition.", body: "Thirty-minute mock session with a Nyx lead, walking through a real student case before they meet anyone." },
+              { n: "04", title: "Trial cohort.", body: "Approved tutors take on two trial students with senior shadowing on the first session. Honest feedback decides whether they stay." },
             ].map((p) => (
               <li key={p.n} className="grid md:grid-cols-12 gap-x-8 gap-y-2">
                 <div className="md:col-span-2">

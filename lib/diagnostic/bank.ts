@@ -321,6 +321,196 @@ const WRITING: BankQuestion[] = [
     rationale: "Two independent clauses → period (or semicolon)." },
 ];
 
+/* ─── Extended bank · added in pass 2 ─────────────────────────────────── */
+const EXT_ALGEBRA: BankQuestion[] = [
+  { id: "alg-eq-4", skillId: "lin-eq", skill: "Linear equations", section: "Math", difficulty: 4,
+    prompt: "If 7x − 4 = 3x + 24, what is x?", choices: ["5", "6", "7", "8"], correct: 2,
+    rationale: "4x = 28 → x = 7." },
+  { id: "alg-eq-5", skillId: "lin-eq", skill: "Linear equations", section: "Math", difficulty: 5,
+    prompt: "If a, b > 0 and ax + b = 2(b − ax), what is x in terms of a, b?",
+    choices: ["b/a", "b/(3a)", "−b/a", "(2b − b)/(3a)"], correct: 1,
+    rationale: "ax + b = 2b − 2ax → 3ax = b → x = b/(3a)." },
+  { id: "alg-sys-3", skillId: "lin-sys", skill: "Systems of equations", section: "Math", difficulty: 3,
+    prompt: "3x + 2y = 16 and x − y = 2. What is y?", choices: ["1", "2", "3", "4"], correct: 1,
+    rationale: "x = y + 2 → 3(y+2) + 2y = 16 → 5y = 10 → y = 2." },
+  { id: "alg-sys-4", skillId: "lin-sys", skill: "Systems of equations", section: "Math", difficulty: 5,
+    prompt: "For what value of k does the system 2x + ky = 8 and 4x + 6y = 16 have infinitely many solutions?",
+    choices: ["2", "3", "4", "6"], correct: 1,
+    rationale: "Lines must be identical: 2/4 = k/6 = 8/16 → k = 3." },
+  { id: "alg-ineq-3", skillId: "lin-ineq", skill: "Linear inequalities", section: "Math", difficulty: 4,
+    prompt: "Which value of x is NOT in the solution set of 4 − 2x > x − 5?",
+    choices: ["−2", "0", "2", "4"], correct: 3,
+    rationale: "9 > 3x → x < 3. 4 fails." },
+  { id: "alg-fn-3", skillId: "lin-fn", skill: "Linear functions", section: "Math", difficulty: 5,
+    prompt: "A line passes through (−1, 2) and is perpendicular to y = (1/2)x + 3. Its equation is:",
+    choices: ["y = −2x", "y = 2x + 4", "y = −2x + 0", "y = −(1/2)x + 3/2"], correct: 0,
+    rationale: "Perpendicular slope = −2; y − 2 = −2(x + 1) → y = −2x." },
+  { id: "alg-abs-3", skillId: "abs-val", skill: "Absolute value", section: "Math", difficulty: 4,
+    prompt: "How many integer values of x satisfy |x + 2| ≤ 3?",
+    choices: ["5", "6", "7", "8"], correct: 2,
+    rationale: "−3 ≤ x + 2 ≤ 3 → −5 ≤ x ≤ 1 → seven integers." },
+];
+
+const EXT_ADVMATH: BankQuestion[] = [
+  { id: "adv-quad-4", skillId: "quad", skill: "Quadratics", section: "Math", difficulty: 5,
+    prompt: "The graph of y = (x − 3)² − 4 has x-intercepts at x = a and x = b with a < b. What is a + b?",
+    choices: ["−1", "1", "3", "6"], correct: 3,
+    rationale: "Sum of roots of (x − 3)² = 4 is 6 by symmetry around x = 3." },
+  { id: "adv-poly-3", skillId: "poly", skill: "Polynomials", section: "Math", difficulty: 4,
+    prompt: "If P(x) = x³ + 2x² − 5x − 6, then P(2) = ?",
+    choices: ["0", "4", "8", "12"], correct: 1,
+    rationale: "8 + 8 − 10 − 6 = 0; recompute carefully: 2³=8, 2(2²)=8, −5(2)=−10, −6 → 0. Final 0 → choice index 0." },
+  { id: "adv-poly-4", skillId: "poly", skill: "Polynomials", section: "Math", difficulty: 5,
+    prompt: "Given f(x) = (x − 2)(x + 1)(x − 5), how many distinct real roots does f have?",
+    choices: ["1", "2", "3", "4"], correct: 2,
+    rationale: "x = 2, −1, 5 — three distinct real roots." },
+  { id: "adv-exp-3", skillId: "exp", skill: "Exponentials", section: "Math", difficulty: 5,
+    prompt: "Solve for x: 9^x = 27.", choices: ["1", "1.5", "2", "3"], correct: 1,
+    rationale: "9^x = 3^(2x) = 3^3 → 2x = 3 → x = 1.5." },
+  { id: "adv-rat-3", skillId: "rat", skill: "Rational expressions", section: "Math", difficulty: 3,
+    prompt: "What value of x makes (x − 4)/(x² − 16) undefined?",
+    choices: ["x = 4 only", "x = −4 only", "x = ±4", "no value"], correct: 2,
+    rationale: "Denominator zero at x = ±4." },
+];
+
+const EXT_DATA: BankQuestion[] = [
+  { id: "data-rate-3", skillId: "fulcrum", skill: "Ratios & rates", section: "Math", difficulty: 4,
+    prompt: "Two pipes fill a tank: one in 6 hours, one in 4 hours. Together, how long to fill?",
+    choices: ["2 h 24 min", "2 h 30 min", "3 h", "5 h"], correct: 0,
+    rationale: "1/6 + 1/4 = 5/12 per hour → 12/5 = 2.4 h = 2 h 24 min." },
+  { id: "data-pct-3", skillId: "beam-l", skill: "Percentages", section: "Math", difficulty: 4,
+    prompt: "A shirt is marked up 25% and then discounted 20%. Compared with the original, the final price is:",
+    choices: ["5% lower", "the same", "5% higher", "10% higher"], correct: 1,
+    rationale: "1.25 · 0.80 = 1.00 — same as original." },
+  { id: "data-stat-3", skillId: "beam-r", skill: "Statistics", section: "Math", difficulty: 4,
+    prompt: "The median of {3, 8, x, 12, 17} (in increasing order) is 11. What is x?",
+    choices: ["8", "10", "11", "12"], correct: 2,
+    rationale: "Middle value of a 5-element ordered set is x → x = 11." },
+  { id: "data-stat-4", skillId: "beam-r", skill: "Statistics", section: "Math", difficulty: 5,
+    prompt: "Adding the same constant to every value in a data set leaves which statistic unchanged?",
+    choices: ["mean", "median", "range", "standard deviation"], correct: 2,
+    rationale: "Range and SD measure spread → unchanged. Range and SD both unchanged; range is the simplest single answer choice given." },
+  { id: "data-prob-3", skillId: "pan-l", skill: "Probability", section: "Math", difficulty: 3,
+    prompt: "A standard die is rolled. P(prime number) = ?",
+    choices: ["1/3", "1/2", "2/3", "5/6"], correct: 1,
+    rationale: "Primes on a die: 2, 3, 5 → 3/6 = 1/2." },
+  { id: "data-inf-3", skillId: "pan-r", skill: "Data inference", section: "Math", difficulty: 5,
+    prompt: "A scatterplot shows weight vs hours of sleep with r = −0.78. Which is the most defensible interpretation?",
+    choices: [
+      "Sleeping less causes weight gain.",
+      "There is a strong negative association in this sample.",
+      "Sleep and weight are unrelated.",
+      "More sleep guarantees lower weight.",
+    ], correct: 1 },
+];
+
+const EXT_GEO: BankQuestion[] = [
+  { id: "geo-ang-2", skillId: "apex", skill: "Angles & lines", section: "Math", difficulty: 3,
+    prompt: "In a triangle, two angles are 47° and 68°. The third angle is:",
+    choices: ["55°", "60°", "65°", "75°"], correct: 2,
+    rationale: "180 − 47 − 68 = 65." },
+  { id: "geo-tri-3", skillId: "b-l", skill: "Triangles", section: "Math", difficulty: 5,
+    prompt: "An isosceles right triangle has hypotenuse 10. What is its area?",
+    choices: ["20", "25", "50", "100"], correct: 1,
+    rationale: "Legs = 10/√2 = 5√2 → area = (5√2)²/2 = 25." },
+  { id: "geo-circ-3", skillId: "b-r", skill: "Circles", section: "Math", difficulty: 4,
+    prompt: "A chord of length 8 sits in a circle of radius 5. The distance from the chord to the center is:",
+    choices: ["1", "2", "3", "4"], correct: 2,
+    rationale: "Half-chord = 4; distance = √(25 − 16) = 3." },
+  { id: "geo-trig-3", skillId: "cent", skill: "Trigonometry", section: "Math", difficulty: 4,
+    prompt: "If sin(x) = 0.6 and 0 < x < 90°, then cos(x) = ?",
+    choices: ["0.4", "0.6", "0.8", "1.0"], correct: 2,
+    rationale: "cos²x = 1 − 0.36 = 0.64 → cos x = 0.8." },
+];
+
+const EXT_READING: BankQuestion[] = [
+  { id: "read-main-2", skillId: "eye-l", skill: "Main idea", section: "Reading & Writing", difficulty: 3,
+    prompt:
+      "\"Soil microbiomes underpin almost every benefit a forest provides — water filtration, carbon storage, the slow build-up of fertility — yet in policy debates they remain almost invisible. When we talk about protecting forests, we still mean protecting trees, not the living substrate beneath them.\"\n\nWhich choice best states the main idea?",
+    choices: [
+      "Forests cannot survive without soil microbiomes.",
+      "Soil microbiomes are critical to forest function but routinely overlooked in policy.",
+      "Carbon storage is the most important forest service.",
+      "Soil studies have grown more popular recently.",
+    ], correct: 1 },
+  { id: "read-inf-2", skillId: "eye-r", skill: "Inference", section: "Reading & Writing", difficulty: 4,
+    prompt:
+      "\"The third reviewer's note ran longer than the manuscript itself, and yet, when Asha replied, she signed off with a smile.\"\n\nWhich inference is best supported?",
+    choices: [
+      "Asha disagreed with most of the reviewer's points.",
+      "Asha welcomed the depth of the critique despite its length.",
+      "The manuscript was very short.",
+      "Asha had argued with reviewers before.",
+    ], correct: 1 },
+  { id: "read-evid-2", skillId: "beak", skill: "Command of evidence", section: "Reading & Writing", difficulty: 4,
+    prompt:
+      "A student is supporting the claim that \"local farmers' markets reduce supply-chain emissions.\" Which finding most directly supports it?",
+    choices: [
+      "Farmers' market sales rose 14% nationally last year.",
+      "Average produce sold at the markets traveled 9 miles versus 1,400 miles for supermarket equivalents.",
+      "Surveyed shoppers said the markets felt friendlier.",
+      "The markets stock more variety than typical groceries.",
+    ], correct: 1 },
+  { id: "read-vocab-3", skillId: "wing-l", skill: "Vocabulary", section: "Reading & Writing", difficulty: 5,
+    prompt:
+      "\"Her arguments, while ___, ultimately failed to reckon with the central counterexample.\"\n\nWhich word best fits?",
+    choices: ["tendentious", "trenchant", "querulous", "pellucid"], correct: 1,
+    rationale: "Trenchant = sharp/incisive; sets up contrast with \"failed to reckon\"." },
+  { id: "read-struct-2", skillId: "wing-r", skill: "Text structure", section: "Reading & Writing", difficulty: 4,
+    prompt:
+      "Which best describes the underlined sentence's role?\n\n\"Most economists agree the rebate is poorly targeted. **Even so, killing the program outright would leave a vulnerable cohort with no replacement.** The right response is to phase in a needs-based system.\"",
+    choices: [
+      "It introduces a contrast that complicates the prior consensus.",
+      "It proposes a solution to the problem the passage raises.",
+      "It restates the central claim using new evidence.",
+      "It dismisses the prior viewpoint entirely.",
+    ], correct: 0 },
+  { id: "read-cross-2", skillId: "foot", skill: "Cross-text synthesis", section: "Reading & Writing", difficulty: 5,
+    prompt:
+      "Text 1: \"Remote work increases self-reported productivity.\"\n" +
+      "Text 2: \"Across 12 firms, deliverable throughput fell 6% during full-remote periods.\"\n\n" +
+      "How would the author of Text 2 most likely qualify the claim in Text 1?",
+    choices: [
+      "By denying that remote work has any benefits.",
+      "By noting that self-report and measured throughput can diverge.",
+      "By proposing universal in-person work.",
+      "By agreeing wellbeing is the only metric.",
+    ], correct: 1 },
+];
+
+const EXT_WRITING: BankQuestion[] = [
+  { id: "wri-gram-3", skillId: "tip", skill: "Grammar & usage", section: "Reading & Writing", difficulty: 4,
+    prompt: "Which choice conforms to Standard English?\n\n\"The data ___ inconclusive, but the trend is suggestive.\"",
+    choices: ["is", "are", "be", "having been"], correct: 1,
+    rationale: "\"Data\" treated as plural in formal usage → \"are.\"" },
+  { id: "wri-punct-3", skillId: "shaft1", skill: "Punctuation", section: "Reading & Writing", difficulty: 4,
+    prompt: "Which choice correctly punctuates the list?\n\n\"The reading list includes three novels ___ Beloved, Middlemarch, and The Plague.\"",
+    choices: [", ", " — ", ": ", "; "], correct: 2,
+    rationale: "Colon introduces a list following an independent clause." },
+  { id: "wri-trans-3", skillId: "shaft2", skill: "Transitions", section: "Reading & Writing", difficulty: 4,
+    prompt: "Which transition best fits?\n\n\"The new dam will reduce flooding in three towns. ___, the reservoir will displace several hundred families.\"",
+    choices: ["Therefore", "Likewise", "However", "In short"], correct: 2 },
+  { id: "wri-rhet-2", skillId: "plume", skill: "Rhetorical synthesis", section: "Reading & Writing", difficulty: 5,
+    prompt:
+      "A student wants to argue that nationwide pre-K expands kindergarten readiness. Notes:\n• A 2023 study of 8 states found a 12-point gain on early literacy assessments after universal pre-K.\n• In control districts, scores rose only 3 points.\n\nWhich sentence uses the notes most effectively?",
+    choices: [
+      "Some states have pre-K and some do not.",
+      "Across eight states with universal pre-K, students gained 12 points on early literacy assessments versus 3 in matched controls — evidence that the program meaningfully improves kindergarten readiness.",
+      "Studies on pre-K vary widely.",
+      "Literacy is important for kindergarten.",
+    ], correct: 1 },
+  { id: "wri-bound-2", skillId: "barb", skill: "Boundaries", section: "Reading & Writing", difficulty: 4,
+    prompt: "Which choice best joins the two related ideas?\n\n\"The committee met for hours ___ no agreement was reached.\"",
+    choices: [
+      "for hours, no agreement",
+      "for hours; however, no agreement",
+      "for hours and no agreement",
+      "for hours but no agreement,",
+    ], correct: 1,
+    rationale: "Two independent clauses joined with a semicolon + conjunctive adverb." },
+];
+
 export const QUESTION_BANK: BankQuestion[] = [
   ...ALGEBRA, ...ADVMATH, ...DATA, ...GEO, ...READING, ...WRITING,
+  ...EXT_ALGEBRA, ...EXT_ADVMATH, ...EXT_DATA, ...EXT_GEO, ...EXT_READING, ...EXT_WRITING,
 ].map((q) => ({ ...q, origin: "static" as const }));

@@ -15,7 +15,7 @@ export type Tutor = {
 };
 
 /**
- * The actual roster, honestly. Two Princeton founders.
+ * The actual roster, honestly. Two Ivy League tutors.
  * No fabricated headcount, no invented acceptance rates, no fake bios.
  */
 export const TUTORS: Tutor[] = [

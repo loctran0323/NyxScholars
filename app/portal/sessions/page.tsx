@@ -163,7 +163,7 @@ export default async function SessionsPage() {
  <div>
  <p className="text-[13px] font-semibold text-[var(--text-1)] mb-0.5">Need more sessions this month?</p>
  <p className="text-[12.5px] text-[var(--text-2)] leading-relaxed">
- As a Scholar subscriber, extra sessions are <span className="text-[var(--accent)] font-semibold">$85/hr</span> — 15% off the standard rate.{" "}
+ As a Scholar subscriber, extra sessions are <span className="text-[var(--accent)] font-semibold">$140/hr</span> — 12% off the standard rate.{" "}
  <Link href="/portal/messages" className="text-[var(--accent)] underline underline-offset-2 hover:text-[var(--accent-bright)] transition-colors">
  Message us to book one.
  </Link>
@@ -172,7 +172,7 @@ export default async function SessionsPage() {
  </div>
  ) : (
  <p className="text-[12px] text-[var(--text-3)]">
- Once you&apos;ve used all 4, extra sessions are available at $85/hr (15% off).
+ Once you&apos;ve used all 4, extra sessions are available at $140/hr (12% off).
  </p>
  )}
  </div>

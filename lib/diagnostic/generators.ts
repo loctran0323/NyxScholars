@@ -400,11 +400,252 @@ function genInference(seed: number): BankQuestion {
   };
 }
 
+/** Data inference: best fit value. */
+function genFit(seed: number): BankQuestion {
+  const r = rng(seed);
+  const slope = pickInt(r, 1, 5);
+  const intercept = pickInt(r, -3, 8);
+  const x = pickInt(r, 4, 14);
+  const y = slope * x + intercept;
+  const { choices, correctIdx } = withChoices(y, [y + 1, y - 1, y + slope], r);
+  return {
+    id: `gen-fit-${seed}`, skillId: "pan-r",
+    skill: meta("pan-r").name, section: "Math", difficulty: 3,
+    prompt: `A line of best fit is y = ${slope}x + ${intercept}. What is the predicted y when x = ${x}?`,
+    choices, correct: correctIdx,
+    rationale: `${slope}·${x} + ${intercept} = ${y}.`,
+  };
+}
+
+/** Circle: area / circumference. */
+function genCircle(seed: number): BankQuestion {
+  const r = rng(seed);
+  const radius = pickInt(r, 3, 12);
+  const ans = `${2 * radius}π`;
+  const distractors = [`${radius}π`, `${radius * radius}π`, `${4 * radius}π`];
+  const choices = shuffle([ans, ...distractors], r);
+  return {
+    id: `gen-circ-${seed}`, skillId: "b-r",
+    skill: meta("b-r").name, section: "Math", difficulty: 3,
+    prompt: `A circle has radius ${radius}. What is its circumference?`,
+    choices, correct: choices.indexOf(ans),
+    rationale: `C = 2πr = ${2 * radius}π.`,
+  };
+}
+
+/** Angles: complementary / supplementary. */
+function genAngles(seed: number): BankQuestion {
+  const r = rng(seed);
+  const a = pickInt(r, 25, 80);
+  const ans = 180 - a;
+  const { choices, correctIdx } = withChoices(
+    ans, [a, 90 - a, 360 - a], r,
+    (n) => `${n}°`
+  );
+  return {
+    id: `gen-ang-${seed}`, skillId: "apex",
+    skill: meta("apex").name, section: "Math", difficulty: 2,
+    prompt: `Two angles are supplementary and one measures ${a}°. What is the other?`,
+    choices, correct: correctIdx,
+    rationale: `Supplementary angles sum to 180°.`,
+  };
+}
+
+/** Trig: special right triangles. */
+function genTrig(seed: number): BankQuestion {
+  const r = rng(seed);
+  const items = [
+    { p: "sin(30°)", a: "1/2", d: ["√3/2", "1", "√2/2"] },
+    { p: "cos(60°)", a: "1/2", d: ["√3/2", "1", "√2/2"] },
+    { p: "tan(45°)", a: "1",   d: ["0", "√3", "√3/3"] },
+    { p: "sin(45°)", a: "√2/2", d: ["1/2", "√3/2", "1"] },
+    { p: "cos(30°)", a: "√3/2", d: ["1/2", "√2/2", "1"] },
+  ];
+  const item = items[seed % items.length];
+  const choices = shuffle([item.a, ...item.d], r);
+  return {
+    id: `gen-trig-${seed}`, skillId: "cent",
+    skill: meta("cent").name, section: "Math",
+    difficulty: 4,
+    prompt: `What is the exact value of ${item.p}?`,
+    choices, correct: choices.indexOf(item.a),
+    rationale: `Standard special-angle value.`,
+  };
+}
+
+/** Main idea — short editorial-style passages. */
+function genMainIdea(seed: number): BankQuestion {
+  const r = rng(seed);
+  const items = [
+    {
+      p: "While honeybees dominate pollination headlines, native bees pollinate a far broader range of wild plants. Conservation efforts focused only on managed colonies may overlook irreplaceable native species.",
+      a: "Native bees deserve more attention in pollination conservation.",
+      d: ["Honeybees are the most efficient pollinators.", "Native bees are difficult to study.", "Pollination is in crisis."],
+    },
+    {
+      p: "Quiet streets often track with shorter commutes and lower asthma rates, but they correlate with higher housing prices, which can displace the residents who would benefit most.",
+      a: "Quiet-street benefits can be undercut by displacement effects.",
+      d: ["Quiet streets cause asthma reductions.", "Housing prices are unrelated to street design.", "All neighborhoods should be quiet."],
+    },
+  ];
+  const item = items[seed % items.length];
+  const choices = shuffle([item.a, ...item.d], r);
+  return {
+    id: `gen-main-${seed}`, skillId: "eye-l",
+    skill: meta("eye-l").name, section: "Reading & Writing", difficulty: 3,
+    prompt: `"${item.p}"\n\nWhich choice best states the main idea?`,
+    choices, correct: choices.indexOf(item.a),
+  };
+}
+
+/** Command-of-evidence templates. */
+function genEvidence(seed: number): BankQuestion {
+  const r = rng(seed);
+  const items = [
+    {
+      claim: "Library investment improves childhood reading scores.",
+      a: "Districts that doubled per-capita library funding saw a 9-point gain in third-grade reading.",
+      d: [
+        "Most parents report enjoying library visits.",
+        "Library staffing has held steady for a decade.",
+        "Public-library buildings are aging.",
+      ],
+    },
+    {
+      claim: "Bike-lane build-outs reduce serious cyclist injuries.",
+      a: "Cities that added 50+ km of protected lanes recorded 38% fewer serious cyclist injuries within two years.",
+      d: [
+        "Cyclists report feeling safer in bike lanes.",
+        "Bike-lane construction is expensive.",
+        "Many drivers oppose new bike lanes.",
+      ],
+    },
+  ];
+  const item = items[seed % items.length];
+  const choices = shuffle([item.a, ...item.d], r);
+  return {
+    id: `gen-evid-${seed}`, skillId: "beak",
+    skill: meta("beak").name, section: "Reading & Writing", difficulty: 4,
+    prompt: `Which finding most directly supports the claim that "${item.claim}"?`,
+    choices, correct: choices.indexOf(item.a),
+  };
+}
+
+/** Text structure templates. */
+function genStruct(seed: number): BankQuestion {
+  const r = rng(seed);
+  const items = [
+    {
+      stem: "It introduces a counterexample that complicates the preceding generalization.",
+      d: [
+        "It restates the topic in different words.",
+        "It concludes with a recommendation.",
+        "It supplies an anecdote that supports the topic sentence.",
+      ],
+    },
+    {
+      stem: "It provides background context for the claim that follows.",
+      d: [
+        "It refutes the central thesis.",
+        "It restates the conclusion.",
+        "It offers a personal anecdote.",
+      ],
+    },
+  ];
+  const item = items[seed % items.length];
+  const choices = shuffle([item.stem, ...item.d], r);
+  return {
+    id: `gen-struct-${seed}`, skillId: "wing-r",
+    skill: meta("wing-r").name, section: "Reading & Writing", difficulty: 3,
+    prompt: `Which choice best describes the function of the underlined sentence within the passage?`,
+    choices, correct: choices.indexOf(item.stem),
+  };
+}
+
+/** Cross-text synthesis templates. */
+function genCross(seed: number): BankQuestion {
+  const r = rng(seed);
+  const items = [
+    {
+      t1: "Studies show four-day work weeks raise reported wellbeing.",
+      t2: "In manufacturing trials, four-day weeks reduced output by 8%.",
+      a: "By cautioning that wellbeing gains may come with productivity costs.",
+      d: [
+        "By denying that any wellbeing gains exist.",
+        "By proposing universal adoption.",
+        "By agreeing wellbeing is the only metric.",
+      ],
+    },
+  ];
+  const item = items[seed % items.length];
+  const choices = shuffle([item.a, ...item.d], r);
+  return {
+    id: `gen-cross-${seed}`, skillId: "foot",
+    skill: meta("foot").name, section: "Reading & Writing", difficulty: 4,
+    prompt: `Text 1: "${item.t1}"\nText 2: "${item.t2}"\n\nHow would the author of Text 2 most likely respond to the claim in Text 1?`,
+    choices, correct: choices.indexOf(item.a),
+  };
+}
+
+/** Rhetorical synthesis templates. */
+function genRhetSyn(seed: number): BankQuestion {
+  const r = rng(seed);
+  const items = [
+    {
+      goal: "argue that public libraries should expand digital lending",
+      notes: [
+        "2024 survey: 64% of patrons prefer ebooks for convenience.",
+        "Three nearby branches saw circulation rise 22% after expanding ebook holdings.",
+      ],
+      a: "Patrons increasingly prefer ebooks (64% in a 2024 survey), and the three branches that expanded their digital catalog saw circulation rise 22% — evidence that further investment in digital lending would broaden library reach.",
+      d: [
+        "Some libraries have ebooks now.",
+        "A 2024 survey was conducted recently.",
+        "Convenience matters to library patrons today.",
+      ],
+    },
+  ];
+  const item = items[seed % items.length];
+  const choices = shuffle([item.a, ...item.d], r);
+  return {
+    id: `gen-rhet-${seed}`, skillId: "plume",
+    skill: meta("plume").name, section: "Reading & Writing", difficulty: 4,
+    prompt: `A student wants to ${item.goal}. Notes:\n${item.notes.map((n) => `• ${n}`).join("\n")}\n\nWhich sentence uses the notes most effectively?`,
+    choices, correct: choices.indexOf(item.a),
+  };
+}
+
+/** Sentence-boundary templates. */
+function genBoundary(seed: number): BankQuestion {
+  const r = rng(seed);
+  const items = [
+    {
+      stem: "The proposal was ambitious, it required a new tax.",
+      a: "ambitious. It required",
+      d: ["ambitious it required", "ambitious, requiring,", "ambitious requiring"],
+    },
+    {
+      stem: "We waited an hour, the speaker never arrived.",
+      a: "an hour. The speaker",
+      d: ["an hour the speaker", "an hour, however, the speaker", "an hour and, the speaker"],
+    },
+  ];
+  const item = items[seed % items.length];
+  const choices = shuffle([item.a, ...item.d], r);
+  return {
+    id: `gen-bound-${seed}`, skillId: "barb",
+    skill: meta("barb").name, section: "Reading & Writing", difficulty: 3,
+    prompt: `Which choice best fixes the sentence boundary?\n\n"${item.stem}"`,
+    choices, correct: choices.indexOf(item.a),
+  };
+}
+
 /* ─── Registry ─────────────────────────────────────────────────────────── */
 
 export type Generator = (seed: number) => BankQuestion;
 
 export const GENERATORS: Record<string, Generator> = {
+  // Math
   "lin-eq":   genLinearEq,
   "lin-sys":  genSystem,
   "lin-ineq": genIneq,
@@ -416,12 +657,23 @@ export const GENERATORS: Record<string, Generator> = {
   "beam-l":   genPercent,
   "beam-r":   genMean,
   "pan-l":    genProb,
+  "pan-r":    genFit,
   "b-l":      genPyth,
+  "b-r":      genCircle,
+  "apex":     genAngles,
+  "cent":     genTrig,
+  // R&W
   "wing-l":   genVocab,
   "tip":      genAgreement,
   "shaft1":   genPunct,
   "shaft2":   genTransition,
   "eye-r":    genInference,
+  "eye-l":    genMainIdea,
+  "beak":     genEvidence,
+  "wing-r":   genStruct,
+  "foot":     genCross,
+  "plume":    genRhetSyn,
+  "barb":     genBoundary,
 };
 
 /** Mint `count` deterministic items for `skillId` if a generator exists. */

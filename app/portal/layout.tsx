@@ -67,8 +67,8 @@ export default async function PortalLayout({
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
         {/* Mobile spacer for top bar */}
         <div className="md:hidden h-14 shrink-0" />
-        <main className="flex-1 overflow-y-auto">
-          <div className="max-w-5xl mx-auto px-5 py-7 md:px-8 md:py-9">
+        <main className="flex-1 overflow-y-auto overscroll-contain">
+          <div className="max-w-5xl mx-auto px-5 py-7 md:px-8 md:py-9 pb-32">
             {children}
           </div>
         </main>
