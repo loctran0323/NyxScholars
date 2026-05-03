@@ -82,9 +82,10 @@ const teacherNavGroups: NavGroup[] = [
   {
     label: "Tutoring",
     items: [
-      { href: "/portal/teacher",       label: "My students",  icon: LayoutDashboard, exact: true },
-      { href: "/portal/teacher/forum", label: "Tutor forum",  icon: MessageSquare },
-      { href: "/portal/messages",      label: "Messages",     icon: MessageSquare, badgeKey: "messages" },
+      { href: "/portal/teacher",              label: "My students",  icon: LayoutDashboard, exact: true },
+      { href: "/portal/teacher/availability", label: "Availability", icon: CalendarPlus },
+      { href: "/portal/teacher/forum",        label: "Tutor forum",  icon: MessageSquare },
+      { href: "/portal/messages",             label: "Messages",     icon: MessageSquare, badgeKey: "messages" },
     ],
   },
   {

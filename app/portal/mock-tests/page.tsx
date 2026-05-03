@@ -8,56 +8,7 @@ export const metadata = {
   description: "Full-length digital SAT/ACT mocks, scored within the portal.",
 };
 
-interface MockTest {
-  id: string;
-  title: string;
-  test: "SAT" | "ACT";
-  durationMin: number;
-  questions: number;
-  released: string;
-  status: "available" | "coming-soon" | "completed";
-  scoreRange?: { math: number; rw: number; composite: number };
-}
-
-const MOCKS: MockTest[] = [
-  {
-    id: "nyx-sat-2026-04",
-    title: "Nyx SAT Mock #4 (April 2026)",
-    test: "SAT",
-    durationMin: 134,
-    questions: 98,
-    released: "Apr 4, 2026",
-    status: "available",
-  },
-  {
-    id: "nyx-sat-2026-03",
-    title: "Nyx SAT Mock #3 (March 2026)",
-    test: "SAT",
-    durationMin: 134,
-    questions: 98,
-    released: "Mar 7, 2026",
-    status: "completed",
-    scoreRange: { math: 740, rw: 700, composite: 1440 },
-  },
-  {
-    id: "nyx-act-2026-04",
-    title: "Nyx ACT Mock #2 (April 2026)",
-    test: "ACT",
-    durationMin: 175,
-    questions: 215,
-    released: "Apr 18, 2026",
-    status: "available",
-  },
-  {
-    id: "nyx-sat-2026-05",
-    title: "Nyx SAT Mock #5 (May 2026)",
-    test: "SAT",
-    durationMin: 134,
-    questions: 98,
-    released: "May 2, 2026",
-    status: "coming-soon",
-  },
-];
+import { MOCKS } from "./content";
 
 export default function MockTestsPage() {
   return (

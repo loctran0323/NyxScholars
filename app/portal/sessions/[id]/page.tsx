@@ -15,7 +15,8 @@ import { Badge } from "@/components/ui/badge";
 import { SessionActions } from "@/components/portal/SessionActions";
 import { SessionWorkspace } from "@/components/portal/SessionWorkspace";
 import { RescheduleDialog } from "@/components/portal/RescheduleDialog";
-import type { Session } from "@/types/portal";
+import { SessionSummaryComposer } from "@/components/portal/SessionSummaryComposer";
+import type { Session, Profile } from "@/types/portal";
 
 function statusVariant(status: string): "gold" | "blue" | "green" | "red" | "default" {
  switch (status) {
@@ -130,16 +131,27 @@ export default async function SessionDetailPage({
  const { data: { user } } = await supabase.auth.getUser();
  if (!user) redirect("/portal/login");
 
- const { data: session } = await supabase
- .from("sessions")
- .select("*")
- .eq("id", id)
- .eq("student_id", user.id)
+ const { data: viewerProfile } = await supabase
+ .from("profiles")
+ .select("role")
+ .eq("id", user.id)
  .single();
+ const isTutor = (viewerProfile as Pick<Profile, "role"> | null)?.role === "teacher";
+
+ // Tutors can view sessions for students assigned to them; students view their own.
+ const { data: session } = isTutor
+ ? await supabase.from("sessions").select("*").eq("id", id).single()
+ : await supabase.from("sessions").select("*").eq("id", id).eq("student_id", user.id).single();
 
  if (!session) notFound();
 
- const s = session as Session;
+ const s = session as Session & {
+ recording_url?: string | null;
+ transcript_url?: string | null;
+ summary_topics?: string[] | null;
+ summary_mistakes?: string[] | null;
+ summary_homework?: string[] | null;
+ };
 
  return (
  <div className="max-w-2xl space-y-5">
@@ -225,12 +237,21 @@ export default async function SessionDetailPage({
  <SessionWorkspace
  sessionId={s.id}
  media={{
- recordingUrl:    (s as Session & { recording_url?: string | null }).recording_url ?? undefined,
- transcriptUrl:   (s as Session & { transcript_url?: string | null }).transcript_url ?? undefined,
- summaryTopics:   (s as Session & { summary_topics?: string[] | null }).summary_topics ?? undefined,
- summaryHomework: (s as Session & { summary_homework?: string[] | null }).summary_homework ?? undefined,
+ recordingUrl:    s.recording_url    ?? undefined,
+ transcriptUrl:   s.transcript_url   ?? undefined,
+ summaryTopics:   s.summary_topics   ?? undefined,
+ summaryHomework: s.summary_homework ?? undefined,
  }}
  />
+
+ {isTutor && (
+ <SessionSummaryComposer
+ sessionId={s.id}
+ initialTopics={s.summary_topics ?? undefined}
+ initialMistakes={s.summary_mistakes ?? undefined}
+ initialHomework={s.summary_homework ?? undefined}
+ />
+ )}
  </div>
  );
 }

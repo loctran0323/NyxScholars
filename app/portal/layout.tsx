@@ -1,5 +1,6 @@
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { PortalSidebar } from "@/components/portal/PortalSidebar";
+import { WelcomeBootstrap } from "@/components/portal/WelcomeBootstrap";
 import Image from "next/image";
 import type { Profile } from "@/types/portal";
 
@@ -83,6 +84,7 @@ export default async function PortalLayout({
             {children}
           </div>
         </main>
+        <WelcomeBootstrap />
       </div>
     </div>
   );

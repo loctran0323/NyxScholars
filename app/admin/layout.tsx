@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LayoutDashboard, Users, GraduationCap, DollarSign, FileSearch, Wallet, Sparkles, Tag } from "lucide-react";
+import { LayoutDashboard, Users, GraduationCap, DollarSign, FileSearch, Wallet, Sparkles, Tag, Megaphone } from "lucide-react";
 
 const NAV = [
   { href: "/admin",           label: "Overview",  icon: LayoutDashboard },
@@ -7,6 +7,7 @@ const NAV = [
   { href: "/admin/students",  label: "Students",  icon: Users },
   { href: "/admin/questions", label: "Questions", icon: Sparkles },
   { href: "/admin/pricing",   label: "Pricing",   icon: Tag },
+  { href: "/admin/broadcast", label: "Broadcast", icon: Megaphone },
   { href: "/admin/revenue",   label: "Revenue",   icon: DollarSign },
   { href: "/admin/payouts",   label: "Payouts",   icon: Wallet },
   { href: "/admin/audit",     label: "Audit",     icon: FileSearch },

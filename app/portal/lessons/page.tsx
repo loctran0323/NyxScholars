@@ -8,59 +8,7 @@ export const metadata = {
   description: "3–5 minute videos by Nyx tutors covering one skill at a time.",
 };
 
-interface Lesson {
-  id: string;
-  title: string;
-  tutor: string;
-  durationSec: number;
-  skill: string;
-  level: "Beginner" | "Intermediate" | "Advanced";
-  description: string;
-  thumbnail: string;
-}
-
-const LESSONS: Lesson[] = [
-  {
-    id: "sat-quad-1",
-    title: "Quadratics: the discriminant trick",
-    tutor: "Anika, Princeton '26",
-    durationSec: 280,
-    skill: "Algebra & functions",
-    level: "Intermediate",
-    description: "A 4-minute walkthrough of when the discriminant tells you the answer faster than factoring.",
-    thumbnail: "/design/lesson-quadratics.jpg",
-  },
-  {
-    id: "sat-rw-pacing",
-    title: "Reading & Writing pacing under timer",
-    tutor: "Ben, Yale '25",
-    durationSec: 320,
-    skill: "Pacing",
-    level: "Beginner",
-    description: "How to budget 53 seconds per question without rushing the long-passage questions.",
-    thumbnail: "/design/lesson-pacing.jpg",
-  },
-  {
-    id: "act-science",
-    title: "ACT Science: skim the chart, skip the prose",
-    tutor: "Anika, Princeton '26",
-    durationSec: 240,
-    skill: "ACT Science strategy",
-    level: "Beginner",
-    description: "Most ACT Science questions are answerable from charts alone. Here's the order.",
-    thumbnail: "/design/lesson-act-science.jpg",
-  },
-  {
-    id: "essay-hook",
-    title: "Personal statement: the first sentence",
-    tutor: "Daniela, Stanford '24",
-    durationSec: 360,
-    skill: "Admissions essays",
-    level: "Advanced",
-    description: "Five hooks that work, two that don't, and how to pick yours.",
-    thumbnail: "/design/lesson-essay.jpg",
-  },
-];
+import { LESSONS } from "./content";
 
 export default function LessonsPage() {
   return (
