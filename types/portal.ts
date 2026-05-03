@@ -18,6 +18,8 @@ export interface Profile {
   plan_status: PlanStatus | null;
   plan_subject: string | null; // for session plan: 'SAT' | 'ACT' | 'AP' | 'College Admissions'
   plan_addons: string[] | null; // e.g. ['counseling']
+  // arbitrary metadata bag — stripe_customer_id, welcome_sent_at, diagnostic_summary, etc.
+  notif_prefs?: Record<string, unknown> | null;
 }
 
 export interface Assignment {

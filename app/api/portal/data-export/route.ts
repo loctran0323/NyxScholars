@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { getPortalApi } from "@/lib/portal-auth";
 import { audit } from "@/lib/audit";
 import { clientKey } from "@/lib/rate-limit";
 
@@ -7,15 +7,12 @@ export const runtime = "nodejs";
 
 /**
  * GET /api/portal/data-export — emit a JSON blob of every row tied to the
- * authenticated user (profile + sessions + messages + diagnostic attempts +
- * homework + notifications). Satisfies GDPR Article 15 / CCPA right-to-know.
+ * authenticated user. Satisfies GDPR Article 15 / CCPA right-to-know.
  */
 export async function GET(req: Request) {
-  const sb = await getSupabaseServerClient();
-  if (!sb) return NextResponse.json({ error: "Auth not configured" }, { status: 503 });
-
-  const { data: { user } } = await sb.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const auth = await getPortalApi();
+  if (!auth.ok) return auth.response;
+  const { supabase: sb, user } = auth;
 
   const [profile, sessions, messages, attempts, homework, notifications, srs] = await Promise.all([
     sb.from("profiles").select("*").eq("id", user.id).single(),
@@ -37,13 +34,9 @@ export async function GET(req: Request) {
   });
 
   const exported = {
-    exported_at:        new Date().toISOString(),
-    schema_version:     "1.0",
-    user: {
-      id:    user.id,
-      email: user.email,
-      created_at: user.created_at,
-    },
+    exported_at:    new Date().toISOString(),
+    schema_version: "1.0",
+    user: { id: user.id, email: user.email, created_at: user.created_at },
     profile:       profile.data,
     sessions:      sessions.data,
     messages:      messages.data,

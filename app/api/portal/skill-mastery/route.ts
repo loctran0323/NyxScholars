@@ -1,30 +1,22 @@
 import { NextResponse } from "next/server";
-import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { getPortalApi } from "@/lib/portal-auth";
 
 export const runtime = "nodejs";
 
 /**
- * GET /api/portal/skill-mastery
- *
- * Aggregates the authenticated user's diagnostic_attempts and homework
- * results into per-skill mastery values, returning a `Record<skill_id, number>`
- * in [0, 1]. The /portal/consultation page consumes this to render the
- * student's actual constellation map (instead of the mocked sample data).
- *
- * Skills with zero attempts are omitted; the consumer can fall back to
- * the default mastery from the static constellation data.
+ * GET /api/portal/skill-mastery — aggregates the authenticated user's
+ * diagnostic_attempts into per-skill mastery values in [0, 1]. The
+ * /portal/consultation page consumes this to render the student's actual
+ * constellation map instead of the mocked sample data.
  */
 export async function GET() {
-  const sb = await getSupabaseServerClient();
-  if (!sb) return NextResponse.json({ mastery: {}, attempts: 0 });
+  const auth = await getPortalApi({ onMissing: NextResponse.json({ mastery: {}, attempts: 0 }) });
+  if (!auth.ok) return auth.response;
 
-  const { data: { user } } = await sb.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-  const { data, error } = await sb
+  const { data, error } = await auth.supabase
     .from("diagnostic_attempts")
     .select("skill_id, correct")
-    .eq("user_id", user.id);
+    .eq("user_id", auth.user.id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
   const counts = new Map<string, { right: number; total: number }>();
@@ -35,13 +27,12 @@ export async function GET() {
     counts.set(row.skill_id, cur);
   }
 
+  // Bayesian smoothing toward 0.5 with a virtual 4-attempt prior so a single
+  // right/wrong doesn't yank the bar to 0% or 100%.
   const mastery: Record<string, number> = {};
   let totalAttempts = 0;
   for (const [skill, c] of counts) {
-    // Bayesian smoothing toward 0.5 with a virtual 4-attempt prior so a
-    // single right/wrong doesn't yank the bar to 0% or 100%.
-    const smoothed = (c.right + 2) / (c.total + 4);
-    mastery[skill] = Math.max(0, Math.min(1, smoothed));
+    mastery[skill] = Math.max(0, Math.min(1, (c.right + 2) / (c.total + 4)));
     totalAttempts += c.total;
   }
 

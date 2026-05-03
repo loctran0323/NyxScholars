@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import crypto from "node:crypto";
-import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { getPortalApi, readJson } from "@/lib/portal-auth";
 import { getServiceRoleClient } from "@/lib/supabase";
 import { sendEmail } from "@/lib/email";
 import { audit } from "@/lib/audit";
@@ -21,29 +21,31 @@ const Confirm = z.object({
   token:   z.string().min(8),
 });
 
-/** POST → email a one-click confirm link to the parent. */
-export async function POST(req: Request) {
-  const sb = await getSupabaseServerClient();
-  if (!sb) return NextResponse.json({ error: "Auth not configured" }, { status: 503 });
-  const { data: { user } } = await sb.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-  const parsed = Send.safeParse(await req.json().catch(() => null));
-  if (!parsed.success) return NextResponse.json({ error: "Invalid", details: parsed.error.issues }, { status: 400 });
-
-  const token = crypto
+function consentToken(userId: string, parentEmail: string): string {
+  return crypto
     .createHmac("sha256", process.env.SUPABASE_SERVICE_ROLE_KEY ?? "dev-secret")
-    .update(`${user.id}:${parsed.data.parent_email}`)
+    .update(`${userId}:${parentEmail}`)
     .digest("hex")
     .slice(0, 32);
+}
 
-  await sb
+/** POST → email a one-click confirm link to the parent. */
+export async function POST(req: Request) {
+  const auth = await getPortalApi();
+  if (!auth.ok) return auth.response;
+
+  const parsed = await readJson(req, Send);
+  if (!parsed.ok) return parsed.response;
+
+  const token = consentToken(auth.user.id, parsed.data.parent_email);
+
+  await auth.supabase
     .from("profiles")
     .update({
       parent_name:  parsed.data.parent_name,
       parent_email: parsed.data.parent_email,
     })
-    .eq("id", user.id);
+    .eq("id", auth.user.id);
 
   await sendEmail({
     to: parsed.data.parent_email,
@@ -51,12 +53,12 @@ export async function POST(req: Request) {
     template: "parental.consent",
     props: {
       studentName: parsed.data.student_name ?? "your student",
-      consentUrl:  `${SITE_URL}/api/portal/parental-consent?user_id=${user.id}&token=${token}`,
+      consentUrl:  `${SITE_URL}/api/portal/parental-consent?user_id=${auth.user.id}&token=${token}`,
     },
   });
 
   await audit({
-    actorId: user.id, actorEmail: user.email ?? null, subjectId: user.id,
+    actorId: auth.user.id, actorEmail: auth.user.email ?? null, subjectId: auth.user.id,
     action: "parental_consent.email_sent",
     details: { parent_email: parsed.data.parent_email },
   });
@@ -67,28 +69,21 @@ export async function POST(req: Request) {
 /** GET → verify the token and stamp the consent timestamp. */
 export async function GET(req: Request) {
   const url = new URL(req.url);
-  const userId = url.searchParams.get("user_id");
-  const token  = url.searchParams.get("token");
-  const parsed = Confirm.safeParse({ user_id: userId, token });
+  const parsed = Confirm.safeParse({
+    user_id: url.searchParams.get("user_id"),
+    token:   url.searchParams.get("token"),
+  });
   if (!parsed.success) return NextResponse.json({ error: "Bad link" }, { status: 400 });
 
   const admin = getServiceRoleClient();
   if (!admin) return NextResponse.json({ error: "Service role not configured" }, { status: 503 });
 
   const { data: profile } = await admin
-    .from("profiles")
-    .select("parent_email")
-    .eq("id", parsed.data.user_id)
-    .maybeSingle();
+    .from("profiles").select("parent_email")
+    .eq("id", parsed.data.user_id).maybeSingle();
   if (!profile?.parent_email) return NextResponse.json({ error: "Profile not found" }, { status: 404 });
 
-  const expected = crypto
-    .createHmac("sha256", process.env.SUPABASE_SERVICE_ROLE_KEY ?? "dev-secret")
-    .update(`${parsed.data.user_id}:${profile.parent_email}`)
-    .digest("hex")
-    .slice(0, 32);
-
-  if (expected !== parsed.data.token) {
+  if (consentToken(parsed.data.user_id, profile.parent_email) !== parsed.data.token) {
     return NextResponse.json({ error: "Token mismatch" }, { status: 403 });
   }
 

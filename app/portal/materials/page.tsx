@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { BookOpen, ExternalLink, FileText, Video, PenTool, PlayCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { PortalHero } from "@/components/portal/PortalHero";
 import { cn } from "@/lib/utils";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import type { Profile, PlanType } from "@/types/portal";
@@ -161,13 +162,13 @@ export default function MaterialsPage() {
 
   return (
     <div>
-      <div className="mb-7">
-        <p className="text-[13px] text-[var(--text-3)] uppercase tracking-wider font-semibold mb-1">Portal</p>
-        <h1 className="text-[26px] font-bold text-[var(--text-1)]">Practice Materials</h1>
-        <p className="text-[var(--text-2)] mt-1 text-[14px]">
-          Curated resources — handpicked by your Nyx founders.
-        </p>
-      </div>
+      <PortalHero
+        eyebrow="Portal"
+        title="Practice library"
+        italic="curated"
+        subtitle="Hand-picked by your Nyx founders. Filtered by what's covered on your plan."
+      />
+
 
       {/* Session plan paywall */}
       {accessExpired && (

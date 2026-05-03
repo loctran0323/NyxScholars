@@ -1,31 +1,17 @@
-import { getSupabaseServerClient } from "@/lib/supabase/server";
-import { redirect, notFound } from "next/navigation";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import { format } from "date-fns";
 import {
- ArrowLeft,
- Calendar,
- Clock,
- User,
- Video,
- ExternalLink,
- AlertCircle,
+  ArrowLeft, Calendar, Clock, User, Video, ExternalLink, AlertCircle,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { SessionActions } from "@/components/portal/SessionActions";
 import { SessionWorkspace } from "@/components/portal/SessionWorkspace";
 import { RescheduleDialog } from "@/components/portal/RescheduleDialog";
 import { SessionSummaryComposer } from "@/components/portal/SessionSummaryComposer";
+import { requirePortalUser } from "@/lib/portal-auth";
+import { sessionStatusVariant } from "@/lib/sessions";
 import type { Session, Profile } from "@/types/portal";
-
-function statusVariant(status: string): "gold" | "blue" | "green" | "red" | "default" {
- switch (status) {
- case "confirmed": return "blue";
- case "completed": return "green";
- case "cancelled": return "red";
- default: return "gold";
- }
-}
 
 function VideoCallSection({ session }: { session: Session }) {
  const now = Date.now();
@@ -125,11 +111,7 @@ export default async function SessionDetailPage({
  params: Promise<{ id: string }>;
 }) {
  const { id } = await params;
- const supabase = await getSupabaseServerClient();
- if (!supabase) redirect("/portal/login");
-
- const { data: { user } } = await supabase.auth.getUser();
- if (!user) redirect("/portal/login");
+ const { supabase, user } = await requirePortalUser();
 
  const { data: viewerProfile } = await supabase
  .from("profiles")
@@ -172,7 +154,7 @@ export default async function SessionDetailPage({
  <h1 className="text-[20px] text-[var(--text-1)]">{s.subject}</h1>
  <p className="text-[13px] text-[var(--text-3)] mt-0.5">Session #{s.id.slice(0, 8).toUpperCase()}</p>
  </div>
- <Badge variant={statusVariant(s.status)} className="shrink-0">
+ <Badge variant={sessionStatusVariant(s.status)} className="shrink-0">
  {s.status}
  </Badge>
  </div>

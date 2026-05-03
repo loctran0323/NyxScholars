@@ -1,163 +1,141 @@
 import Link from "next/link";
-import { ShieldCheck, CalendarPlus, MessageSquare, Sparkles, Award } from "lucide-react";
-import { TUTORS, type Tutor } from "@/lib/mock/tutors";
+import {
+  ShieldCheck, CalendarPlus, MessageSquare, Sparkles, Award, Users, Hourglass,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip } from "@/components/ui/tooltip";
-import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { PortalHero } from "@/components/portal/PortalHero";
+import { PortalSection } from "@/components/portal/PortalSection";
+import { EmptyTile } from "@/components/portal/EmptyTile";
+import { requirePortalUser } from "@/lib/portal-auth";
+import { initials } from "@/lib/sessions";
 
-export const metadata = { title: "Meet your matched tutors" };
+export const metadata = { title: "Your tutor match · Nyx" };
 
 interface AssignmentRow {
-  id: string;
+  id:         string;
   teacher_id: string;
-  subject: string | null;
-  tutor: { full_name: string | null; school: string | null; verified_at: string | null } | null;
-}
-
-interface MatchedTutor {
-  id: string;
-  name: string;
-  school: string;
-  classOf: number;
-  satScore: number;
-  tags: string[];
-  bio: string;
-  verified: boolean;
-  source: "live" | "sample";
+  subject:    string | null;
+  created_at: string;
+  tutor: {
+    full_name:    string | null;
+    school:       string | null;
+    verified_at:  string | null;
+  } | null;
 }
 
 export default async function MatchPage() {
-  const sb = await getSupabaseServerClient();
+  const { supabase, user } = await requirePortalUser();
 
-  // 1. Live assignments first — if the admin has paired this student with
-  //    real tutors, surface those (with the Verified badge from the real
-  //    profile row, not the sample roster).
-  let live: MatchedTutor[] = [];
-  if (sb) {
-    const { data: { user } } = await sb.auth.getUser();
-    if (user) {
-      const { data } = await sb
-        .from("assignments")
-        .select("id, teacher_id, subject, tutor:profiles!teacher_id(full_name, school, verified_at)")
-        .eq("student_id", user.id)
-        .eq("active", true);
-      live = ((data ?? []) as unknown as AssignmentRow[]).map((a) => ({
-        id:        a.teacher_id,
-        name:      a.tutor?.full_name ?? "Tutor",
-        school:    a.tutor?.school ?? "—",
-        classOf:   2026,
-        satScore:  1500,
-        tags:      [a.subject ?? "All subjects"],
-        bio:       "Assigned by Nyx after your intake.",
-        verified:  !!a.tutor?.verified_at,
-        source:    "live",
-      }));
-    }
-  }
+  const { data: assignmentsRaw } = await supabase
+    .from("assignments")
+    .select("id, teacher_id, subject, created_at, tutor:profiles!teacher_id(full_name, school, verified_at)")
+    .eq("student_id", user.id)
+    .eq("active", true)
+    .order("created_at", { ascending: true });
 
-  // 2. Top up with sample roster so the screen never shows fewer than 3.
-  const sample: MatchedTutor[] = TUTORS.slice(0, 3).map((t: Tutor) => ({
-    id:        t.id,
-    name:      t.name,
-    school:    t.school,
-    classOf:   t.classOf,
-    satScore:  t.satScore,
-    tags:      t.tags as string[],
-    bio:       t.bio,
-    verified:  true,
-    source:    "sample",
-  }));
-  const matched = [...live, ...sample.filter((s) => !live.find((l) => l.id === s.id))].slice(0, 3);
+  const assignments = (assignmentsRaw ?? []) as unknown as AssignmentRow[];
 
   return (
-    <div className="max-w-4xl">
-      <header className="mb-8">
-        <p className="text-[12px] text-[var(--accent)] uppercase tracking-[0.22em] font-semibold mb-1">
-          Tutor matchmaking
-        </p>
-        <h1 className="text-[28px] font-semibold text-[var(--text-1)] leading-tight">
-          Three Ivy League tutors picked for your sky.
-        </h1>
-        <p className="text-[var(--text-2)] mt-2 text-[14.5px] max-w-xl leading-relaxed">
-          Each was scored on subject overlap, schedule fit, and prior outcomes with students like you.
-          Book a free 15-minute coffee chat — pick the one you click with.
-        </p>
-      </header>
+    <div className="space-y-10 max-w-3xl">
+      <PortalHero
+        eyebrow="Tutor matchmaking"
+        title={assignments.length === 0 ? "Your match" : "Your tutor"}
+        italic={assignments.length === 0 ? "is being chosen." : "team."}
+        subtitle={
+          assignments.length === 0
+            ? "We hand-match every student. No marketplaces, no algorithm-only picks — a real Nyx founder reviews your intake and pairs you with someone who's been where you're going."
+            : "Each tutor was scored on subject overlap, schedule fit, and prior outcomes with students like you. Book a free 15-minute coffee chat or message them directly."
+        }
+      />
 
-      <div className="space-y-4">
-        {matched.map((t) => (
-          <article
-            key={t.id}
-            className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5 sm:p-6 flex gap-5 flex-wrap sm:flex-nowrap"
-          >
-            <div className="w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-2xl bg-[var(--accent-dim)] border border-[var(--border-accent)] grid place-items-center text-[var(--accent)] text-[24px] font-semibold uppercase">
-              {t.name.split(" ").map((p) => p[0]).join("")}
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-start justify-between gap-3 flex-wrap">
-                <div>
-                  <h2 className="text-[16px] font-semibold text-[var(--text-1)]">
-                    {t.name}, {t.school} {t.classOf}
-                  </h2>
-                  <p className="text-[12.5px] text-[var(--text-3)] mt-0.5">
-                    Teaches {t.tags.slice(0, 3).join(" · ")}
-                  </p>
-                </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {t.verified && (
-                    <Tooltip content="Verified by Nyx: official score report, current enrollment, and a passing teaching audition.">
-                      <Badge variant="verified" className="cursor-help">
-                        <ShieldCheck size={10} /> Verified
-                      </Badge>
-                    </Tooltip>
-                  )}
-                  {t.source === "live" && <Badge variant="blue">Assigned</Badge>}
-                  {t.source === "sample" && <Badge variant="default">Sample roster</Badge>}
-                  <Badge variant="green">SAT {t.satScore}</Badge>
-                  {t.tags.includes("Admissions") && <Badge variant="purple">Admissions</Badge>}
-                </div>
-              </div>
+      {assignments.length === 0 ? (
+        <PortalSection label="Status">
+          <MatchInProgress />
+        </PortalSection>
+      ) : (
+        <PortalSection label={assignments.length === 1 ? "Your tutor" : "Your tutors"}>
+          <div className="space-y-4">
+            {assignments.map((a) => <MatchedTutorCard key={a.id} assignment={a} />)}
+          </div>
+        </PortalSection>
+      )}
 
-              <p className="text-[13px] text-[var(--text-2)] mt-3 leading-relaxed">{t.bio}</p>
-
-              <div className="grid sm:grid-cols-3 gap-2 mt-4">
-                <Stat icon={Award}      label="Specialty"    value={t.tags[0]} />
-                <Stat icon={Sparkles}   label="Avg. delta"   value="+220 pts" />
-                <Stat icon={ShieldCheck} label="Vetted"       value="4-step audit" />
-              </div>
-
-              <div className="flex flex-wrap gap-2 mt-5">
-                <Link
-                  href={`/portal/schedule?tutor=${t.id}`}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[var(--gold-soft)] text-[var(--on-gold)] font-semibold text-[12.5px] hover:bg-[var(--gold-bright)] transition-colors"
-                >
-                  <CalendarPlus size={13} />
-                  Book free intro chat
-                </Link>
-                <Link
-                  href={`/portal/messages?tutor=${t.id}`}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-[var(--border)] text-[var(--text-1)] font-medium text-[12.5px] hover:border-[var(--border-2)] transition-colors"
-                >
-                  <MessageSquare size={13} />
-                  Send a question
-                </Link>
-              </div>
-            </div>
-          </article>
-        ))}
-      </div>
-
-      <p className="text-[12.5px] text-[var(--text-3)] mt-6">
-        Don&apos;t see a match? <Link href="/portal/messages?topic=re-match" className="text-[var(--accent)] hover:text-[var(--accent-bright)]">Tell us</Link> and we&apos;ll re-run the search.
-      </p>
+      <PortalSection label="Don't feel a click?">
+        <EmptyTile
+          icon={Sparkles}
+          title="Re-match, no awkwardness."
+          body="Tell us what wasn't working — pace, style, schedule, subject — and we'll re-run the search within a day. No charge until you've had a productive session."
+          cta={{ href: "/portal/messages?topic=re-match", label: "Request a re-match" }}
+        />
+      </PortalSection>
     </div>
   );
 }
 
-function Stat({
-  icon: Icon,
-  label,
-  value,
+function MatchedTutorCard({ assignment }: { assignment: AssignmentRow }) {
+  const t = assignment.tutor;
+  const name = t?.full_name ?? "Tutor TBD";
+  const subjects = assignment.subject ?? "All subjects";
+
+  return (
+    <article className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 sm:p-6 flex gap-5 flex-wrap sm:flex-nowrap">
+      <div className="w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-2xl bg-[var(--accent-dim)] border border-[var(--border-accent)] grid place-items-center text-[var(--accent)] text-[24px] font-semibold uppercase">
+        {initials(name)}
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-start justify-between gap-3 flex-wrap">
+          <div>
+            <h2 className="text-[16px] font-semibold text-[var(--text-1)]">{name}</h2>
+            {t?.school && <p className="text-[12.5px] text-[var(--text-3)] mt-0.5">{t.school}</p>}
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {t?.verified_at && (
+              <Tooltip content="Verified by Nyx: official score report, current enrollment, and a passing teaching audition.">
+                <Badge variant="verified" className="cursor-help">
+                  <ShieldCheck size={10} /> Verified
+                </Badge>
+              </Tooltip>
+            )}
+            <Badge variant="blue">Assigned</Badge>
+            {subjects && <Badge variant="default">{subjects}</Badge>}
+          </div>
+        </div>
+
+        <p className="text-[13px] text-[var(--text-2)] mt-3 leading-relaxed">
+          {t?.school
+            ? `Verified ${t.school} tutor — paired with you after a hand review of your intake and target test.`
+            : "Paired with you after a hand review of your intake and target test."}
+        </p>
+
+        <div className="grid sm:grid-cols-2 gap-2 mt-4">
+          <TutorStat icon={Award}       label="Specialty" value={subjects} />
+          <TutorStat icon={ShieldCheck} label="Vetted"    value="4-step audit" />
+        </div>
+
+        <div className="flex flex-wrap gap-2 mt-5">
+          <Link
+            href={`/portal/schedule?tutor=${assignment.teacher_id}`}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[var(--gold-soft)] text-[var(--on-gold)] font-semibold text-[12.5px] hover:bg-[var(--gold-bright)] transition-colors"
+          >
+            <CalendarPlus size={13} />
+            Book a session
+          </Link>
+          <Link
+            href={`/portal/messages?tutor=${assignment.teacher_id}`}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-[var(--border)] text-[var(--text-1)] font-medium text-[12.5px] hover:border-[var(--border-2)] transition-colors"
+          >
+            <MessageSquare size={13} />
+            Send a question
+          </Link>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function TutorStat({
+  icon: Icon, label, value,
 }: {
   icon: React.ComponentType<{ size?: number; className?: string }>;
   label: string;
@@ -171,5 +149,53 @@ function Stat({
       </div>
       <p className="text-[13px] font-semibold text-[var(--text-1)]">{value}</p>
     </div>
+  );
+}
+
+function MatchInProgress() {
+  return (
+    <article className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-7">
+      <div className="flex items-start gap-4">
+        <div className="w-11 h-11 rounded-xl bg-[var(--accent-dim)] border border-[var(--border-accent)] grid place-items-center shrink-0">
+          <Hourglass size={18} className="text-[var(--accent)]" />
+        </div>
+        <div className="flex-1">
+          <p className="text-[14.5px] font-semibold text-[var(--text-1)]">Match in progress</p>
+          <p className="text-[13px] text-[var(--text-2)] mt-1 leading-relaxed">
+            We typically pair within one business day after your intake is complete. You'll get an email and a portal notification the moment your tutor is set.
+          </p>
+        </div>
+      </div>
+      <ul className="mt-5 space-y-2.5 text-[12.5px] text-[var(--text-2)]">
+        <li className="flex items-start gap-2">
+          <Users size={13} className="text-[var(--text-3)] mt-0.5 shrink-0" />
+          <span>A Nyx founder reads your diagnostic, target test, and notes — no algorithm-only matches.</span>
+        </li>
+        <li className="flex items-start gap-2">
+          <ShieldCheck size={13} className="text-[var(--text-3)] mt-0.5 shrink-0" />
+          <span>Every tutor is verified — score report on file, current Ivy enrollment, and a passing teaching audition.</span>
+        </li>
+        <li className="flex items-start gap-2">
+          <Sparkles size={13} className="text-[var(--text-3)] mt-0.5 shrink-0" />
+          <span>If the first call doesn't click, the re-match is free.</span>
+        </li>
+      </ul>
+      <div className="flex flex-wrap gap-2 mt-5">
+        <Link
+          href="/portal/diagnostic"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[var(--gold-soft)] text-[var(--on-gold)] font-semibold text-[12.5px] hover:bg-[var(--gold-bright)] transition-colors"
+        >
+          <Sparkles size={13} />
+          Finish your intake
+        </Link>
+        <Link
+          href="/portal/messages"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-[var(--border)] text-[var(--text-1)] font-medium text-[12.5px] hover:border-[var(--border-2)] transition-colors"
+        >
+          <MessageSquare size={13} />
+          Add context for your tutor
+        </Link>
+      </div>
+    </article>
   );
 }

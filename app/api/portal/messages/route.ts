@@ -1,16 +1,15 @@
 import { NextResponse } from "next/server";
-import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { z } from "zod";
+import { getPortalApi, readJson } from "@/lib/portal-auth";
+
+const PostBody = z.object({
+  content: z.string().trim().min(1).max(4000),
+});
 
 export async function GET(request: Request) {
-  const supabase = await getSupabaseServerClient();
-  if (!supabase) {
-    return NextResponse.json({ error: "Not configured" }, { status: 503 });
-  }
-
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await getPortalApi();
+  if (!auth.ok) return auth.response;
+  const { supabase, user } = auth;
 
   const { searchParams } = new URL(request.url);
   const markRead = searchParams.get("markRead") === "true";
@@ -21,21 +20,14 @@ export async function GET(request: Request) {
     .eq("student_id", user.id)
     .order("created_at", { ascending: true });
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  // Mark nyx messages as read
   if (markRead) {
     const unreadIds = (messages ?? [])
       .filter((m) => m.sender === "nyx" && !m.read)
       .map((m) => m.id);
-
     if (unreadIds.length > 0) {
-      await supabase
-        .from("messages")
-        .update({ read: true })
-        .in("id", unreadIds);
+      await supabase.from("messages").update({ read: true }).in("id", unreadIds);
     }
   }
 
@@ -43,42 +35,23 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const supabase = await getSupabaseServerClient();
-  if (!supabase) {
-    return NextResponse.json({ error: "Not configured" }, { status: 503 });
-  }
+  const auth = await getPortalApi();
+  if (!auth.ok) return auth.response;
 
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const parsed = await readJson(request, PostBody);
+  if (!parsed.ok) return parsed.response;
 
-  let body: Record<string, unknown>;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
-  }
-
-  const { content } = body;
-  if (!content || typeof content !== "string" || !content.trim()) {
-    return NextResponse.json({ error: "Message content is required" }, { status: 400 });
-  }
-
-  const { data, error } = await supabase
+  const { data, error } = await auth.supabase
     .from("messages")
     .insert({
-      student_id: user.id,
-      sender: "student",
-      content: content.trim(),
-      read: true,
+      student_id: auth.user.id,
+      sender:     "student",
+      content:    parsed.data.content,
+      read:       true,
     })
     .select()
     .single();
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ message: data }, { status: 201 });
 }

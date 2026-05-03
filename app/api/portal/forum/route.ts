@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { getPortalApi, readJson } from "@/lib/portal-auth";
 
 export const runtime = "nodejs";
 
@@ -11,15 +11,15 @@ const NewThread = z.object({
 });
 
 export async function GET(req: Request) {
-  const sb = await getSupabaseServerClient();
-  if (!sb) return NextResponse.json({ threads: [] });
-  const { data: { user } } = await sb.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const auth = await getPortalApi({ onMissing: NextResponse.json({ threads: [] }) });
+  if (!auth.ok) return auth.response;
 
-  const url = new URL(req.url);
-  const cat = url.searchParams.get("category");
-
-  let q = sb.from("forum_threads").select("*").order("pinned", { ascending: false }).order("last_reply_at", { ascending: false }).limit(60);
+  const cat = new URL(req.url).searchParams.get("category");
+  let q = auth.supabase
+    .from("forum_threads").select("*")
+    .order("pinned", { ascending: false })
+    .order("last_reply_at", { ascending: false })
+    .limit(60);
   if (cat) q = q.eq("category", cat);
 
   const { data, error } = await q;
@@ -28,24 +28,21 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  const sb = await getSupabaseServerClient();
-  if (!sb) return NextResponse.json({ error: "Auth not configured" }, { status: 503 });
-  const { data: { user } } = await sb.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const auth = await getPortalApi();
+  if (!auth.ok) return auth.response;
 
-  const parsed = NewThread.safeParse(await req.json().catch(() => null));
-  if (!parsed.success) return NextResponse.json({ error: "Invalid", details: parsed.error.issues }, { status: 400 });
+  const parsed = await readJson(req, NewThread);
+  if (!parsed.ok) return parsed.response;
 
-  const { data, error } = await sb
+  const { data, error } = await auth.supabase
     .from("forum_threads")
     .insert({
-      author_id: user.id,
+      author_id: auth.user.id,
       title:     parsed.data.title,
       body:      parsed.data.body,
       category:  parsed.data.category,
     })
-    .select()
-    .single();
+    .select().single();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ thread: data });
 }

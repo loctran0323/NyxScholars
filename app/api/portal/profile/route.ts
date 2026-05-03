@@ -1,122 +1,81 @@
 import { NextResponse } from "next/server";
-import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { z } from "zod";
+import { getPortalApi, readJson } from "@/lib/portal-auth";
+
+const ProfilePut = z.object({
+  full_name:    z.string().nullish(),
+  grade:        z.string().nullish(),
+  school:       z.string().nullish(),
+  phone:        z.string().nullish(),
+  target_test:  z.enum(["SAT", "ACT"]).nullish(),
+  target_score: z.string().nullish(),
+});
+
+const ProfilePatch = z.object({
+  full_name:    z.string().nullish(),
+  grade:        z.string().nullish(),
+  school:       z.string().nullish(),
+  phone:        z.string().nullish(),
+  target_test:  z.enum(["SAT", "ACT"]).nullish(),
+  target_score: z.string().nullish(),
+  plan:         z.enum(["session", "monthly", "counseling"]).nullish(),
+  plan_status:  z.enum(["active", "paused", "cancelled"]).nullish(),
+  plan_subject: z.string().nullish(),
+  plan_addons:  z.array(z.string()).nullish(),
+}).strict();
 
 export async function GET() {
-  const supabase = await getSupabaseServerClient();
-  if (!supabase) {
-    return NextResponse.json({ error: "Not configured" }, { status: 503 });
-  }
-
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await getPortalApi();
+  if (!auth.ok) return auth.response;
+  const { supabase, user } = auth;
 
   const { data: profile, error } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user.id)
-    .single();
+    .from("profiles").select("*").eq("id", user.id).single();
 
   if (error && error.code !== "PGRST116") {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
-
   return NextResponse.json({ profile: profile ?? null });
 }
 
 export async function PUT(request: Request) {
-  const supabase = await getSupabaseServerClient();
-  if (!supabase) {
-    return NextResponse.json({ error: "Not configured" }, { status: 503 });
-  }
+  const auth = await getPortalApi();
+  if (!auth.ok) return auth.response;
 
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const parsed = await readJson(request, ProfilePut);
+  if (!parsed.ok) return parsed.response;
 
-  let body: Record<string, unknown>;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
-  }
-
-  const { full_name, grade, school, phone, target_test, target_score } = body;
-
-  const { data, error } = await supabase
+  const { data, error } = await auth.supabase
     .from("profiles")
-    .upsert({
-      id: user.id,
-      full_name: full_name ?? null,
-      grade: grade ?? null,
-      school: school ?? null,
-      phone: phone ?? null,
-      target_test: target_test ?? null,
-      target_score: target_score ?? null,
-    })
+    .upsert({ id: auth.user.id, ...parsed.data })
     .select()
     .single();
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ profile: data });
 }
 
 /**
  * PATCH — partial profile update. Used by the upgrade success page to
- * activate a plan after Stripe checkout.
- *
- * Allowed fields: plan, plan_status, plan_subject, plan_addons, role,
- * assigned_teacher_id, full_name, grade, school, phone, target_test,
- * target_score.
+ * activate a plan after Stripe checkout, by onboarding, etc.
  */
 export async function PATCH(request: Request) {
-  const supabase = await getSupabaseServerClient();
-  if (!supabase) {
-    return NextResponse.json({ error: "Not configured" }, { status: 503 });
-  }
+  const auth = await getPortalApi();
+  if (!auth.ok) return auth.response;
 
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const parsed = await readJson(request, ProfilePatch);
+  if (!parsed.ok) return parsed.response;
 
-  let body: Record<string, unknown>;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
-  }
-
-  const allowed = [
-    "full_name", "grade", "school", "phone",
-    "target_test", "target_score",
-    "plan", "plan_status", "plan_subject", "plan_addons",
-  ] as const;
-
-  const updates: Record<string, unknown> = {};
-  for (const key of allowed) {
-    if (key in body) updates[key] = body[key];
-  }
-
+  const updates = Object.fromEntries(
+    Object.entries(parsed.data).filter(([, v]) => v !== undefined),
+  );
   if (Object.keys(updates).length === 0) {
     return NextResponse.json({ error: "No allowed fields in body" }, { status: 400 });
   }
 
-  const { data, error } = await supabase
-    .from("profiles")
-    .update(updates)
-    .eq("id", user.id)
-    .select()
-    .single();
+  const { data, error } = await auth.supabase
+    .from("profiles").update(updates).eq("id", auth.user.id).select().single();
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ profile: data });
 }

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { getPortalApi, readJson } from "@/lib/portal-auth";
 
 export const runtime = "nodejs";
 
@@ -11,55 +11,47 @@ const Slot = z.object({
   timezone:   z.string().trim().max(60).default("America/New_York"),
 });
 
-const PutBody = z.object({
-  slots: z.array(Slot).max(40),
-});
+const PutBody = z.object({ slots: z.array(Slot).max(40) });
 
-/**
- * GET / PUT tutor weekly availability. Tutor-only.
- * Each slot is a (weekday, start_min, end_min) tuple in the tutor's tz.
- */
+/** GET / PUT tutor weekly availability. Tutor-only. */
 export async function GET() {
-  const sb = await getSupabaseServerClient();
-  if (!sb) return NextResponse.json({ slots: [] });
-  const { data: { user } } = await sb.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const auth = await getPortalApi({ onMissing: NextResponse.json({ slots: [] }) });
+  if (!auth.ok) return auth.response;
 
-  const { data, error } = await sb
-    .from("tutor_availability")
-    .select("*")
-    .eq("tutor_id", user.id)
-    .order("weekday")
-    .order("start_min");
+  const { data, error } = await auth.supabase
+    .from("tutor_availability").select("*")
+    .eq("tutor_id", auth.user.id)
+    .order("weekday").order("start_min");
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ slots: data ?? [] });
 }
 
 export async function PUT(req: Request) {
-  const sb = await getSupabaseServerClient();
-  if (!sb) return NextResponse.json({ error: "Auth not configured" }, { status: 503 });
-  const { data: { user } } = await sb.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  const { data: profile } = await sb.from("profiles").select("role").eq("id", user.id).single();
+  const auth = await getPortalApi();
+  if (!auth.ok) return auth.response;
+
+  const { data: profile } = await auth.supabase
+    .from("profiles").select("role").eq("id", auth.user.id).single();
   if (profile?.role !== "teacher") return NextResponse.json({ error: "Tutors only" }, { status: 403 });
 
-  const parsed = PutBody.safeParse(await req.json().catch(() => null));
-  if (!parsed.success) return NextResponse.json({ error: "Invalid", details: parsed.error.issues }, { status: 400 });
+  const parsed = await readJson(req, PutBody);
+  if (!parsed.ok) return parsed.response;
 
   // Replace-all semantics: simpler than diffing.
-  const del = await sb.from("tutor_availability").delete().eq("tutor_id", user.id);
+  const del = await auth.supabase
+    .from("tutor_availability").delete().eq("tutor_id", auth.user.id);
   if (del.error) return NextResponse.json({ error: del.error.message }, { status: 500 });
 
   if (parsed.data.slots.length === 0) return NextResponse.json({ ok: true, slots: [] });
 
   const rows = parsed.data.slots.map((s) => ({
-    tutor_id: user.id,
+    tutor_id:  auth.user.id,
     weekday:   s.weekday,
     start_min: s.start_min,
     end_min:   s.end_min,
     timezone:  s.timezone,
   }));
-  const { data, error } = await sb.from("tutor_availability").insert(rows).select();
+  const { data, error } = await auth.supabase.from("tutor_availability").insert(rows).select();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true, slots: data ?? [] });
 }

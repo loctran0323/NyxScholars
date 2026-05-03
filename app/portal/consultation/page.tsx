@@ -1,137 +1,87 @@
-"use client";
+import { format } from "date-fns";
+import { ConsultationView, type ConsultationNote } from "./ConsultationView";
+import { requirePortalUser } from "@/lib/portal-auth";
+import { initials, planLabel } from "@/lib/sessions";
+import type { Profile } from "@/types/portal";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { ArrowRight } from "lucide-react";
-import { Text, Card } from "@/components/system";
-import { mockDashboard, type ConsultationDashboardData } from "@/lib/mock/consultationDashboard";
-import { ALL_SKILLS } from "@/lib/mock/constellations";
-import { Sky, SkillSheet } from "@/components/portal/Sky";
-import {
-  StudentHeader, DashTabs, AssignedDrillsCard, EstimatedRangeCard,
-  ConstellationsCard, NextSessionCard, SessionHistoryCard,
-} from "@/components/portal/SkyAccessories";
+export const metadata = { title: "Consultation · Nyx" };
 
-function daysUntil(iso: string | null): string {
-  if (!iso) return "TBD";
-  const ms = new Date(iso).getTime() - Date.now();
-  if (ms <= 0) return "today";
-  const days = Math.ceil(ms / (1000 * 60 * 60 * 24));
-  return `in ${days} day${days === 1 ? "" : "s"}`;
+interface DiagnosticSummary {
+  completed_at?:   string;
+  predicted_score?: number;
+  per_skill?:      Record<string, number>;
 }
 
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
-}
+export default async function ConsultationDashboardPage() {
+  const { supabase, user } = await requirePortalUser();
 
-export default function ConsultationDashboardPage() {
-  const d: ConsultationDashboardData = mockDashboard;
-  const router = useRouter();
-  const [view, setView] = useState<"sky" | "metrics">("sky");
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const selectedSkill = ALL_SKILLS.find((s) => s.id === selectedId) ?? null;
-  // In production this comes from the matched tutor record; for the
-  // mock dashboard we use a generic label so the demo doesn't fabricate
-  // a specific tutor identity.
-  const tutorName = "your tutor";
+  const [
+    { data: profile },
+    { data: assignment },
+    { data: upcoming },
+    { data: notesSessions },
+  ] = await Promise.all([
+    supabase
+      .from("profiles").select("full_name, plan, notif_prefs")
+      .eq("id", user.id).maybeSingle(),
+    supabase
+      .from("assignments")
+      .select("subject, tutor:profiles!teacher_id(full_name)")
+      .eq("student_id", user.id).eq("active", true)
+      .order("created_at", { ascending: true }).limit(1).maybeSingle(),
+    supabase
+      .from("sessions").select("subject, scheduled_at")
+      .eq("student_id", user.id)
+      .in("status", ["pending", "confirmed"])
+      .gte("scheduled_at", new Date().toISOString())
+      .order("scheduled_at", { ascending: true })
+      .limit(1).maybeSingle(),
+    supabase
+      .from("sessions").select("id, scheduled_at, admin_notes")
+      .eq("student_id", user.id)
+      .eq("status", "completed")
+      .not("admin_notes", "is", null)
+      .order("scheduled_at", { ascending: false })
+      .limit(6),
+  ]);
+
+  const typedProfile = profile as Profile | null;
+  const studentName = typedProfile?.full_name ?? user.email?.split("@")[0] ?? "Student";
+
+  const tutorRow = assignment as { subject: string | null; tutor: { full_name: string | null } | null } | null;
+  const tutorName = tutorRow?.tutor?.full_name ?? "Your tutor";
+
+  const meta = (typedProfile?.notif_prefs ?? {}) as Record<string, unknown>;
+  const summary = (meta.diagnostic_summary ?? null) as DiagnosticSummary | null;
+  const masteryOverrides = summary?.per_skill ?? undefined;
+  const hasIntake = !!summary?.completed_at;
+
+  const upcomingSession = upcoming
+    ? {
+        topic:     (upcoming as { subject: string }).subject,
+        whenISO:   (upcoming as { scheduled_at: string }).scheduled_at,
+        whenLabel: format(new Date((upcoming as { scheduled_at: string }).scheduled_at), "EEE, MMM d"),
+      }
+    : null;
+
+  const notes: ConsultationNote[] = ((notesSessions ?? []) as { id: string; scheduled_at: string; admin_notes: string }[])
+    .map((s) => ({
+      id:        s.id,
+      author:    tutorName,
+      createdAt: s.scheduled_at,
+      body:      s.admin_notes,
+    }));
 
   return (
-    <div className="-mx-6 md:-mx-10 -my-8 md:-my-12 flex flex-col h-[calc(100dvh-56px)] md:h-screen min-h-[680px]">
-      <StudentHeader
-        studentName={d.student.name}
-        studentInitials={d.student.name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
-        tutorName={tutorName}
-        packageLabel={`${d.student.plan} package`}
-        nextSession={daysUntil(d.student.nextSessionAt)}
-      />
-
-      <DashTabs view={view} setView={setView} />
-
-      <div className="flex-1 overflow-hidden relative" style={{ background: "#070914" }}>
-        {view === "sky" ? (
-          <div className="relative w-full h-full">
-            <Sky
-              hoveredId={hoveredId}
-              setHoveredId={setHoveredId}
-              selectedId={selectedId}
-              setSelectedId={setSelectedId}
-            />
-            <SkillSheet
-              skill={selectedSkill}
-              onClose={() => setSelectedId(null)}
-              onDrill={(skill) => router.push(`/portal/practice?skill=${skill.id}`)}
-            />
-          </div>
-        ) : (
-          <div className="h-full overflow-y-auto px-5 md:px-7 py-7" style={{ color: "#e6e9f5" }}>
-            <MetricsView d={d} tutorName={tutorName} onSelectSkill={setSelectedId} />
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-/* ───────────────────────────────────────────────────────────
- * Metrics view — slimmed from 9 cards to 5: the things a real
- * student / parent / tutor actually look at.
- * ─────────────────────────────────────────────────────────── */
-function MetricsView({
-  d, tutorName, onSelectSkill,
-}: {
-  d: ConsultationDashboardData;
-  tutorName: string;
-  onSelectSkill: (id: string | null) => void;
-}) {
-  return (
-    <div className="space-y-5 max-w-[1100px]">
-      {/* Top row — the two most-looked-at cards */}
-      <div className="grid lg:grid-cols-[1.4fr_1fr] gap-5">
-        {d.upcomingSession ? (
-          <NextSessionCard
-            tutorName={tutorName}
-            whenLabel={formatDate(d.upcomingSession.startsAt)}
-            topic={d.upcomingSession.topic}
-            whyLine="Setup strategies on word problems — the lowest mastery from your last drill."
-          />
-        ) : null}
-        <EstimatedRangeCard />
-      </div>
-
-      {/* What your tutor assigned */}
-      <AssignedDrillsCard assignedBy={tutorName} />
-
-      {/* The constellation list — single picture of the whole sky */}
-      <ConstellationsCard onSelect={onSelectSkill} />
-
-      {/* Session history — calm, no streak boasting */}
-      <SessionHistoryCard />
-
-      {/* Tutor notes — the actual conversation, not a "feed" */}
-      <Card variant="default">
-        <div className="flex justify-between font-mono mb-4" style={{ fontSize: 9, letterSpacing: 4, color: "#7a82a0" }}>
-          <span>NOTES FROM {tutorName.toUpperCase()}</span>
-          <span>{d.notes.length} total</span>
-        </div>
-        <ul className="space-y-5">
-          {d.notes.map((n) => (
-            <li key={n.id} className="pb-5" style={{ borderBottom: "1px solid #1e2542" }}>
-              <div className="flex items-baseline justify-between mb-2">
-                <span className="text-[var(--text-1)] text-[13px] font-semibold">{n.author}</span>
-                <span className="text-[var(--text-3)] text-[10px] font-mono tracking-wider">{formatDate(n.createdAt)}</span>
-              </div>
-              <Text variant="small">{n.body}</Text>
-            </li>
-          ))}
-        </ul>
-        <a
-          href="/portal/messages"
-          className="inline-flex items-center gap-1.5 mt-2 text-[#7dd3fc] hover:text-[#bde9ff] font-mono text-[10px] tracking-[0.2em] uppercase transition-colors"
-        >
-          Message {tutorName} <ArrowRight size={11} />
-        </a>
-      </Card>
-    </div>
+    <ConsultationView
+      studentName={studentName}
+      studentInitials={initials(studentName)}
+      tutorName={tutorName}
+      packageLabel={planLabel(typedProfile?.plan ?? null).split(" · ")[0]}
+      nextSession={upcomingSession}
+      notes={notes}
+      masteryOverrides={masteryOverrides}
+      hasIntake={hasIntake}
+    />
   );
 }

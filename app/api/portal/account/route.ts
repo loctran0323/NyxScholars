@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { getPortalApi } from "@/lib/portal-auth";
 import { getServiceRoleClient } from "@/lib/supabase";
 import { audit } from "@/lib/audit";
 import { clientKey } from "@/lib/rate-limit";
@@ -12,11 +12,9 @@ export const runtime = "nodejs";
  * profile fields) when the service role key isn't configured.
  */
 export async function DELETE(req: Request) {
-  const sb = await getSupabaseServerClient();
-  if (!sb) return NextResponse.json({ error: "Auth not configured" }, { status: 503 });
-
-  const { data: { user } } = await sb.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const auth = await getPortalApi();
+  if (!auth.ok) return auth.response;
+  const { supabase, user } = auth;
 
   const admin = getServiceRoleClient();
 
@@ -30,21 +28,20 @@ export async function DELETE(req: Request) {
   });
 
   if (!admin) {
-    // Soft-delete fallback (no service role key on this env).
-    await sb.from("profiles").update({
+    await supabase.from("profiles").update({
       full_name: null,
-      grade: null,
-      school: null,
+      grade:     null,
+      school:    null,
       target_score: null,
-      target_test: null,
-      phone: null,
+      target_test:  null,
+      phone:     null,
     }).eq("id", user.id);
-    await sb.auth.signOut();
+    await supabase.auth.signOut();
     return NextResponse.json({ ok: true, mode: "soft" });
   }
 
   const { error } = await admin.auth.admin.deleteUser(user.id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  await sb.auth.signOut();
+  await supabase.auth.signOut();
   return NextResponse.json({ ok: true, mode: "hard" });
 }

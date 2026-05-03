@@ -1,16 +1,16 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { getSupabaseServerClient } from "@/lib/supabase/server";
+import { getPortalApi, readJson } from "@/lib/portal-auth";
 import { getServiceRoleClient } from "@/lib/supabase";
 
 export const runtime = "nodejs";
 
 const Body = z.object({
-  theta:        z.number(),
-  ci:           z.number(),
-  questionsAsked: z.number().int().min(0),
-  predictedScore: z.number().int().min(0).max(1700),
-  perSkill:     z.record(z.string(), z.number().min(0).max(1)),
+  theta:           z.number(),
+  ci:              z.number(),
+  questionsAsked:  z.number().int().min(0),
+  predictedScore:  z.number().int().min(0).max(1700),
+  perSkill:        z.record(z.string(), z.number().min(0).max(1)),
 });
 
 /**
@@ -20,41 +20,35 @@ const Body = z.object({
  * the constellation page (and downstream tutor matching) can read a single
  * source of truth instead of replaying every attempt row.
  *
- * Stored under `profile.notif_prefs.diagnostic_summary` to avoid an
- * additional schema migration.
+ * Stored under `profile.notif_prefs.diagnostic_summary` to avoid an extra
+ * schema migration.
  */
 export async function POST(req: Request) {
-  const sb = await getSupabaseServerClient();
-  if (!sb) return NextResponse.json({ error: "Auth not configured" }, { status: 503 });
-  const { data: { user } } = await sb.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const auth = await getPortalApi();
+  if (!auth.ok) return auth.response;
 
-  const parsed = Body.safeParse(await req.json().catch(() => null));
-  if (!parsed.success) return NextResponse.json({ error: "Invalid", details: parsed.error.issues }, { status: 400 });
+  const parsed = await readJson(req, Body);
+  if (!parsed.ok) return parsed.response;
 
-  const admin = getServiceRoleClient() ?? sb;
+  const admin = getServiceRoleClient() ?? auth.supabase;
   const { data: profile } = await admin
-    .from("profiles")
-    .select("notif_prefs")
-    .eq("id", user.id)
-    .maybeSingle();
+    .from("profiles").select("notif_prefs")
+    .eq("id", auth.user.id).maybeSingle();
   const meta = ((profile as { notif_prefs: Record<string, unknown> | null } | null)?.notif_prefs ?? {}) as Record<string, unknown>;
 
   const summary = {
-    completed_at:   new Date().toISOString(),
-    theta:          parsed.data.theta,
-    ci:             parsed.data.ci,
-    questions:      parsed.data.questionsAsked,
+    completed_at:    new Date().toISOString(),
+    theta:           parsed.data.theta,
+    ci:              parsed.data.ci,
+    questions:       parsed.data.questionsAsked,
     predicted_score: parsed.data.predictedScore,
-    per_skill:      parsed.data.perSkill,
+    per_skill:       parsed.data.perSkill,
   };
 
   const { error } = await admin
     .from("profiles")
-    .update({
-      notif_prefs: { ...meta, diagnostic_summary: summary },
-    })
-    .eq("id", user.id);
+    .update({ notif_prefs: { ...meta, diagnostic_summary: summary } })
+    .eq("id", auth.user.id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
   return NextResponse.json({ ok: true, summary });

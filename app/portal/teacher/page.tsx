@@ -1,9 +1,11 @@
-import { getSupabaseServerClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 import { format } from "date-fns";
 import { Users, MessageSquare, Calendar, ChevronRight, GraduationCap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Stat } from "@/components/portal/Stat";
+import { QuickLink } from "@/components/portal/QuickLink";
+import { requireTutorUser } from "@/lib/portal-auth";
+import { initials } from "@/lib/sessions";
 import type { Profile, Session, Assignment } from "@/types/portal";
 
 interface AssignedStudent {
@@ -13,21 +15,7 @@ interface AssignedStudent {
 }
 
 export default async function TeacherDashboard() {
-  const supabase = await getSupabaseServerClient();
-  if (!supabase) redirect("/portal/login");
-
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/portal/login");
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user.id)
-    .single();
-
-  if ((profile as Profile | null)?.role !== "teacher") {
-    redirect("/portal");
-  }
+  const { supabase, user, profile } = await requireTutorUser();
 
   // Pull all active assignments → student profiles → next upcoming session.
   const { data: assignmentsRaw } = await supabase
@@ -77,10 +65,7 @@ export default async function TeacherDashboard() {
     })
     .filter((x): x is AssignedStudent => x !== null);
 
-  const teacherName =
-    (profile as Profile | null)?.full_name?.split(" ")[0] ??
-    user.email?.split("@")[0] ??
-    "Teacher";
+  const teacherName = profile.full_name?.split(" ")[0] ?? user.email?.split("@")[0] ?? "Teacher";
 
   const totalUpcoming = nextSessionByStudent.size;
 
@@ -101,9 +86,9 @@ export default async function TeacherDashboard() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-        <StatCard label="Active Students" value={students.length} icon={Users} />
-        <StatCard label="Upcoming Sessions" value={totalUpcoming} icon={Calendar} />
-        <StatCard label="Subjects" value={countSubjects(assignments)} icon={GraduationCap} />
+        <Stat label="Active students"   value={students.length}            sub="assigned to you" />
+        <Stat label="Upcoming sessions" value={totalUpcoming}              sub="next 30 days" />
+        <Stat label="Subjects"          value={countSubjects(assignments)} sub="across roster" />
       </div>
 
       <div>
@@ -166,65 +151,12 @@ export default async function TeacherDashboard() {
           Quick Actions
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <Link
-            href="/portal/messages"
-            className="flex items-center gap-4 p-4 bg-[var(--surface)] border border-[var(--border)] rounded-2xl hover:border-[var(--border-accent)] transition-all group"
-          >
-            <div className="w-10 h-10 rounded-xl bg-[var(--accent-dim)] border border-[var(--border-accent)] flex items-center justify-center shrink-0">
-              <MessageSquare size={17} className="text-[var(--accent)]" />
-            </div>
-            <div>
-              <p className="text-[13.5px] font-semibold text-[var(--text-1)]">Messages</p>
-              <p className="text-[12px] text-[var(--text-3)]">Talk to your students</p>
-            </div>
-            <ChevronRight size={14} className="text-[var(--text-3)] ml-auto group-hover:text-[var(--accent)]" />
-          </Link>
-          <Link
-            href="/portal/profile"
-            className="flex items-center gap-4 p-4 bg-[var(--surface)] border border-[var(--border)] rounded-2xl hover:border-[var(--border-2)] transition-all"
-          >
-            <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-[var(--border)] flex items-center justify-center shrink-0">
-              <GraduationCap size={17} className="text-[var(--text-2)]" />
-            </div>
-            <div>
-              <p className="text-[13.5px] font-semibold text-[var(--text-1)]">Profile</p>
-              <p className="text-[12px] text-[var(--text-3)]">Update your details</p>
-            </div>
-            <ChevronRight size={14} className="text-[var(--text-3)] ml-auto" />
-          </Link>
+          <QuickLink href="/portal/messages" icon={MessageSquare}  label="Messages" sub="Talk to your students" />
+          <QuickLink href="/portal/profile"  icon={GraduationCap}  label="Profile"  sub="Update your details" />
         </div>
       </div>
     </div>
   );
-}
-
-function StatCard({
-  label, value, icon: Icon,
-}: {
-  label: string;
-  value: number;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
-}) {
-  return (
-    <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-4">
-      <div className="flex items-center justify-between mb-2">
-        <p className="text-[11px] text-[var(--text-3)] font-semibold uppercase tracking-wider">{label}</p>
-        <Icon size={14} className="text-[var(--text-3)]" />
-      </div>
-      <p className="text-[24px] font-bold text-[var(--text-1)]">{value}</p>
-    </div>
-  );
-}
-
-function initials(name: string | null): string {
-  if (!name) return "";
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .filter(Boolean)
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
 }
 
 function countSubjects(assignments: Assignment[]): number {

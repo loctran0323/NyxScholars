@@ -1,5 +1,3 @@
-import { getSupabaseServerClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 import { format } from "date-fns";
 import { CalendarPlus, Calendar, Clock, ChevronRight, Video, Zap } from "lucide-react";
@@ -7,99 +5,84 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { SessionsToolbar } from "@/components/portal/SessionsToolbar";
 import { SessionRowActions } from "@/components/portal/SessionRowActions";
+import { requirePortalUser } from "@/lib/portal-auth";
+import { sessionStatusVariant } from "@/lib/sessions";
 import type { Session } from "@/types/portal";
 
-function statusVariant(status: string): "gold" | "blue" | "green" | "red" | "default" {
- switch (status) {
- case "confirmed": return "blue";
- case "completed": return "green";
- case "cancelled": return "red";
- default: return "gold";
- }
-}
-
 function SessionCard({ session }: { session: Session }) {
- const isUpcoming = new Date(session.scheduled_at) > new Date();
- const canJoin =
- session.status === "confirmed" &&
- session.meeting_link &&
- Math.abs(new Date(session.scheduled_at).getTime() - Date.now()) < 30 * 60 * 1000;
+  const isUpcoming = new Date(session.scheduled_at) > new Date();
+  const canJoin =
+    session.status === "confirmed" &&
+    session.meeting_link &&
+    Math.abs(new Date(session.scheduled_at).getTime() - Date.now()) < 30 * 60 * 1000;
 
- return (
- <div data-session-id={session.id} className="space-y-2">
- <Link
- href={`/portal/sessions/${session.id}`}
- className="flex items-start gap-4 p-5 bg-[var(--surface)] border border-[var(--border)] rounded-2xl hover:border-[var(--border-2)] transition-all group"
- >
- <div className="w-12 h-12 rounded-xl bg-[var(--surface-elevated)] border border-[var(--border)] flex flex-col items-center justify-center shrink-0">
- <span className="text-[10px] text-[var(--text-3)] font-semibold uppercase">
- {format(new Date(session.scheduled_at), "MMM")}
- </span>
- <span className="text-[18px] text-[var(--text-1)] leading-tight">
- {format(new Date(session.scheduled_at), "d")}
- </span>
- </div>
+  return (
+    <div data-session-id={session.id} className="space-y-2">
+      <Link
+        href={`/portal/sessions/${session.id}`}
+        className="flex items-start gap-4 p-5 bg-[var(--surface)] border border-[var(--border)] rounded-2xl hover:border-[var(--border-2)] transition-all group"
+      >
+        <div className="w-12 h-12 rounded-xl bg-[var(--surface-elevated)] border border-[var(--border)] flex flex-col items-center justify-center shrink-0">
+          <span className="text-[10px] text-[var(--text-3)] font-semibold uppercase">
+            {format(new Date(session.scheduled_at), "MMM")}
+          </span>
+          <span className="text-[18px] text-[var(--text-1)] leading-tight">
+            {format(new Date(session.scheduled_at), "d")}
+          </span>
+        </div>
 
- <div className="flex-1 min-w-0">
- <div className="flex items-start justify-between gap-2 mb-1">
- <p className="text-[14px] font-semibold text-[var(--text-1)]">{session.subject}</p>
- <Badge variant={statusVariant(session.status)}>
- {session.status}
- </Badge>
- </div>
- <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-1">
- <span className="flex items-center gap-1.5 text-[12.5px] text-[var(--text-2)]">
- <Clock size={11} />
- {format(new Date(session.scheduled_at), "EEEE, MMM d · h:mm a")}
- </span>
- <span className="text-[12px] text-[var(--text-3)]">{session.duration_minutes} min</span>
- </div>
- {session.tutor_name && (
- <p className="text-[12px] text-[var(--text-3)] mt-1">Tutor: {session.tutor_name}</p>
- )}
- {canJoin && (
- <div className="flex items-center gap-1.5 mt-2 text-[12px] text-emerald-400 font-medium">
- <Video size={12} className="animate-pulse" />
- Ready to join
- </div>
- )}
- {session.status === "confirmed" && session.meeting_link && !canJoin && isUpcoming && (
- <p className="text-[12px] text-blue-400 mt-1">Meeting link ready</p>
- )}
- </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between gap-2 mb-1">
+            <p className="text-[14px] font-semibold text-[var(--text-1)]">{session.subject}</p>
+            <Badge variant={sessionStatusVariant(session.status)}>{session.status}</Badge>
+          </div>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-1">
+            <span className="flex items-center gap-1.5 text-[12.5px] text-[var(--text-2)]">
+              <Clock size={11} />
+              {format(new Date(session.scheduled_at), "EEEE, MMM d · h:mm a")}
+            </span>
+            <span className="text-[12px] text-[var(--text-3)]">{session.duration_minutes} min</span>
+          </div>
+          {session.tutor_name && (
+            <p className="text-[12px] text-[var(--text-3)] mt-1">Tutor: {session.tutor_name}</p>
+          )}
+          {canJoin && (
+            <div className="flex items-center gap-1.5 mt-2 text-[12px] text-emerald-400 font-medium">
+              <Video size={12} className="animate-pulse" />
+              Ready to join
+            </div>
+          )}
+          {session.status === "confirmed" && session.meeting_link && !canJoin && isUpcoming && (
+            <p className="text-[12px] text-blue-400 mt-1">Meeting link ready</p>
+          )}
+        </div>
 
- <ChevronRight size={15} className="text-[var(--text-3)] shrink-0 mt-1 group-hover:text-[var(--text-2)] transition-colors" />
- </Link>
- {!isUpcoming || session.status === "cancelled" ? null : (
- <div className="px-5 -mt-1">
- <SessionRowActions session={session} />
- </div>
- )}
- </div>
- );
+        <ChevronRight size={15} className="text-[var(--text-3)] shrink-0 mt-1 group-hover:text-[var(--text-2)] transition-colors" />
+      </Link>
+      {!isUpcoming || session.status === "cancelled" ? null : (
+        <div className="px-5 -mt-1">
+          <SessionRowActions session={session} />
+        </div>
+      )}
+    </div>
+  );
 }
 
 const MONTHLY_SESSION_LIMIT = 4;
 
 export default async function SessionsPage() {
- const supabase = await getSupabaseServerClient();
- if (!supabase) redirect("/portal/login");
+  const { supabase, user } = await requirePortalUser();
 
- const { data: { user } } = await supabase.auth.getUser();
- if (!user) redirect("/portal/login");
-
- const [{ data: allSessions }, { data: profile }] = await Promise.all([
- supabase
- .from("sessions")
- .select("*")
- .eq("student_id", user.id)
- .order("scheduled_at", { ascending: false }),
- supabase
- .from("profiles")
- .select("plan, plan_addons")
- .eq("id", user.id)
- .single(),
- ]);
+  const [{ data: allSessions }, { data: profile }] = await Promise.all([
+    supabase
+      .from("sessions").select("*")
+      .eq("student_id", user.id)
+      .order("scheduled_at", { ascending: false }),
+    supabase
+      .from("profiles").select("plan, plan_addons")
+      .eq("id", user.id)
+      .single(),
+  ]);
 
  const sessions = (allSessions ?? []) as Session[];
  const now = new Date();
