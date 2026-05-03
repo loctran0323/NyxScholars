@@ -28,3 +28,47 @@ export const PLAN_PRICE_IDS: Record<PlanType, string | null> = {
 export function isStripeConfigured(): boolean {
   return Boolean(process.env.STRIPE_SECRET_KEY);
 }
+
+export interface StripeConfig {
+  publishableKey: string | null;
+  secretKey: string | null;
+  webhookSecret: string | null;
+  siteUrl: string;
+  prices: Record<PlanType, string | null>;
+}
+
+export function getStripeConfig(): StripeConfig {
+  return {
+    publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? null,
+    secretKey:      process.env.STRIPE_SECRET_KEY                  ?? null,
+    webhookSecret:  process.env.STRIPE_WEBHOOK_SECRET              ?? null,
+    siteUrl:        process.env.NEXT_PUBLIC_SITE_URL               ?? "http://localhost:3000",
+    prices: {
+      session:    process.env.STRIPE_PRICE_SESSION    ?? null,
+      monthly:    process.env.STRIPE_PRICE_MONTHLY    ?? null,
+      counseling: process.env.STRIPE_PRICE_COUNSELING ?? null,
+    },
+  };
+}
+
+export interface StripeConfig {
+  publishableKey: string | null;
+  secretKey: string | null;
+  webhookSecret: string | null;
+  siteUrl: string;
+  prices: Record<PlanType, string | null>;
+}
+
+export function getStripeConfig(): StripeConfig {
+  return {
+    publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? null,
+    secretKey:      process.env.STRIPE_SECRET_KEY                  ?? null,
+    webhookSecret:  process.env.STRIPE_WEBHOOK_SECRET              ?? null,
+    siteUrl:        process.env.NEXT_PUBLIC_SITE_URL               ?? "http://localhost:3000",
+    prices: {
+      session:    process.env.STRIPE_PRICE_SESSION    ?? null,
+      monthly:    process.env.STRIPE_PRICE_MONTHLY    ?? null,
+      counseling: process.env.STRIPE_PRICE_COUNSELING ?? null,
+    },
+  };
+}
