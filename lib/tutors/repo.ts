@@ -139,7 +139,8 @@ export async function countLoadThisWeek(tutorProfileId: string): Promise<number>
   const { count } = await sb
     .from("assignments")
     .select("*", { count: "exact", head: true })
-    .eq("tutor_id", tutorProfileId)
+    .eq("teacher_id", tutorProfileId)
+    .eq("active", true)
     .gte("created_at", start.toISOString())
     .lt("created_at", end.toISOString());
   return count ?? 0;
