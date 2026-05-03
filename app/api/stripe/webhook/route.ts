@@ -44,6 +44,9 @@ export async function POST(req: NextRequest) {
   }
 
   // ---- Idempotency: short-circuit duplicate deliveries -------------------
+  // The handler below (handleCheckoutCompleted) already supports both
+  // metadata flows (packageId from the pricing page and plan from the
+  // portal upgrade), so we don't need a separate inline branch here.
   const sb = getServiceRoleClient();
   if (sb) {
     const { data: existing } = await sb

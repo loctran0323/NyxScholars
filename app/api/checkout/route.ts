@@ -7,7 +7,11 @@ import { captureException } from "@/lib/observability";
 
 export const runtime = "nodejs";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+// Use request origin so redirects always go back to whichever domain made the request
+function getSiteUrl(request: Request): string {
+  const origin = new URL(request.url).origin;
+  return origin !== "null" ? origin : (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000");
+}
 
 /**
  * POST /api/checkout
@@ -40,8 +44,9 @@ export async function POST(request: Request) {
   const { plan, annualPrepay, promoCode } = parsed.data;
   if (!plan) return NextResponse.json({ error: "plan is required" }, { status: 400 });
 
-  const successUrl = `${SITE_URL}/portal/upgrade/success?plan=${plan}`;
-  const cancelUrl = `${SITE_URL}/portal/upgrade?cancelled=1`;
+  const siteUrl = getSiteUrl(request);
+  const successUrl = `${siteUrl}/portal/upgrade/success?plan=${plan}`;
+  const cancelUrl = `${siteUrl}/portal/upgrade?cancelled=1`;
 
   if (!isStripeConfigured()) {
     return NextResponse.json({
