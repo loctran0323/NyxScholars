@@ -145,22 +145,24 @@ export function Sky({ hoveredId, setHoveredId, selectedId, setSelectedId, master
           opacity="0.5"
         />
         <text
-          x="40"
+          x={w - 40}
           y={h * 0.535 - 8}
           fill={TEXT_FAINT}
           fontSize="9"
           letterSpacing="5"
           fontFamily="Inter, system-ui, sans-serif"
+          textAnchor="end"
         >
           MATHEMATICS · NORTHERN SKY
         </text>
         <text
-          x="40"
+          x={w - 40}
           y={h * 0.535 + 18}
           fill={TEXT_FAINT}
           fontSize="9"
           letterSpacing="5"
           fontFamily="Inter, system-ui, sans-serif"
+          textAnchor="end"
         >
           READING &amp; WRITING · SOUTHERN SKY
         </text>

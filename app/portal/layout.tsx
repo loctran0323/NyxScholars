@@ -1,6 +1,7 @@
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 import { PortalSidebar } from "@/components/portal/PortalSidebar";
 import { WelcomeBootstrap } from "@/components/portal/WelcomeBootstrap";
+import { PortalInit } from "@/components/portal/PortalInit";
 import Image from "next/image";
 import type { Profile } from "@/types/portal";
 
@@ -62,6 +63,7 @@ export default async function PortalLayout({
 
   return (
     <div className="fixed inset-0 z-[100] bg-[var(--bg)] flex overflow-hidden">
+      <PortalInit />
       <PortalSidebar
         profile={typedProfile}
         userEmail={user.email ?? ""}
