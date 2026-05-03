@@ -12,6 +12,7 @@ import {
  AlertCircle,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { SessionActions } from "@/components/portal/SessionActions";
 import type { Session } from "@/types/portal";
 
 function statusVariant(status: string): "gold" | "blue" | "green" | "red" | "default" {
@@ -205,6 +206,11 @@ export default async function SessionDetailPage({
  <p className="text-[13px] text-[var(--text-1)] leading-relaxed">{s.admin_notes}</p>
  </div>
  )}
+ </div>
+
+ {/* Quick actions */}
+ <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-4">
+ <SessionActions session={s} />
  </div>
 
  {/* Video call section */}

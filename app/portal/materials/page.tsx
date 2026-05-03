@@ -183,7 +183,7 @@ export default function MaterialsPage() {
           <div className="flex gap-3 justify-center flex-wrap">
             <a
               href="/portal/schedule"
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-b from-[var(--accent-bright)] to-[var(--accent)] text-[#0d1117] font-bold text-[13px] hover:opacity-90 transition-all [text-shadow:none]"
+              className="px-5 py-2.5 rounded-xl bg-[#0c1124] border border-[var(--accent)]/45 text-[var(--text-1)] font-semibold text-[13px] hover:bg-[#141a30] hover:border-[var(--accent)] transition-all"
             >
               Book a Session
             </a>

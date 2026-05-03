@@ -17,7 +17,7 @@ type CTAProps = {
 
 const VARIANT_CLASSES: Record<CTAVariant, string> = {
   primary:
-    "bg-gradient-to-b from-[var(--accent-bright)] to-[var(--accent)] text-white font-bold [text-shadow:0_1px_3px_rgba(0,0,0,0.55),0_0px_8px_rgba(0,0,0,0.3)] hover:from-[#d4f0ff] hover:to-[#9ecfea] shadow-[0_8px_28px_rgba(125,211,252,0.22)] hover:shadow-[0_14px_44px_rgba(125,211,252,0.35)] hover:-translate-y-0.5",
+    "bg-[#0c1124] border border-[var(--accent)]/45 text-[var(--text-1)] font-semibold hover:bg-[#141a30] hover:border-[var(--accent)] hover:-translate-y-px",
   ghost:
     "border border-[var(--border-2)] text-[var(--text-1)] font-semibold hover:bg-[var(--surface)]",
 };

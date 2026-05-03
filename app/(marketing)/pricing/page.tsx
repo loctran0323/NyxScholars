@@ -11,11 +11,7 @@ import { HOURLY_RATE, PACKAGES } from "@/lib/pricing";
 
 const includedEverywhere = [
   "Free 30-minute trial — no card",
-<<<<<<< HEAD
   "1:1 video sessions with a vetted Ivy League tutor",
-=======
-  "1:1 video sessions with a vetted Ivy+ undergrad",
->>>>>>> 740ebb25070b791dd0880bc05cc1884f2bb7109f
   "Shared progress map (your sky)",
   "Cancel any session up to 12 hours before",
   "Refundable until halfway through any cadence",

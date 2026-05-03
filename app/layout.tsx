@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Fraunces, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
-import { SiteChrome } from "@/components/shared/SiteChrome";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -47,7 +46,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} ${cormorant.variable} h-full`}
     >
       <body className="text-[var(--text-1)] min-h-screen flex flex-col antialiased">
-        <SiteChrome>{children}</SiteChrome>
+        {children}
       </body>
     </html>
   );

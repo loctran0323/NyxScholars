@@ -5,6 +5,8 @@ import { format } from "date-fns";
 import { CalendarPlus, Calendar, Clock, ChevronRight, Video, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { SessionsToolbar } from "@/components/portal/SessionsToolbar";
+import { SessionRowActions } from "@/components/portal/SessionRowActions";
 import type { Session } from "@/types/portal";
 
 function statusVariant(status: string): "gold" | "blue" | "green" | "red" | "default" {
@@ -24,6 +26,7 @@ function SessionCard({ session }: { session: Session }) {
  Math.abs(new Date(session.scheduled_at).getTime() - Date.now()) < 30 * 60 * 1000;
 
  return (
+ <div data-session-id={session.id} className="space-y-2">
  <Link
  href={`/portal/sessions/${session.id}`}
  className="flex items-start gap-4 p-5 bg-[var(--surface)] border border-[var(--border)] rounded-2xl hover:border-[var(--border-2)] transition-all group"
@@ -67,6 +70,12 @@ function SessionCard({ session }: { session: Session }) {
 
  <ChevronRight size={15} className="text-[var(--text-3)] shrink-0 mt-1 group-hover:text-[var(--text-2)] transition-colors" />
  </Link>
+ {!isUpcoming || session.status === "cancelled" ? null : (
+ <div className="px-5 -mt-1">
+ <SessionRowActions session={session} />
+ </div>
+ )}
+ </div>
  );
 }
 
@@ -177,6 +186,8 @@ export default async function SessionsPage() {
  )}
  </div>
  )}
+
+ <SessionsToolbar sessions={sessions} />
 
  <Tabs defaultValue="upcoming">
  <TabsList className="mb-5">
