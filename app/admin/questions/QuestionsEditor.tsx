@@ -46,14 +46,27 @@ export function QuestionsEditor({ stats, initial }: { stats: Stats; initial: Que
     setItems(data.dbQuestions as QuestionRow[]);
   }
 
-  async function deleteOne(id: string) {
-    const res = await fetch(`/api/admin/questions?id=${id}`, { method: "DELETE" });
+  async function setStatus(id: string, status: "active" | "draft" | "retired") {
+    const res = await fetch(`/api/admin/questions`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, status }),
+    });
     if (!res.ok) {
-      toast({ title: "Couldn't retire", variant: "error" });
+      toast({ title: "Couldn't update", variant: "error" });
       return;
     }
-    setItems((curr) => curr.map((i) => (i.id === id ? { ...i, status: "retired" } : i)));
-    toast({ title: "Retired", variant: "success", durationMs: 1500 });
+    setItems((curr) => curr.map((i) => (i.id === id ? { ...i, status } : i)));
+    toast({
+      title:
+        status === "active"
+          ? "Published"
+          : status === "retired"
+            ? "Retired"
+            : "Moved to draft",
+      variant: "success",
+      durationMs: 1500,
+    });
   }
 
   return (
@@ -110,11 +123,28 @@ export function QuestionsEditor({ stats, initial }: { stats: Stats; initial: Que
                       {q.status}
                     </Badge>
                   </div>
-                  {q.status !== "retired" && (
-                    <Button variant="ghost" size="sm" onClick={() => deleteOne(q.id)}>
-                      <Trash2 size={12} /> Retire
-                    </Button>
-                  )}
+                  <div className="flex items-center gap-1">
+                    {q.status === "draft" && (
+                      <Button variant="ghost" size="sm" onClick={() => setStatus(q.id, "active")}>
+                        <Save size={12} /> Publish
+                      </Button>
+                    )}
+                    {q.status === "active" && (
+                      <>
+                        <Button variant="ghost" size="sm" onClick={() => setStatus(q.id, "draft")}>
+                          Unpublish
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={() => setStatus(q.id, "retired")}>
+                          <Trash2 size={12} /> Retire
+                        </Button>
+                      </>
+                    )}
+                    {q.status === "retired" && (
+                      <Button variant="ghost" size="sm" onClick={() => setStatus(q.id, "draft")}>
+                        Restore
+                      </Button>
+                    )}
+                  </div>
                 </div>
                 <p className="text-[13.5px] text-[var(--text-1)] mb-2 leading-snug">{q.prompt}</p>
                 <ul className="space-y-1">
