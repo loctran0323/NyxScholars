@@ -1,20 +1,36 @@
+"use client";
+
 import Link from "next/link";
-import { Check } from "lucide-react";
+import { Check, ArrowRight, Loader2 } from "lucide-react";
+import { useState } from "react";
 import {
   CTA,
   BgInkWash, BgFade,
 } from "@/components/system";
 import { HOURLY_RATE, PACKAGES } from "@/lib/pricing";
 
-export const metadata = { title: "Pricing" };
-
 const includedEverywhere = [
   "Free 30-minute trial — no card",
+<<<<<<< HEAD
   "1:1 video sessions with a vetted Ivy League tutor",
+=======
+  "1:1 video sessions with a vetted Ivy+ undergrad",
+>>>>>>> 740ebb25070b791dd0880bc05cc1884f2bb7109f
   "Shared progress map (your sky)",
   "Cancel any session up to 12 hours before",
   "Refundable until halfway through any cadence",
 ];
+
+async function startCheckout(packageId: string): Promise<void> {
+  const res = await fetch("/api/stripe/checkout", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ packageId }),
+  });
+  const data = await res.json() as { url?: string; error?: string };
+  if (data.url) window.location.href = data.url;
+  else alert(data.error ?? "Something went wrong. Please try again.");
+}
 
 export default function PricingPage() {
   return (
@@ -43,8 +59,13 @@ export default function PricingPage() {
       <section className="relative py-16 md:py-24">
         <div className="max-w-[1000px] mx-auto px-6 sm:px-10">
           <div className="rounded-[14px] overflow-hidden border border-[var(--border)] bg-[#0c1124]/60 backdrop-blur-sm">
-            <Row label="Free trial" sub="30 minutes" price="$0" />
-            <Row label="Pay-as-you-go" sub="any session" price={`$${HOURLY_RATE} / hr`} highlight />
+            <Row label="Free trial" sub="30 minutes" price="$0" cta={{ label: "Book trial", href: "/match" }} />
+            <Row
+              label="Pay-as-you-go"
+              sub="any session"
+              price={`$${HOURLY_RATE} / hr`}
+              cta={{ label: "Buy a session", packageId: "pay-as-you-go" }}
+            />
             {PACKAGES.map((pkg) => (
               <Row
                 key={pkg.id}
@@ -53,9 +74,15 @@ export default function PricingPage() {
                 price={`$${pkg.effectiveHourly} / hr`}
                 aside={`$${pkg.totalPrice.toLocaleString()} · save ${pkg.discountPct}%`}
                 recommended={pkg.recommended}
+                cta={{ label: "Get started", packageId: pkg.id }}
               />
             ))}
-            <Row label="Admissions" sub="essays · school list · interviews" price="Quoted per case" />
+            <Row
+              label="Admissions"
+              sub="essays · school list · interviews"
+              price="Quoted per case"
+              cta={{ label: "Get in touch", href: "/match" }}
+            />
           </div>
 
           <div className="mt-14 max-w-[680px]">
@@ -105,21 +132,46 @@ export default function PricingPage() {
   );
 }
 
+type RowCTA =
+  | { label: string; href: string; packageId?: never }
+  | { label: string; packageId: string; href?: never };
+
 function Row({
-  label, sub, price, aside, highlight, recommended,
+  label, sub, price, aside, recommended, cta,
 }: {
   label: string;
   sub: string;
   price: string;
   aside?: string;
-  highlight?: boolean;
   recommended?: boolean;
+  cta: RowCTA;
 }) {
+  const [loading, setLoading] = useState(false);
+  const [hovered, setHovered] = useState(false);
+
+  const handleCTA = async () => {
+    if (cta.href) {
+      window.location.href = cta.href;
+      return;
+    }
+    setLoading(true);
+    await startCheckout(cta.packageId!);
+    setLoading(false);
+  };
+
   return (
-    <div
-      className="grid items-baseline gap-4 px-6 sm:px-8 py-6 border-b border-[var(--border)] last:border-b-0"
-      style={{ gridTemplateColumns: "1fr auto", background: highlight ? "rgba(125,211,252,0.04)" : "transparent" }}
+    <button
+      onClick={handleCTA}
+      disabled={loading}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="w-full grid items-center gap-4 px-6 sm:px-8 py-6 border-b border-[var(--border)] last:border-b-0 cursor-pointer text-left transition-colors disabled:opacity-50"
+      style={{
+        gridTemplateColumns: "1fr auto auto",
+        background: hovered ? "rgba(255,255,255,0.025)" : "transparent",
+      }}
     >
+      {/* Label + sub */}
       <div>
         <div className="flex items-baseline gap-3 flex-wrap">
           <span
@@ -138,6 +190,8 @@ function Row({
           {sub.toUpperCase()}
         </div>
       </div>
+
+      {/* Price */}
       <div className="text-right">
         <div className="font-mono" style={{ fontSize: 17, color: "var(--text-1)" }}>{price}</div>
         {aside ? (
@@ -146,6 +200,11 @@ function Row({
           </div>
         ) : null}
       </div>
-    </div>
+
+      {/* Arrow — appears on hover */}
+      <div style={{ color: hovered ? "var(--accent)" : "transparent", transition: "color 0.15s" }}>
+        {loading ? <Loader2 size={16} className="animate-spin" /> : <ArrowRight size={16} />}
+      </div>
+    </button>
   );
 }

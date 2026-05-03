@@ -105,8 +105,11 @@ function FilterChip({ label, active, onClick }: { label: string; active: boolean
   );
 }
 
+const SESSION_ACCESS_DAYS = 7;
+
 export default function MaterialsPage() {
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [lastSessionAt, setLastSessionAt] = useState<string | null | undefined>(undefined); // undefined = loading
   const [categoryFilter, setCategoryFilter] = useState<"All" | SubjectCategory>("All");
   const [difficultyFilter, setDifficultyFilter] = useState<"All" | DifficultyLevel>("All");
 
@@ -116,10 +119,34 @@ export default function MaterialsPage() {
     void supabase.auth.getUser().then(async (authRes: { data: { user: { id: string } | null } }) => {
       const user = authRes.data.user;
       if (!user) return;
-      const { data } = await supabase.from("profiles").select("*").eq("id", user.id).single();
-      if (data) setProfile(data as Profile);
+
+      const { data: profileData } = await supabase.from("profiles").select("*").eq("id", user.id).single();
+      if (profileData) setProfile(profileData as Profile);
+
+      // For session-plan users, find their most recent confirmed/completed session
+      if (profileData?.plan === "session") {
+        const { data: sessions } = await supabase
+          .from("sessions")
+          .select("scheduled_at")
+          .eq("student_id", user.id)
+          .in("status", ["confirmed", "completed"])
+          .order("scheduled_at", { ascending: false })
+          .limit(1);
+        setLastSessionAt(sessions?.[0]?.scheduled_at ?? null);
+      } else {
+        setLastSessionAt(null); // non-session plans don't need this gate
+      }
     });
   }, []);
+
+  const isSessionPlan = profile?.plan === "session";
+  const accessExpired = (() => {
+    if (!isSessionPlan) return false;
+    if (lastSessionAt === undefined) return false; // still loading
+    if (!lastSessionAt) return true; // no sessions at all
+    const daysSince = (Date.now() - new Date(lastSessionAt).getTime()) / (1000 * 60 * 60 * 24);
+    return daysSince > SESSION_ACCESS_DAYS;
+  })();
 
   const allowedCats = getAllowedCategories(profile?.plan ?? null, profile?.plan_subject ?? null, profile?.plan_addons ?? null);
   const visibleMaterials = MATERIALS.filter((m) => allowedCats.includes(m.category));
@@ -142,7 +169,36 @@ export default function MaterialsPage() {
         </p>
       </div>
 
-      {/* Filters */}
+      {/* Session plan paywall */}
+      {accessExpired && (
+        <div className="rounded-2xl border border-white/[0.08] bg-[var(--surface)] p-8 text-center mb-6">
+          <div className="w-14 h-14 rounded-full bg-[var(--accent)]/10 border border-[var(--accent)]/20 flex items-center justify-center mx-auto mb-4">
+            <BookOpen size={22} className="text-[var(--accent)]" />
+          </div>
+          <h2 className="text-[17px] font-bold text-[var(--text-1)] mb-2">Materials access expired</h2>
+          <p className="text-[var(--text-2)] text-[13.5px] leading-relaxed max-w-sm mx-auto mb-6">
+            Session plan members get {SESSION_ACCESS_DAYS} days of materials access after each session.
+            Book another session to unlock access again.
+          </p>
+          <div className="flex gap-3 justify-center flex-wrap">
+            <a
+              href="/portal/schedule"
+              className="px-5 py-2.5 rounded-xl bg-gradient-to-b from-[var(--accent-bright)] to-[var(--accent)] text-[#0d1117] font-bold text-[13px] hover:opacity-90 transition-all [text-shadow:none]"
+            >
+              Book a Session
+            </a>
+            <a
+              href="/pricing"
+              className="px-5 py-2.5 rounded-xl bg-white/[0.06] border border-white/[0.1] text-[var(--text-1)] font-medium text-[13px] hover:border-white/[0.18] transition-all"
+            >
+              Upgrade to Monthly
+            </a>
+          </div>
+        </div>
+      )}
+
+      {/* Filters + grid — hidden when access is expired */}
+      <div className={accessExpired ? "opacity-30 pointer-events-none select-none blur-[2px]" : ""}>
       <div className="space-y-3 mb-6">
         <div>
           <p className="text-[11px] text-[var(--text-3)] font-semibold uppercase tracking-wider mb-2">Category</p>
@@ -187,6 +243,7 @@ export default function MaterialsPage() {
           </a>
         ))}
       </div>
+      </div> {/* end blur wrapper */}
     </div>
   );
 }
