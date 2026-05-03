@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Save, CheckCircle, Key } from "lucide-react";
+import { Save, CheckCircle, Key, Globe } from "lucide-react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { cn } from "@/lib/utils";
+import { TimezoneField } from "@/components/portal/TimezoneField";
+import { detectTimezone } from "@/lib/timezone";
 
 const GRADES = ["8", "9", "10", "11", "12", "College Freshman", "Other"];
 
@@ -14,6 +16,7 @@ export default function ProfilePage() {
   const [phone, setPhone] = useState("");
   const [targetTest, setTargetTest] = useState<"SAT" | "ACT" | "">("");
   const [targetScore, setTargetScore] = useState("");
+  const [timezone, setTimezone] = useState<string | null>(null);
   const [email, setEmail] = useState("");
 
   const [saving, setSaving] = useState(false);
@@ -47,6 +50,9 @@ export default function ProfilePage() {
         setPhone(profile.phone ?? "");
         setTargetTest(profile.target_test ?? "");
         setTargetScore(profile.target_score ?? "");
+        setTimezone(profile.timezone ?? detectTimezone());
+      } else {
+        setTimezone(detectTimezone());
       }
     };
     load();
@@ -68,6 +74,7 @@ export default function ProfilePage() {
         phone: phone || null,
         target_test: targetTest || null,
         target_score: targetScore || null,
+        timezone: timezone || null,
       }),
     });
 
@@ -209,6 +216,14 @@ export default function ProfilePage() {
               placeholder="Your high school"
               className="w-full h-10 px-3.5 rounded-xl bg-[var(--bg-2)] border border-[var(--border)] text-[14px] text-[var(--text-1)] placeholder:text-[var(--text-3)] focus:outline-none focus:ring-2 focus:ring-[var(--border-accent)] focus:border-[var(--border-accent)] transition-all"
             />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="block text-[13px] font-medium text-[var(--text-2)] flex items-center gap-1.5">
+              <Globe size={12} className="text-[var(--text-3)]" /> Timezone
+            </label>
+            <TimezoneField value={timezone} onChange={setTimezone} />
+            <p className="text-[11.5px] text-[var(--text-3)]">All session times throughout the portal will be shown in this zone.</p>
           </div>
 
           <button

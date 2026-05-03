@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { SessionActions } from "@/components/portal/SessionActions";
+import { SessionWorkspace } from "@/components/portal/SessionWorkspace";
+import { RescheduleDialog } from "@/components/portal/RescheduleDialog";
 import type { Session } from "@/types/portal";
 
 function statusVariant(status: string): "gold" | "blue" | "green" | "red" | "default" {
@@ -208,13 +210,27 @@ export default async function SessionDetailPage({
  )}
  </div>
 
- {/* Quick actions */}
- <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-4">
+ {/* Quick actions + reschedule */}
+ <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-4 flex items-center justify-between flex-wrap gap-3">
  <SessionActions session={s} />
+ {s.status !== "cancelled" && s.status !== "completed" && (
+ <RescheduleDialog sessionId={s.id} currentScheduledAt={s.scheduled_at} />
+ )}
  </div>
 
  {/* Video call section */}
  <VideoCallSection session={s} />
+
+ {/* Whiteboard + recording + AI summary + homework */}
+ <SessionWorkspace
+ sessionId={s.id}
+ media={{
+ recordingUrl:    (s as Session & { recording_url?: string | null }).recording_url ?? undefined,
+ transcriptUrl:   (s as Session & { transcript_url?: string | null }).transcript_url ?? undefined,
+ summaryTopics:   (s as Session & { summary_topics?: string[] | null }).summary_topics ?? undefined,
+ summaryHomework: (s as Session & { summary_homework?: string[] | null }).summary_homework ?? undefined,
+ }}
+ />
  </div>
  );
 }

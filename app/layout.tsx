@@ -7,6 +7,7 @@ import { ToastProvider } from "@/components/system/Toast";
 import { Analytics } from "@/components/system/Analytics";
 import { PwaRegister } from "@/components/system/PwaRegister";
 import { NpsPrompt } from "@/components/system/NpsPrompt";
+import { InstallPrompt } from "@/components/system/InstallPrompt";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -83,6 +84,7 @@ export default function RootLayout({
             <Analytics />
             <PwaRegister />
             <NpsPrompt />
+            <InstallPrompt />
           </ToastProvider>
         </ThemeProvider>
       </body>

@@ -19,6 +19,9 @@ import {
   X,
   SlidersHorizontal,
   CreditCard,
+  ClipboardList,
+  PlayCircle,
+  Timer,
 } from "lucide-react";
 import { NotificationsBell } from "@/components/portal/NotificationsBell";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
@@ -30,19 +33,25 @@ const studentNavItems = [
   { href: "/portal/consultation", label: "My Sky",           icon: Compass,         exact: false, plans: ["session", "monthly", "counseling"] },
   { href: "/portal/diagnostic",   label: "Intake",           icon: Sparkles,        exact: false, plans: ["session", "monthly", "counseling"] },
   { href: "/portal/schedule",     label: "Schedule Session", icon: CalendarPlus,    exact: false, plans: ["session", "monthly", "counseling"] },
-  { href: "/portal/sessions",     label: "My Sessions",      icon: Calendar,        exact: false, plans: ["session", "monthly", "counseling"] },
-  { href: "/portal/materials",    label: "Materials",        icon: BookOpen,        exact: false, plans: ["session", "monthly", "counseling"] },
-  { href: "/portal/messages",     label: "Messages",         icon: MessageSquare,   exact: false, plans: ["session", "monthly", "counseling"] },
+  { href: "/portal/sessions",     label: "My Sessions",      icon: Calendar,          exact: false, plans: ["session", "monthly", "counseling"] },
+  { href: "/portal/practice",     label: "Daily 8 minutes",  icon: Sparkles,          exact: false, plans: ["session", "monthly", "counseling"] },
+  { href: "/portal/homework",     label: "Homework",         icon: ClipboardList,     exact: false, plans: ["session", "monthly", "counseling"] },
+  { href: "/portal/lessons",      label: "Video lessons",    icon: PlayCircle,        exact: false, plans: ["session", "monthly", "counseling"] },
+  { href: "/portal/mock-tests",   label: "Mock tests",       icon: Timer,             exact: false, plans: ["session", "monthly", "counseling"] },
+  { href: "/portal/materials",    label: "Materials",        icon: BookOpen,          exact: false, plans: ["session", "monthly", "counseling"] },
+  { href: "/portal/messages",     label: "Messages",         icon: MessageSquare,     exact: false, plans: ["session", "monthly", "counseling"] },
   { href: "/portal/profile",      label: "Profile",          icon: User,              exact: false, plans: ["session", "monthly", "counseling"] },
   { href: "/portal/billing",      label: "Billing",          icon: CreditCard,        exact: false, plans: ["session", "monthly", "counseling"] },
   { href: "/portal/settings",     label: "Settings",         icon: SlidersHorizontal, exact: false, plans: ["session", "monthly", "counseling"] },
 ];
 
 const teacherNavItems = [
-  { href: "/portal/teacher",  label: "My Students", icon: LayoutDashboard,   exact: true,  plans: [] },
-  { href: "/portal/messages", label: "Messages",    icon: MessageSquare,     exact: false, plans: [] },
-  { href: "/portal/profile",  label: "Profile",     icon: User,              exact: false, plans: [] },
-  { href: "/portal/settings", label: "Settings",    icon: SlidersHorizontal, exact: false, plans: [] },
+  { href: "/portal/teacher",       label: "My Students", icon: LayoutDashboard,   exact: true,  plans: [] },
+  { href: "/portal/teacher/forum", label: "Tutor forum", icon: MessageSquare,     exact: false, plans: [] },
+  { href: "/portal/messages",      label: "Messages",    icon: MessageSquare,     exact: false, plans: [] },
+  { href: "/portal/profile",       label: "Profile",     icon: User,              exact: false, plans: [] },
+  { href: "/portal/billing",       label: "Payouts",     icon: CreditCard,        exact: false, plans: [] },
+  { href: "/portal/settings",      label: "Settings",    icon: SlidersHorizontal, exact: false, plans: [] },
 ];
 
 function planLabel(plan: PlanType | null, role?: string | null): string {
