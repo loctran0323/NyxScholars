@@ -17,12 +17,14 @@ export default async function PortalLayout({
           <div className="flex justify-center mb-6">
             <Image src="/design/stacked-lockup.png" alt="Nyx" width={120} height={150} className="opacity-95" priority />
           </div>
-          <h2 className="text-xl font-semibold text-[var(--text-1)] mb-2 font-[family-name:var(--font-fraunces)]">Portal unavailable</h2>
+          <h2 className="text-xl font-semibold text-[var(--text-1)] mb-2 font-[family-name:var(--font-fraunces)]">
+            Portal unavailable
+          </h2>
           <p className="text-[var(--text-2)] text-sm leading-relaxed">
             The student portal requires Supabase to be configured. Add your{" "}
             <code className="text-[var(--accent)] text-xs">NEXT_PUBLIC_SUPABASE_URL</code> and{" "}
-            <code className="text-[var(--accent)] text-xs">NEXT_PUBLIC_SUPABASE_ANON_KEY</code>{" "}
-            environment variables to enable authentication.
+            <code className="text-[var(--accent)] text-xs">NEXT_PUBLIC_SUPABASE_ANON_KEY</code> environment
+            variables to enable authentication.
           </p>
         </div>
       </div>
@@ -67,8 +69,17 @@ export default async function PortalLayout({
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
         {/* Mobile spacer for top bar */}
         <div className="md:hidden h-14 shrink-0" />
-        <main className="flex-1 overflow-y-auto overscroll-contain">
-          <div className="max-w-5xl mx-auto px-5 py-7 md:px-8 md:py-9 pb-32">
+        <main id="main" className="flex-1 overflow-y-auto overscroll-contain">
+          {/* Atmospheric fade behind content */}
+          <div
+            aria-hidden
+            className="fixed inset-0 pointer-events-none -z-10"
+            style={{
+              backgroundImage:
+                "radial-gradient(ellipse 80% 40% at 60% -10%, var(--accent-dim) 0%, transparent 60%)",
+            }}
+          />
+          <div className="max-w-[1080px] mx-auto px-6 py-8 md:px-10 md:py-12 pb-32">
             {children}
           </div>
         </main>
