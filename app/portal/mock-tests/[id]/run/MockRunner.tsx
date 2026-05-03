@@ -32,21 +32,34 @@ export function MockRunner({
   const router = useRouter();
   const { toast } = useToast();
   const storageKey = `${STORAGE_PREFIX}${mockId}`;
-  const [picks, setPicks] = React.useState<(number | null)[]>(() => {
-    if (typeof window === "undefined") return Array(questions.length).fill(null);
+  const totalSeconds = durationMin * 60;
+
+  // Persist both the picks AND the start time so the timer survives a
+  // refresh — students don't get a free reset by reloading.
+  interface SavedState { picks: (number | null)[]; startedAtMs: number }
+  function loadSaved(): SavedState | null {
+    if (typeof window === "undefined") return null;
     try {
       const raw = window.localStorage.getItem(storageKey);
-      return raw ? (JSON.parse(raw) as (number | null)[]) : Array(questions.length).fill(null);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      // Back-compat with the old shape (just the picks array).
+      if (Array.isArray(parsed)) return { picks: parsed as (number | null)[], startedAtMs: Date.now() };
+      return parsed as SavedState;
     } catch {
-      return Array(questions.length).fill(null);
+      return null;
     }
-  });
+  }
+  const initial = loadSaved();
+  const [picks, setPicks] = React.useState<(number | null)[]>(initial?.picks ?? Array(questions.length).fill(null));
+  const startedAtRef = React.useRef<number>(initial?.startedAtMs ?? Date.now());
   const [idx, setIdx] = React.useState(0);
   const [submitted, setSubmitted] = React.useState(false);
-  const [secondsLeft, setSecondsLeft] = React.useState(durationMin * 60);
-  const startedAtRef = React.useRef<number | null>(null);
-
-  React.useEffect(() => { startedAtRef.current = Date.now(); }, []);
+  const [secondsLeft, setSecondsLeft] = React.useState(() => {
+    if (!initial) return totalSeconds;
+    const elapsed = Math.floor((Date.now() - initial.startedAtMs) / 1000);
+    return Math.max(0, totalSeconds - elapsed);
+  });
 
   React.useEffect(() => {
     if (submitted) return;
@@ -66,7 +79,10 @@ export function MockRunner({
 
   React.useEffect(() => {
     if (typeof window === "undefined") return;
-    try { window.localStorage.setItem(storageKey, JSON.stringify(picks)); } catch { /* ignore */ }
+    try {
+      const payload: SavedState = { picks, startedAtMs: startedAtRef.current };
+      window.localStorage.setItem(storageKey, JSON.stringify(payload));
+    } catch { /* ignore */ }
   }, [picks, storageKey]);
 
   function pick(i: number) {

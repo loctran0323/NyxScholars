@@ -1,16 +1,73 @@
 import Link from "next/link";
 import { ShieldCheck, CalendarPlus, MessageSquare, Sparkles, Award } from "lucide-react";
-import { TUTORS } from "@/lib/mock/tutors";
+import { TUTORS, type Tutor } from "@/lib/mock/tutors";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip } from "@/components/ui/tooltip";
+import { getSupabaseServerClient } from "@/lib/supabase/server";
 
 export const metadata = { title: "Meet your matched tutors" };
 
-export default function MatchPage() {
-  // Pick the top 3 — in a real implementation, this would query a matching
-  // service that uses the intake context to rank tutors by subject overlap,
-  // schedule fit, and personality signal.
-  const matched = TUTORS.slice(0, 3);
+interface AssignmentRow {
+  id: string;
+  teacher_id: string;
+  subject: string | null;
+  tutor: { full_name: string | null; school: string | null; verified_at: string | null } | null;
+}
+
+interface MatchedTutor {
+  id: string;
+  name: string;
+  school: string;
+  classOf: number;
+  satScore: number;
+  tags: string[];
+  bio: string;
+  verified: boolean;
+  source: "live" | "sample";
+}
+
+export default async function MatchPage() {
+  const sb = await getSupabaseServerClient();
+
+  // 1. Live assignments first — if the admin has paired this student with
+  //    real tutors, surface those (with the Verified badge from the real
+  //    profile row, not the sample roster).
+  let live: MatchedTutor[] = [];
+  if (sb) {
+    const { data: { user } } = await sb.auth.getUser();
+    if (user) {
+      const { data } = await sb
+        .from("assignments")
+        .select("id, teacher_id, subject, tutor:profiles!teacher_id(full_name, school, verified_at)")
+        .eq("student_id", user.id)
+        .eq("active", true);
+      live = ((data ?? []) as unknown as AssignmentRow[]).map((a) => ({
+        id:        a.teacher_id,
+        name:      a.tutor?.full_name ?? "Tutor",
+        school:    a.tutor?.school ?? "—",
+        classOf:   2026,
+        satScore:  1500,
+        tags:      [a.subject ?? "All subjects"],
+        bio:       "Assigned by Nyx after your intake.",
+        verified:  !!a.tutor?.verified_at,
+        source:    "live",
+      }));
+    }
+  }
+
+  // 2. Top up with sample roster so the screen never shows fewer than 3.
+  const sample: MatchedTutor[] = TUTORS.slice(0, 3).map((t: Tutor) => ({
+    id:        t.id,
+    name:      t.name,
+    school:    t.school,
+    classOf:   t.classOf,
+    satScore:  t.satScore,
+    tags:      t.tags as string[],
+    bio:       t.bio,
+    verified:  true,
+    source:    "sample",
+  }));
+  const matched = [...live, ...sample.filter((s) => !live.find((l) => l.id === s.id))].slice(0, 3);
 
   return (
     <div className="max-w-4xl">
@@ -47,11 +104,15 @@ export default function MatchPage() {
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
-                  <Tooltip content="Verified by Nyx: official score report, current enrollment, and a passing teaching audition.">
-                    <Badge variant="verified" className="cursor-help">
-                      <ShieldCheck size={10} /> Verified
-                    </Badge>
-                  </Tooltip>
+                  {t.verified && (
+                    <Tooltip content="Verified by Nyx: official score report, current enrollment, and a passing teaching audition.">
+                      <Badge variant="verified" className="cursor-help">
+                        <ShieldCheck size={10} /> Verified
+                      </Badge>
+                    </Tooltip>
+                  )}
+                  {t.source === "live" && <Badge variant="blue">Assigned</Badge>}
+                  {t.source === "sample" && <Badge variant="default">Sample roster</Badge>}
                   <Badge variant="green">SAT {t.satScore}</Badge>
                   {t.tags.includes("Admissions") && <Badge variant="purple">Admissions</Badge>}
                 </div>

@@ -29,9 +29,12 @@ type SkyProps = {
   setHoveredId: (id: string | null) => void;
   selectedId: string | null;
   setSelectedId: (id: string | null) => void;
+  /** Optional override map: skill_id → mastery in [0,1]. Defaults to the
+   *  static value baked into CONSTELLATIONS when missing. */
+  masteryOverrides?: Record<string, number>;
 };
 
-export function Sky({ hoveredId, setHoveredId, selectedId, setSelectedId }: SkyProps) {
+export function Sky({ hoveredId, setHoveredId, selectedId, setSelectedId, masteryOverrides }: SkyProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ w: 1200, h: 720 });
   const [hoveredConstId, setHoveredConstId] = useState<string | null>(null);
@@ -50,6 +53,28 @@ export function Sky({ hoveredId, setHoveredId, selectedId, setSelectedId }: SkyP
 
   const { w, h } = size;
 
+  // Apply per-skill mastery overrides (from /api/portal/skill-mastery) on
+  // top of the static constellation data. This is what makes the sky
+  // reflect the actual student instead of the seed sample.
+  const liveConstellations = useMemo<Constellation[]>(() => {
+    if (!masteryOverrides || Object.keys(masteryOverrides).length === 0) return CONSTELLATIONS;
+    return CONSTELLATIONS.map((c) => ({
+      ...c,
+      stars: c.stars.map((s) => ({
+        ...s,
+        mastery: masteryOverrides[s.id] ?? s.mastery,
+      })),
+    }));
+  }, [masteryOverrides]);
+
+  const liveAllSkills = useMemo<FlatSkill[]>(() => {
+    if (!masteryOverrides || Object.keys(masteryOverrides).length === 0) return ALL_SKILLS;
+    return ALL_SKILLS.map((s) => ({
+      ...s,
+      mastery: masteryOverrides[s.id] ?? s.mastery,
+    }));
+  }, [masteryOverrides]);
+
   const bgStars = useMemo(() => {
     const arr: { x: number; y: number; s: number; twinkle: boolean }[] = [];
     for (let i = 0; i < 180; i++) {
@@ -64,9 +89,9 @@ export function Sky({ hoveredId, setHoveredId, selectedId, setSelectedId }: SkyP
     return arr;
   }, []);
 
-  const litStars = ALL_SKILLS.filter((s) => s.mastery > 0.5).length;
-  const totalStars = ALL_SKILLS.length;
-  const radiantConsts = CONSTELLATIONS.filter((c) => {
+  const litStars = liveAllSkills.filter((s) => s.mastery > 0.5).length;
+  const totalStars = liveAllSkills.length;
+  const radiantConsts = liveConstellations.filter((c) => {
     const avg = c.stars.reduce((a, s) => a + s.mastery, 0) / c.stars.length;
     return avg >= 0.85;
   }).length;
@@ -140,7 +165,7 @@ export function Sky({ hoveredId, setHoveredId, selectedId, setSelectedId }: SkyP
           READING &amp; WRITING · SOUTHERN SKY
         </text>
 
-        {CONSTELLATIONS.map((c) => (
+        {liveConstellations.map((c) => (
           <ConstellationGlyph
             key={c.id}
             c={c}

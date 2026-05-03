@@ -89,16 +89,41 @@ export default function DiagnosticPage() {
 
   function nextQuestion() {
     if (questionIndex >= TOTAL - 1) {
-      setPhase("results");
+      finalizeAndShowResults();
       return;
     }
     const nxt = selectNext(state, pool);
     if (!nxt) {
-      setPhase("results");
+      finalizeAndShowResults();
       return;
     }
     setCurrent(nxt);
     setQuestionIndex((i) => i + 1);
+  }
+
+  /** Persist a summary so /portal/consultation can show real mastery. */
+  function finalizeAndShowResults() {
+    setPhase("results");
+    const perSkill: Record<string, number> = {};
+    for (const skillId of Object.keys(state.skillTheta)) {
+      // Map θ in [-3, 3] to mastery in [0, 1] via the same logistic the
+      // adaptive engine uses. Clamp so absurd values don't escape.
+      const t = state.skillTheta[skillId];
+      const m = 1 / (1 + Math.exp(-1.7 * t));
+      perSkill[skillId] = Math.max(0, Math.min(1, m));
+    }
+    const predictedScore = Math.round(1200 + state.theta * 130);
+    void fetch("/api/portal/diagnostic-complete", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        theta: state.theta,
+        ci: state.ci,
+        questionsAsked: questionIndex + 1,
+        predictedScore,
+        perSkill,
+      }),
+    }).catch(() => {});
   }
 
   function reset() {

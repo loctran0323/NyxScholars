@@ -146,11 +146,6 @@ export function selectNextV2(state: AdaptiveStateV2, pool: BankQuestion[]): Bank
   let best: BankQuestion | null = null;
   let bestScore = -Infinity;
   for (const q of candidates) {
-    if (state.lastSection === q.section && state.lastSection === "Reading & Writing") {
-      // Section lock: don't ask two passages back to back. Heavy penalty, not ban.
-      // (Pure ban breaks a small bank.)
-    }
-
     const post = state.skill[q.skillId] ?? { mean: PRIOR_MEAN, sd: PRIOR_SD, attempts: 0 };
     const b = difficultyToB(q.difficulty);
     const localTheta = post.attempts > 0 ? 0.6 * post.mean + 0.4 * state.theta : state.theta;

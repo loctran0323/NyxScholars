@@ -7,8 +7,10 @@ export interface Lesson {
   level: "Beginner" | "Intermediate" | "Advanced";
   description: string;
   thumbnail: string;
-  /** Direct video URL when available. Falls back to a "uploading" state. */
+  /** Direct video URL when available. Falls back to an editorial "this drops next quarter" panel. */
   videoUrl?: string;
+  /** Optional release hint shown in the fallback panel ("April 2026", "next quarter", etc.). */
+  releaseHint?: string;
   takeaways: string[];
   transcript?: string;
 }
