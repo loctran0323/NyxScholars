@@ -9,20 +9,20 @@ export function getStripe(): Stripe {
 
 export const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET ?? "";
 
-// Map pricing.ts IDs → Stripe Price IDs (fill after creating products in Stripe dashboard)
+// Map pricing.ts package IDs → Stripe Price IDs
 export const PRICE_IDS: Record<string, string> = {
-  "pay-as-you-go": process.env.STRIPE_PRICE_PAYG        ?? "",
-  "month":         process.env.STRIPE_PRICE_MONTH       ?? "",
-  "two-month":     process.env.STRIPE_PRICE_TWO_MONTH   ?? "",
-  "three-month":   process.env.STRIPE_PRICE_THREE_MONTH ?? "",
-  "admissions":    process.env.STRIPE_PRICE_ADMISSIONS  ?? "",
+  "pay-as-you-go": process.env.STRIPE_PRICE_PAY      ?? "",
+  "month":         process.env.STRIPE_FOUR_PAY        ?? "",
+  "two-month":     process.env.STRIPE_EIGHT_PAY       ?? "",
+  "three-month":   process.env.STRIPE_TWELVE_PAY      ?? "",
+  "admissions":    process.env.STRIPE_PAY_ADMISSIONS  ?? "",
 };
 
 // Portal plan price IDs (used by upgrade flow)
 export const PLAN_PRICE_IDS: Record<PlanType, string | null> = {
-  session:    process.env.STRIPE_PRICE_SESSION    ?? null,
-  monthly:    process.env.STRIPE_PRICE_MONTHLY    ?? null,
-  counseling: process.env.STRIPE_PRICE_COUNSELING ?? null,
+  session:    process.env.STRIPE_PRICE_PAY     ?? null,
+  monthly:    process.env.STRIPE_FOUR_PAY      ?? null,
+  counseling: process.env.STRIPE_PAY_ADMISSIONS ?? null,
 };
 
 export function isStripeConfigured(): boolean {
@@ -42,11 +42,11 @@ export function getStripeConfig(): StripeConfig {
     publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? null,
     secretKey:      process.env.STRIPE_SECRET_KEY                  ?? null,
     webhookSecret:  process.env.STRIPE_WEBHOOK_SECRET              ?? null,
-    siteUrl:        process.env.NEXT_PUBLIC_SITE_URL               ?? "http://localhost:3000",
+    siteUrl:        process.env.NEXT_PUBLIC_SITE_URL               ?? "https://nyxscholars.com/",
     prices: {
-      session:    process.env.STRIPE_PRICE_SESSION    ?? null,
-      monthly:    process.env.STRIPE_PRICE_MONTHLY    ?? null,
-      counseling: process.env.STRIPE_PRICE_COUNSELING ?? null,
+      session:    process.env.STRIPE_PRICE_PAY       ?? null,
+      monthly:    process.env.STRIPE_FOUR_PAY         ?? null,
+      counseling: process.env.STRIPE_PAY_ADMISSIONS   ?? null,
     },
   };
 }
