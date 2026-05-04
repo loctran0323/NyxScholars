@@ -18,7 +18,7 @@ export function sessionStatusVariant(status: SessionStatus | string): "gold" | "
 export function planLabel(plan: string | null | undefined): string {
   switch (plan) {
     case "session":    return "Session · pay as you go";
-    case "monthly":    return "Scholar · 4 sessions / month";
+    case "monthly":    return "Scholar · 8 weeks";
     case "counseling": return "Concierge · custom-quoted";
     default:           return "Trial — choose a plan to begin";
   }
