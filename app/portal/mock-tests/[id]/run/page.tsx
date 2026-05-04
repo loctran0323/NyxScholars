@@ -1,19 +1,28 @@
-import { ComingSoonPanel } from "@/components/portal/ComingSoonPanel";
+import { notFound } from "next/navigation";
+import { MockRunner } from "./MockRunner";
+import { getMockById, buildMockQuestions } from "../../content";
 
 export const metadata = {
-  title: "Mock test runner · Coming soon",
+  title: "Mock test runner · Nyx",
 };
 
-export default function MockRunPage() {
+export default async function MockRunPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const mock = getMockById(id);
+  if (!mock) notFound();
+
+  const questions = buildMockQuestions(mock);
+
   return (
-    <ComingSoonPanel
-      feature="Mock tests"
-      title="Timed runner is offline"
-      italic="for now"
-      blurb="The full-length runner is paused while we calibrate the question rotation. The Adaptive Intake (under Learn → Adaptive intake) is the closest thing currently live — it's a 14-question diagnostic, not a full-length mock, but it produces a real sky map."
-      eta="Summer 2026"
-      backHref="/portal/mock-tests"
-      backLabel="Back to mock tests"
+    <MockRunner
+      mockId={mock.id}
+      title={mock.title}
+      questions={questions}
+      durationMin={mock.durationMin}
     />
   );
 }
