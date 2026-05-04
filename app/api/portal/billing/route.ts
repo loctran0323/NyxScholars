@@ -35,6 +35,11 @@ export async function POST() {
   const meta = (profileLookup.data?.notif_prefs ?? {}) as Record<string, unknown>;
   let customerId = (meta.stripe_customer_id as string | undefined) ?? null;
 
+  if (!customerId && user.email) {
+    const existing = await stripe.customers.list({ email: user.email, limit: 1 });
+    customerId = existing.data[0]?.id ?? null;
+  }
+
   if (!customerId) {
     const customer = await stripe.customers.create({
       email: user.email ?? undefined,
