@@ -20,6 +20,7 @@ export default async function ConsultationDashboardPage() {
     { data: assignment },
     { data: upcoming },
     { data: notesSessions },
+    { count: diagnosticAttemptCount },
   ] = await Promise.all([
     supabase
       .from("profiles").select("full_name, plan, notif_prefs")
@@ -43,6 +44,10 @@ export default async function ConsultationDashboardPage() {
       .not("admin_notes", "is", null)
       .order("scheduled_at", { ascending: false })
       .limit(6),
+    supabase
+      .from("diagnostic_attempts")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", user.id),
   ]);
 
   const typedProfile = profile as Profile | null;
@@ -54,7 +59,7 @@ export default async function ConsultationDashboardPage() {
   const meta = (typedProfile?.notif_prefs ?? {}) as Record<string, unknown>;
   const summary = (meta.diagnostic_summary ?? null) as DiagnosticSummary | null;
   const masteryOverrides = summary?.per_skill ?? undefined;
-  const hasIntake = !!summary?.completed_at;
+  const hasIntake = !!summary?.completed_at || (diagnosticAttemptCount ?? 0) > 0;
 
   const upcomingSession = upcoming
     ? {
