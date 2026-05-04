@@ -27,46 +27,47 @@ async function loadBillingData(userId: string, email: string | undefined, profil
   if (!isStripeConfigured()) {
     return { customerId: null, subscription: null, paymentMethod: null, invoices: [] };
   }
-  const stripe = getStripe();
 
-  // Resolve the customer id. Stored on profile.notif_prefs.stripe_customer_id
-  // by /api/portal/billing on first portal-open or by webhook on first checkout.
-  const meta = (profile?.notif_prefs ?? {}) as Record<string, unknown> | undefined;
-  let customerId = meta && typeof meta.stripe_customer_id === "string" ? meta.stripe_customer_id : null;
+  try {
+    const stripe = getStripe();
 
-  if (!customerId && email) {
-    // Fall back to looking up by email so returning customers see their data
-    // even before they re-trigger the portal session.
-    const found = await stripe.customers.list({ email, limit: 1 });
-    customerId = found.data[0]?.id ?? null;
-  }
+    const meta = (profile?.notif_prefs ?? {}) as Record<string, unknown> | undefined;
+    let customerId = meta && typeof meta.stripe_customer_id === "string" ? meta.stripe_customer_id : null;
 
-  if (!customerId) {
+    if (!customerId && email) {
+      const found = await stripe.customers.list({ email, limit: 1 });
+      customerId = found.data[0]?.id ?? null;
+    }
+
+    if (!customerId) {
+      return { customerId: null, subscription: null, paymentMethod: null, invoices: [] };
+    }
+
+    const [subsResponse, invoicesResponse, customerResponse] = await Promise.all([
+      stripe.subscriptions.list({
+        customer: customerId,
+        status:   "all",
+        limit:    1,
+        expand:   ["data.default_payment_method", "data.items.data.price.product"],
+      }),
+      stripe.invoices.list({ customer: customerId, limit: 12 }),
+      stripe.customers.retrieve(customerId, { expand: ["invoice_settings.default_payment_method"] }),
+    ]);
+
+    const subscription = subsResponse.data[0] ?? null;
+    let paymentMethod: Stripe.PaymentMethod | null = null;
+    const customer = customerResponse as Stripe.Customer;
+    const defaultPm = customer.invoice_settings?.default_payment_method;
+    if (defaultPm && typeof defaultPm === "object") paymentMethod = defaultPm as Stripe.PaymentMethod;
+    else if (subscription?.default_payment_method && typeof subscription.default_payment_method === "object") {
+      paymentMethod = subscription.default_payment_method as Stripe.PaymentMethod;
+    }
+
+    void userId;
+    return { customerId, subscription, paymentMethod, invoices: invoicesResponse.data };
+  } catch {
     return { customerId: null, subscription: null, paymentMethod: null, invoices: [] };
   }
-
-  const [subsResponse, invoicesResponse, customerResponse] = await Promise.all([
-    stripe.subscriptions.list({
-      customer: customerId,
-      status:   "all",
-      limit:    1,
-      expand:   ["data.default_payment_method", "data.items.data.price.product"],
-    }),
-    stripe.invoices.list({ customer: customerId, limit: 12 }),
-    stripe.customers.retrieve(customerId, { expand: ["invoice_settings.default_payment_method"] }),
-  ]);
-
-  const subscription = subsResponse.data[0] ?? null;
-  let paymentMethod: Stripe.PaymentMethod | null = null;
-  const customer = customerResponse as Stripe.Customer;
-  const defaultPm = customer.invoice_settings?.default_payment_method;
-  if (defaultPm && typeof defaultPm === "object") paymentMethod = defaultPm as Stripe.PaymentMethod;
-  else if (subscription?.default_payment_method && typeof subscription.default_payment_method === "object") {
-    paymentMethod = subscription.default_payment_method as Stripe.PaymentMethod;
-  }
-
-  void userId;
-  return { customerId, subscription, paymentMethod, invoices: invoicesResponse.data };
 }
 
 export default async function BillingPage() {
@@ -154,7 +155,7 @@ function PlanCard({
   const cancelling = subscription?.cancel_at_period_end ?? false;
   const item = subscription?.items.data[0];
   const price = item?.price;
-  const periodEnd = item?.current_period_end ?? null;
+  const periodEnd = (subscription as (Stripe.Subscription & { current_period_end?: number }) | null)?.current_period_end ?? null;
   const product = price?.product && typeof price.product === "object" ? (price.product as Stripe.Product) : null;
   const planName = product?.name ?? planLabel(plan);
   const amount = price?.unit_amount != null
