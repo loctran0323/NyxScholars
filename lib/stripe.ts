@@ -20,8 +20,8 @@ export const PRICE_IDS: Record<string, string> = {
 
 // Portal plan price IDs (used by upgrade flow)
 export const PLAN_PRICE_IDS: Record<PlanType, string | null> = {
-  session:    process.env.STRIPE_PRICE_PAY     ?? null,
-  monthly:    process.env.STRIPE_FOUR_PAY      ?? null,
+  session:    process.env.STRIPE_PRICE_PAY      ?? null,
+  monthly:    process.env.STRIPE_EIGHT_PAY      ?? null,
   counseling: process.env.STRIPE_PAY_ADMISSIONS ?? null,
 };
 
@@ -44,9 +44,9 @@ export function getStripeConfig(): StripeConfig {
     webhookSecret:  process.env.STRIPE_WEBHOOK_SECRET              ?? null,
     siteUrl:        process.env.NEXT_PUBLIC_SITE_URL               ?? "https://nyxscholars.com/",
     prices: {
-      session:    process.env.STRIPE_PRICE_PAY       ?? null,
-      monthly:    process.env.STRIPE_FOUR_PAY         ?? null,
-      counseling: process.env.STRIPE_PAY_ADMISSIONS   ?? null,
+      session:    process.env.STRIPE_PRICE_PAY      ?? null,
+      monthly:    process.env.STRIPE_EIGHT_PAY      ?? null,
+      counseling: process.env.STRIPE_PAY_ADMISSIONS ?? null,
     },
   };
 }

@@ -124,6 +124,9 @@ export default function DiagnosticClient({ existingSummary }: { existingSummary:
     void fetch("/api/portal/diagnostic-complete", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      // keepalive ensures the request survives if the user navigates away
+      // immediately after seeing results before the browser can cancel it.
+      keepalive: true,
       body: JSON.stringify({
         theta: freshState.theta,
         ci: freshState.ci,
@@ -136,11 +139,13 @@ export default function DiagnosticClient({ existingSummary }: { existingSummary:
 
   function startRetake() {
     const fresh = initState();
+    const shuffled = [...pool].sort(() => Math.random() - 0.5);
+    setPool(shuffled);
     setPhase("welcome");
     setQuestionIndex(0);
     setAnswers([]);
     setState(fresh);
-    setCurrent(selectNext(fresh, pool));
+    setCurrent(selectNext(fresh, shuffled));
   }
 
   return (
