@@ -1,12 +1,16 @@
 import { cookies } from "next/headers";
 
 /**
- * Passphrase that gates /talija. Prefers TALIJA_PASSCODE; falls back to
- * ADMIN_PASSWORD so the tutor view can never be locked out in an environment
- * where only the admin password is configured.
+ * Passphrase that gates /talija. Prefers the TALIJA_PASSCODE env var (then
+ * ADMIN_PASSWORD), and finally falls back to a hardcoded default so the tutor
+ * view works in production with no env configuration at all. This is a
+ * low-stakes gate (it guards a study dashboard, not sensitive data); the
+ * hardcoded default was explicitly requested.
  */
-export function talijaPasscode(): string | undefined {
-  return process.env.TALIJA_PASSCODE || process.env.ADMIN_PASSWORD || undefined;
+const DEFAULT_PASSCODE = "charlesistheprettiestboyandimjustasmellypoopyhead";
+
+export function talijaPasscode(): string {
+  return process.env.TALIJA_PASSCODE || process.env.ADMIN_PASSWORD || DEFAULT_PASSCODE;
 }
 
 export const TALIJA_COOKIE = "talija_session";

@@ -11,6 +11,7 @@
  * chainable no-op via a Proxy, so an unforeseen query degrades to "no filter"
  * rather than throwing.
  */
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { MOCK_DB, DEMO_USER } from "@/lib/mock/portalSeed";
 
 export const DEMO_COOKIE = "nyx_demo";
@@ -306,13 +307,11 @@ function baseClient(auth: unknown) {
 }
 
 /** Server-side mock client (auth state read from cookies). */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function createMockServerClient(cookieStore: CookieStore): any {
-  return baseClient(serverAuth(cookieStore));
+export function createMockServerClient(cookieStore: CookieStore): SupabaseClient {
+  return baseClient(serverAuth(cookieStore)) as unknown as SupabaseClient;
 }
 
 /** Browser-side mock client (auth state stored in a readable cookie). */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function createMockBrowserClient(): any {
-  return baseClient(browserAuth());
+export function createMockBrowserClient(): SupabaseClient {
+  return baseClient(browserAuth()) as unknown as SupabaseClient;
 }
