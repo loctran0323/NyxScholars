@@ -10,7 +10,10 @@ import { cookies } from "next/headers";
 const DEFAULT_PASSCODE = "charlesistheprettiestboyandimjustasmellypoopyhead";
 
 export function talijaPasscode(): string {
-  return process.env.TALIJA_PASSCODE || process.env.ADMIN_PASSWORD || DEFAULT_PASSCODE;
+  // Hardcoded passphrase (explicitly requested). An optional TALIJA_PASSCODE env
+  // var can override it, but we deliberately do NOT fall back to ADMIN_PASSWORD,
+  // so this exact passphrase always works on /talija regardless of other env vars.
+  return process.env.TALIJA_PASSCODE || DEFAULT_PASSCODE;
 }
 
 export const TALIJA_COOKIE = "talija_session";
