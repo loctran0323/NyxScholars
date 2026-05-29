@@ -4,7 +4,7 @@ import * as React from "react";
 import { Clock, Flag, ChevronLeft, ChevronRight, ArrowLeft, Gauge, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Stimulus } from "@/components/practice/Passage";
+import { Stimulus, Inline } from "@/components/practice/Passage";
 import { SKILL_BY_KEY, type PublicRWQuestion } from "@/lib/practice/types";
 
 interface SavedState {
@@ -340,7 +340,7 @@ export function PacingRunner({
         </div>
 
         <Stimulus text={q.passage} />
-        <p className="mb-5 text-[15px] font-medium leading-relaxed text-[var(--text-1)]">{q.prompt}</p>
+        <p className="mb-5 text-[15px] font-medium leading-relaxed text-[var(--text-1)]"><Inline text={q.prompt} /></p>
 
         <div className="flex flex-col gap-2.5">
           {q.choices.map((choice, i) => {

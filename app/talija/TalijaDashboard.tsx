@@ -8,7 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/system/Toast";
-import { Passage } from "@/components/practice/Passage";
+import { Passage, Inline } from "@/components/practice/Passage";
 import type { TalijaBank } from "@/lib/practice/talija-data";
 
 const LETTER = (i: number) => String.fromCharCode(65 + i);
@@ -177,7 +177,7 @@ function SessionCard({ s, open, onToggle }: { s: ResultSession; open: boolean; o
                 <span className="ml-auto inline-flex items-center gap-1 font-mono text-[11px] text-[var(--text-3)]"><Clock size={10} />{Math.round(a.ms / 1000)}s</span>
               </div>
               <Passage text={a.passage} className="mb-2" />
-              <p className="mb-2 text-[13.5px] font-medium text-[var(--text-1)]">{a.prompt}</p>
+              <p className="mb-2 text-[13.5px] font-medium text-[var(--text-1)]"><Inline text={a.prompt} /></p>
               <div className="space-y-1.5">
                 {a.choices.map((c, ci) => {
                   const isKey = a.correct === ci;
@@ -334,7 +334,7 @@ function BankTab({ bank }: { bank: TalijaBank }) {
                     <div key={q.id} className="rounded-xl border border-[var(--border)] bg-[var(--bg-2)] p-4">
                       <p className="mb-2 font-mono text-[10.5px] text-[var(--text-3)]">Q{i + 1} · difficulty {q.difficulty} · {q.paceSeconds}s</p>
                       <Passage text={q.passage} className="mb-2" />
-                      <p className="mb-2 text-[13px] font-medium text-[var(--text-1)]">{q.prompt}</p>
+                      <p className="mb-2 text-[13px] font-medium text-[var(--text-1)]"><Inline text={q.prompt} /></p>
                       <div className="space-y-1">
                         {q.choices.map((c, ci) => (
                           <div key={ci} className={cn("flex items-start gap-2 rounded-lg px-2.5 py-1.5 text-[12.5px]", ci === q.correct ? "bg-[var(--success-soft)] text-[var(--text-1)]" : "text-[var(--text-2)]")}>

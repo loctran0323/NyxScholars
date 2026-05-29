@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Stimulus } from "@/components/practice/Passage";
+import { Stimulus, Inline } from "@/components/practice/Passage";
 import { PacingRunner } from "./PacingRunner";
 import { SKILL_BY_KEY, type PublicRWQuestion, type RWDomain } from "@/lib/practice/types";
 import type { StudentData, StudentSkill, StudentHomework } from "@/lib/practice/student-data";
@@ -355,7 +355,7 @@ function SimpleRunner({
       <article className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 sm:p-7">
         <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--text-3)]">{SKILL_BY_KEY[q.skill]?.label ?? q.skill}</p>
         <Stimulus text={q.passage} />
-        <p className="mb-5 text-[15px] font-medium leading-relaxed text-[var(--text-1)]">{q.prompt}</p>
+        <p className="mb-5 text-[15px] font-medium leading-relaxed text-[var(--text-1)]"><Inline text={q.prompt} /></p>
 
         <div className="flex flex-col gap-2.5">
           {q.choices.map((choice, i) => {

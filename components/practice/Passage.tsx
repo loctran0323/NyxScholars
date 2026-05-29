@@ -57,6 +57,11 @@ export function Stimulus({ text, className }: { text: string; className?: string
   );
 }
 
+/** Inline text that renders **double asterisks** as bold — for prompts/stems. */
+export function Inline({ text }: { text: string }) {
+  return <>{renderInline(text ?? "")}</>;
+}
+
 function renderInline(s: string): React.ReactNode {
   const parts = s.split(/(\*\*[^*]+\*\*)/g);
   return parts.map((part, i) => {
