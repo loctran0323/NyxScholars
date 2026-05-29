@@ -38,6 +38,25 @@ export function Passage({ text, className }: { text: string; className?: string 
   );
 }
 
+/**
+ * A passage rendered as a visually distinct, pinned stimulus block directly
+ * above the question — so it is always clear which text a question refers to.
+ * Renders nothing when there is no passage.
+ */
+export function Stimulus({ text, className }: { text: string; className?: string }) {
+  if (!text?.trim()) return null;
+  return (
+    <div
+      className={cn(
+        "mb-5 rounded-xl border border-l-2 border-[var(--border)] border-l-[var(--accent)] bg-[var(--bg-2)]/60 p-4",
+        className,
+      )}
+    >
+      <Passage text={text} />
+    </div>
+  );
+}
+
 function renderInline(s: string): React.ReactNode {
   const parts = s.split(/(\*\*[^*]+\*\*)/g);
   return parts.map((part, i) => {
