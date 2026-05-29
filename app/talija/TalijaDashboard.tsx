@@ -3,7 +3,7 @@
 import * as React from "react";
 import {
   RefreshCw, ChevronDown, CheckCircle2, XCircle, Clock, ClipboardList,
-  BookOpen, Activity, Flag, Send, AlertTriangle,
+  BookOpen, Activity, Flag, Send, AlertTriangle, Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -81,6 +81,7 @@ function TabButton({ active, onClick, icon, children }: { active: boolean; onCli
 
 // ── Results tab ──
 function ResultsTab({ slug, bank }: { slug: string; bank: TalijaBank }) {
+  const { toast } = useToast();
   const [sessions, setSessions] = React.useState<ResultSession[]>([]);
   const [configured, setConfigured] = React.useState(true);
   const [loading, setLoading] = React.useState(true);
@@ -103,6 +104,23 @@ function ResultsTab({ slug, bank }: { slug: string; bank: TalijaBank }) {
     return () => clearInterval(id);
   }, [load]);
 
+  async function clearTestData() {
+    if (!window.confirm(`Clear all of ${slug}'s synced results and homework? This can't be undone.`)) return;
+    try {
+      const r = await fetch(`/api/temp/${slug}/reset`, { method: "POST" });
+      const data = await r.json();
+      if (r.ok && data.ok) {
+        setSessions([]);
+        toast({ title: "Test data cleared", variant: "success" });
+        load();
+      } else {
+        toast({ title: data.reason === "not-configured" ? "Supabase not configured" : "Couldn't clear data", variant: "error" });
+      }
+    } catch {
+      toast({ title: "Couldn't clear data", variant: "error" });
+    }
+  }
+
   return (
     <div>
       <AssignHomework slug={slug} bank={bank} />
@@ -111,9 +129,14 @@ function ResultsTab({ slug, bank }: { slug: string; bank: TalijaBank }) {
         <p className="font-mono text-[10.5px] uppercase tracking-[0.22em] text-[var(--text-3)]">
           {slug}&apos;s sessions {sessions.length ? `· ${sessions.length}` : ""}
         </p>
-        <button onClick={() => { setLoading(true); load(); }} className="inline-flex items-center gap-1.5 text-[12px] text-[var(--text-3)] hover:text-[var(--text-1)]">
-          <RefreshCw size={12} className={loading ? "animate-spin" : ""} /> Refresh
-        </button>
+        <div className="flex items-center gap-3">
+          <button onClick={clearTestData} className="inline-flex items-center gap-1.5 text-[12px] text-[var(--text-3)] hover:text-[var(--danger)]">
+            <Trash2 size={12} /> Clear test data
+          </button>
+          <button onClick={() => { setLoading(true); load(); }} className="inline-flex items-center gap-1.5 text-[12px] text-[var(--text-3)] hover:text-[var(--text-1)]">
+            <RefreshCw size={12} className={loading ? "animate-spin" : ""} /> Refresh
+          </button>
+        </div>
       </div>
 
       {!configured && (
