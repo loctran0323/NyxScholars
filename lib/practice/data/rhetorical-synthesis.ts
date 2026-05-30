@@ -216,5 +216,205 @@ export const DATA: RWSkillData = {
         "The goal asks specifically for a similarity in engineering, and only the third choice names a shared design feature, the load-spreading arch, that both bridges use. The fourth choice is the strongest trap: it is a genuine similarity acknowledged across eras, but staying in use is an outcome, not a fact about how the bridges were engineered.",
       paceSeconds: 90,
     },
+    {
+      id: "rhetorical-synthesis-11",
+      skill: "rhetorical-synthesis",
+      domain: "Expression of Ideas",
+      difficulty: 4,
+      passage:
+        "While researching a topic, a student has taken the following notes:\n• Honeybees and bumblebees both pollinate crops and live in colonies.\n• Honeybee colonies survive the winter as a group, clustering for warmth.\n• In a bumblebee colony, only the new queens survive the winter; the rest die in autumn.\n• Honeybee colonies can contain tens of thousands of workers.\n• Bumblebee colonies rarely exceed a few hundred workers.",
+      prompt:
+        "The student wants to emphasize a difference between honeybee and bumblebee colonies. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
+      choices: [
+        "Both honeybees and bumblebees pollinate crops and live together in colonies.",
+        "Honeybee colonies can contain tens of thousands of workers, far more than a bumblebee colony's few hundred.",
+        "Bumblebee colonies rarely grow beyond a few hundred workers over the course of a season.",
+        "Honeybees cluster together for warmth in order to survive the cold winter months.",
+      ],
+      correct: 1,
+      rationale:
+        "A difference must measure the two colonies against each other on the same point, which only the second choice does by contrasting the tens of thousands of honeybee workers with the bumblebee's few hundred. The first choice is the strongest trap: it cleanly pairs both insects, but it reports a shared trait, emphasizing a similarity rather than the difference the goal requires.",
+      paceSeconds: 85,
+    },
+    {
+      id: "rhetorical-synthesis-12",
+      skill: "rhetorical-synthesis",
+      domain: "Expression of Ideas",
+      difficulty: 5,
+      passage:
+        "While researching a topic, a student has taken the following notes:\n• Aerogel is a solid material made mostly of air, with tiny pores throughout.\n• It is one of the lightest solids ever created.\n• Despite being so light, it can support many times its own weight.\n• It is an excellent insulator, blocking heat far better than ordinary foam.\n• Engineers have used it to insulate spacecraft and protect scientific instruments.",
+      prompt:
+        "The student wants to introduce aerogel to an audience unfamiliar with it. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
+      choices: [
+        "Engineers have used aerogel to insulate spacecraft and to protect scientific instruments.",
+        "Although aerogel is extremely light, it can still support many times its own weight.",
+        "Aerogel is a porous solid made mostly of air, one of the lightest solids ever created.",
+        "Aerogel blocks heat far more effectively than ordinary foam does.",
+      ],
+      correct: 2,
+      rationale:
+        "Introducing aerogel to newcomers requires first saying what it is, which only the third choice does by defining it as a porous, air-filled solid and noting that it is among the lightest solids ever made. The second choice is the strongest trap: it is accurate and striking, but it highlights one property as if the reader already knows what aerogel is, skipping the basic definition a newcomer needs.",
+      paceSeconds: 90,
+    },
+    {
+      id: "rhetorical-synthesis-13",
+      skill: "rhetorical-synthesis",
+      domain: "Expression of Ideas",
+      difficulty: 5,
+      passage:
+        "While researching a topic, a student has taken the following notes:\n• A museum tested two ways to display a fragile centuries-old manuscript.\n• Option 1 kept the manuscript on permanent open display under low light.\n• Option 2 sealed it in a dark case and showed it only one week each year.\n• Under Option 1, the ink began to fade within a few years.\n• Under Option 2, conservators detected no measurable fading after a decade.",
+      prompt:
+        "The student wants to present a specific advantage of Option 2 over Option 1. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
+      choices: [
+        "Option 1 placed the manuscript on permanent display, while Option 2 kept it in a sealed dark case.",
+        "Under Option 2, conservators found no measurable fading after a decade, unlike the ink that faded under Option 1.",
+        "Option 2 limited public viewing of the manuscript to a single week each year.",
+        "Under Option 1, the manuscript's ink began to fade within just a few years of display.",
+      ],
+      correct: 1,
+      rationale:
+        "An advantage of Option 2 must name something it does better, which only the second choice does by contrasting its lack of fading after a decade with the fading seen under Option 1. The first choice is the strongest trap: it correctly contrasts the two display methods, but it only describes how they differ in setup without identifying which preserves the manuscript better, so no advantage is presented.",
+      paceSeconds: 90,
+    },
+    {
+      id: "rhetorical-synthesis-14",
+      skill: "rhetorical-synthesis",
+      domain: "Expression of Ideas",
+      difficulty: 4,
+      passage:
+        "While researching a topic, a student has taken the following notes:\n• A startup released a navigation app and a fitness app in the same year.\n• The navigation app earned strong reviews but few downloads.\n• The fitness app was downloaded millions of times within months.\n• After the fitness app's success, the startup hired 40 new employees.\n• The startup then opened a second office in another city.",
+      prompt:
+        "The student wants to explain why the startup expanded. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
+      choices: [
+        "The startup released both a navigation app and a fitness app during the same year.",
+        "After hiring 40 new employees, the startup opened a second office in another city.",
+        "Following the fitness app's millions of downloads, the startup hired 40 employees and opened a second office.",
+        "The navigation app earned strong reviews but was downloaded only a few times.",
+      ],
+      correct: 2,
+      rationale:
+        "Explaining why the startup expanded requires linking the expansion to its cause, which only the third choice does by tying the fitness app's millions of downloads to the new hires and second office. The second choice is the strongest trap: it accurately describes the expansion itself, but it reports the growth without giving the reason, the app's success, that the goal asks for.",
+      paceSeconds: 85,
+    },
+    {
+      id: "rhetorical-synthesis-15",
+      skill: "rhetorical-synthesis",
+      domain: "Expression of Ideas",
+      difficulty: 5,
+      passage:
+        "While researching a topic, a student has taken the following notes:\n• A chef studied bread-making in two villages on opposite sides of a mountain.\n• One village let its dough rise with wild yeast gathered from the air.\n• The other village used a starter passed down for generations.\n• The wild-yeast loaves were tangy and dense, while the starter loaves were milder and airier.\n• In both villages, bakers shaped each loaf entirely by hand.",
+      prompt:
+        "The student wants to generalize about a shared practice in the two villages' bread-making. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
+      choices: [
+        "One village relied on wild yeast gathered from the air to make its dough rise.",
+        "The wild-yeast loaves were tangy and dense, while the starter loaves were milder and airier.",
+        "Despite using different methods to leaven their dough, bakers in both villages shaped every loaf entirely by hand.",
+        "The second village used a bread starter that had been passed down for many generations.",
+      ],
+      correct: 2,
+      rationale:
+        "A generalization about a shared practice must state what both villages do in common, which only the third choice does by drawing out the hand-shaping of every loaf across the two methods. The second choice is the strongest trap: it accurately pairs the two villages, but it contrasts how their loaves differ, emphasizing a difference rather than the shared practice the goal demands.",
+      paceSeconds: 90,
+    },
+    {
+      id: "rhetorical-synthesis-16",
+      skill: "rhetorical-synthesis",
+      domain: "Expression of Ideas",
+      difficulty: 4,
+      passage:
+        "While researching a topic, a student has taken the following notes:\n• A town compared two ways to commute downtown: a new bike lane and the existing bus line.\n• The bus line covers the route in 25 minutes.\n• A cyclist covers the same route in 18 minutes.\n• The bus runs only once every 30 minutes during the day.\n• The bike lane lets cyclists depart whenever they choose.",
+      prompt:
+        "The student wants to present a specific advantage of cycling over taking the bus. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
+      choices: [
+        "Both the bike lane and the bus line connect the same neighborhoods to downtown.",
+        "A cyclist covers the downtown route in 18 minutes, faster than the bus's 25-minute trip.",
+        "The bus line completes the route downtown in about 25 minutes.",
+        "The bus and the bike lane both serve commuters traveling toward the town center.",
+      ],
+      correct: 1,
+      rationale:
+        "An advantage of cycling must name something cycling does better, which only the second choice does by contrasting the 18-minute ride with the bus's 25-minute trip. The third choice is the closest trap: it accurately states the bus's travel time, but on its own it reports a single fact about the bus without comparing it to cycling, so no advantage of cycling emerges.",
+      paceSeconds: 85,
+    },
+    {
+      id: "rhetorical-synthesis-17",
+      skill: "rhetorical-synthesis",
+      domain: "Expression of Ideas",
+      difficulty: 5,
+      passage:
+        "While researching a topic, a student has taken the following notes:\n• A coral reef is a structure built by tiny animals called coral polyps.\n• The polyps secrete calcium carbonate, which hardens into the reef's stony framework.\n• Colorful algae live inside the polyps and supply much of their food.\n• When water grows too warm, the polyps expel the algae and turn white.\n• Without the algae, the polyps may starve and die.",
+      prompt:
+        "The student wants to explain why coral reefs turn white during warm-water events. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
+      choices: [
+        "Coral reefs are stony structures built up by tiny animals called coral polyps.",
+        "Coral polyps secrete calcium carbonate, which hardens into the reef's framework.",
+        "When the water grows too warm, coral polyps expel the colorful algae living inside them, leaving the polyps white.",
+        "Without the algae that normally feed them, coral polyps may eventually starve and die.",
+      ],
+      correct: 2,
+      rationale:
+        "Explaining why reefs turn white requires naming the cause of the color change, which only the third choice does by linking the warm water to the expulsion of the colorful algae that leaves the polyps white. The fourth choice is the strongest trap: it accurately describes a serious consequence of losing the algae, but it explains what happens after the whitening rather than why the whitening itself occurs.",
+      paceSeconds: 90,
+    },
+    {
+      id: "rhetorical-synthesis-18",
+      skill: "rhetorical-synthesis",
+      domain: "Expression of Ideas",
+      difficulty: 4,
+      passage:
+        "While researching a topic, a student has taken the following notes:\n• A library compared two reading programs for elementary students.\n• Program X assigned books matched to each child's measured reading level.\n• Program Y let each child freely choose any book that interested them.\n• Children in Program Y reported enjoying reading much more.\n• Children in Program Y also read about twice as many books over the year.",
+      prompt:
+        "The student wants to argue that Program Y is the better choice for this library. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
+      choices: [
+        "Program X assigned each child books matched to that child's measured reading level.",
+        "Both programs were tested with elementary students at the same library.",
+        "Because children in Program Y enjoyed reading more and read about twice as many books, it is the stronger program for the library.",
+        "Children in Program X were given books selected to match their reading levels.",
+      ],
+      correct: 2,
+      rationale:
+        "Arguing for Program Y requires foregrounding its benefits as a reason to choose it, which only the third choice does by joining the greater enjoyment and the doubled reading to the conclusion that it is the stronger program. The first choice is the closest trap: it accurately describes how Program X works, but describing the rival program does nothing to make the case for Program Y that the goal demands.",
+      paceSeconds: 85,
+    },
+    {
+      id: "rhetorical-synthesis-19",
+      skill: "rhetorical-synthesis",
+      domain: "Expression of Ideas",
+      difficulty: 5,
+      passage:
+        "While researching a topic, a student has taken the following notes:\n• A botanist tracked a rare orchid that grows only in one mountain valley.\n• The orchid is pollinated by a single species of moth.\n• That moth lays its eggs only in one kind of tree found in the valley.\n• Logging has removed most of those trees from the valley.\n• The orchid produced far fewer seeds in the years after the logging.",
+      prompt:
+        "The student wants to emphasize why the orchid's survival is threatened. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
+      choices: [
+        "The rare orchid grows only in a single mountain valley and is pollinated by one species of moth.",
+        "Because logging removed the trees the orchid's only pollinator needs to breed, the orchid produced far fewer seeds.",
+        "The orchid is pollinated solely by a moth that lays its eggs in a particular valley tree.",
+        "After the logging took place, the orchid produced far fewer seeds than it had before.",
+      ],
+      correct: 1,
+      rationale:
+        "Emphasizing the threat requires showing the chain by which the orchid is losing its means of reproducing, which only the second choice does by linking the logging to the loss of the pollinator's breeding tree and then to the drop in seeds. The first choice is the strongest trap: a single-valley orchid with one pollinator sounds fragile, but naming its narrow range alone does not explain the active danger, the broken pollination chain, that now threatens it.",
+      paceSeconds: 90,
+    },
+    {
+      id: "rhetorical-synthesis-20",
+      skill: "rhetorical-synthesis",
+      domain: "Expression of Ideas",
+      difficulty: 5,
+      passage:
+        "While researching a topic, a student has taken the following notes:\n• Two early flying machines were tested in the same decade.\n• One was a glider with no engine, steered only by shifting the pilot's weight.\n• The other was a powered craft with an engine and movable control surfaces.\n• The glider could stay aloft only briefly, while the powered craft could climb and hold altitude under its own power.\n• Both machines used fabric stretched over a light wooden frame for their wings.",
+      prompt:
+        "The student wants to emphasize a similarity in how the two flying machines were built. Which choice most effectively uses relevant information from the notes to accomplish this goal?",
+      choices: [
+        "The glider had no engine, while the powered craft carried an engine and movable control surfaces.",
+        "The glider could stay aloft only briefly, but the powered craft could climb under its own power.",
+        "Both flying machines used fabric stretched over a light wooden frame to form their wings.",
+        "One machine was steered by shifting the pilot's weight, the other by movable control surfaces.",
+      ],
+      correct: 2,
+      rationale:
+        "The goal asks for a similarity in how the machines were built, and only the third choice names a shared construction detail, fabric over a light wooden frame, common to both wings. The first choice is the strongest trap: it correctly pairs the two machines, but it contrasts their power sources and controls, emphasizing a difference in design rather than the construction similarity the goal requires.",
+      paceSeconds: 90,
+    },
   ],
 };

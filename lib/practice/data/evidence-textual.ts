@@ -216,5 +216,205 @@ export const DATA: RWSkillData = {
         "The critic's specific claim is that the revisions were for planting clues, NOT for fixing errors. Choice C shows the drafts were riddled with mistakes that the revisions corrected, giving the ordinary error-fixing motive the critic ruled out. Choice B is the trap: foreshadowing in the final text seems to confirm the clue theory, but it says nothing about why the chapters were revised and is equally consistent with clues present from the first draft.",
       paceSeconds: 90,
     },
+    {
+      id: "evidence-textual-11",
+      skill: "evidence-textual",
+      domain: "Information and Ideas",
+      difficulty: 4,
+      passage:
+        "A paleontologist examined fossilized footprints left by a large, two-legged dinosaur. Because the prints in one trackway are spaced far apart, she argued that this particular animal was moving at a fast run when it made them, rather than walking, as some colleagues had assumed.",
+      prompt:
+        "Which finding, if true, would most directly support the paleontologist's claim about how the animal was moving?",
+      choices: [
+        "The footprints were preserved in fine-grained mud that captured the shape of each toe in detail.",
+        "Studies of living two-legged animals show that the gap between successive footprints grows longer as the animal moves faster.",
+        "Other trackways at the same site were left by smaller dinosaurs of a different species.",
+        "The dinosaur that made the prints is known from skeletons to have had powerful hind limbs.",
+      ],
+      correct: 1,
+      rationale:
+        "Her claim is that the wide spacing means the animal was running, not walking. Choice B supplies the link that ties stride spacing to speed in living analogues, so the wide gaps directly indicate a fast gait. Choice D is the strongest trap: powerful hind limbs show the animal could run, but capability says nothing about whether it was running when these particular prints were made, which is the specific claim at issue.",
+      paceSeconds: 85,
+    },
+    {
+      id: "evidence-textual-12",
+      skill: "evidence-textual",
+      domain: "Information and Ideas",
+      difficulty: 4,
+      passage:
+        "A nutrition researcher noticed that office workers who kept a bowl of fruit on their desks ate more fruit during the day than workers who kept fruit in a drawer. He concluded that simply making the fruit visible, rather than any change in how much people liked fruit, was what increased consumption.",
+      prompt:
+        "Which finding, if true, would most strongly support the researcher's conclusion about why consumption rose?",
+      choices: [
+        "Workers in both groups rated fruit as equally appealing on a survey taken before the study began.",
+        "Workers who ate more fruit reported feeling more energetic in the afternoon.",
+        "The fruit kept in bowls was replaced more frequently than the fruit kept in drawers.",
+        "Workers who ate the most fruit also tended to drink more water during the day.",
+      ],
+      correct: 0,
+      rationale:
+        "His conclusion pins the rise on visibility, explicitly not on differing liking for fruit. Choice A shows the two groups liked fruit equally, ruling out the rival taste explanation and leaving visibility as the operative difference. Choice C is the trap: more frequent replacement is consistent with higher eating but is a consequence of greater consumption, not evidence that visibility rather than preference caused it.",
+      paceSeconds: 85,
+    },
+    {
+      id: "evidence-textual-13",
+      skill: "evidence-textual",
+      domain: "Information and Ideas",
+      difficulty: 4,
+      passage:
+        "An astronomer studying a distant star observed that its brightness dips at regular intervals. She proposed that the dips are caused by a planet passing in front of the star and blocking part of its light, rather than by changes in the star itself.",
+      prompt:
+        "Which finding, if true, would most strongly support the astronomer's planet-based explanation over an explanation based on changes in the star?",
+      choices: [
+        "The star is roughly the same age and size as the Sun.",
+        "Each dip in brightness lasts for the same number of hours and removes the same fraction of the star's light.",
+        "Several other stars in the same region of the sky also show dips in brightness.",
+        "The star's overall brightness has remained stable for as long as it has been observed.",
+      ],
+      correct: 1,
+      rationale:
+        "The prompt asks for evidence favoring an orbiting planet over intrinsic stellar changes. Choice B describes dips of fixed duration and fixed depth, the regular, repeating signature of a body crossing the disk on a stable orbit, which a planet predicts but irregular stellar fluctuations would not. Choice D is the trap: long-term stability of overall brightness is consistent with a steady star but does not distinguish a transiting planet from periodic stellar behavior and so cannot favor one over the other.",
+      paceSeconds: 85,
+    },
+    {
+      id: "evidence-textual-14",
+      skill: "evidence-textual",
+      domain: "Information and Ideas",
+      difficulty: 4,
+      passage:
+        "A musicologist studying a Renaissance composer argued that a manuscript long attributed to him was in fact written by one of his students. She pointed out that the handwriting in the manuscript differs from the composer's known hand.",
+      prompt:
+        "Which finding, if true, would most strongly weaken the musicologist's claim that the student, not the composer, wrote the manuscript?",
+      choices: [
+        "The composer is known to have taught dozens of students over his career.",
+        "The manuscript uses a style of musical notation that became common only after the composer's lifetime.",
+        "It was common practice at the time for composers to dictate their works to a scribe who wrote out the music.",
+        "The student named by the musicologist later became a respected composer in his own right.",
+      ],
+      correct: 2,
+      rationale:
+        "Her claim rests entirely on the handwriting not matching the composer's hand. Choice C undercuts that reasoning: if composers routinely dictated to scribes, then a different hand is exactly what one would expect even for the composer's own work, so the handwriting no longer points to a student author. Choice B is the trap: notation postdating the composer would actually strengthen her case that he did not write it, the opposite of weakening it.",
+      paceSeconds: 85,
+    },
+    {
+      id: "evidence-textual-15",
+      skill: "evidence-textual",
+      domain: "Information and Ideas",
+      difficulty: 5,
+      passage:
+        "An ecologist studying a mountain lake found that a native trout population collapsed shortly after an introduced crayfish species arrived. She argued that the crayfish caused the collapse by eating the eggs the trout laid on the lake bottom, rather than by competing with the trout for food.",
+      prompt:
+        "Which finding, if true, would most strongly support the ecologist's egg-predation explanation over a competition-based one?",
+      choices: [
+        "In lakes where the crayfish was present, the number of trout eggs surviving to hatch fell sharply, while the food available to adult trout stayed the same.",
+        "The introduced crayfish reproduces faster than the native trout.",
+        "Adult trout and crayfish were sometimes observed feeding in the same shallow areas of the lake.",
+        "Trout populations in lakes without crayfish remained stable over the same years.",
+      ],
+      correct: 0,
+      rationale:
+        "The prompt asks specifically for support of egg predation over competition. Choice A isolates the egg pathway — egg survival drops while adult food supply is unchanged — which is precisely what egg predation predicts and what competition for food does not. Choice C is the strongest trap: overlapping feeding areas hint at competition for food, the rival mechanism, so it supports the explanation the ecologist is arguing against rather than hers.",
+      paceSeconds: 90,
+    },
+    {
+      id: "evidence-textual-16",
+      skill: "evidence-textual",
+      domain: "Information and Ideas",
+      difficulty: 5,
+      passage:
+        "A geographer studying an abandoned desert settlement argued that its inhabitants left because a long drought dried up the springs they depended on. A student reviewing the work proposed instead that the people left because a trade route shifted away from the settlement, cutting off the goods they relied on, and that water was never the deciding factor.",
+      prompt:
+        "Which finding, if true, would most strongly support the student's interpretation over the geographer's?",
+      choices: [
+        "Sediment layers near the settlement show signs of a severe, decades-long drought during the period it was abandoned.",
+        "The settlement was abandoned in the same decade that a major caravan route was rerouted to bypass it, while the local springs continued to flow for years afterward.",
+        "Pottery found at the settlement matches styles made in distant cities along old trade routes.",
+        "Several nearby settlements that depended on the same springs were also abandoned around the same time.",
+      ],
+      correct: 1,
+      rationale:
+        "The student claims the trade-route shift, not drought, drove the departure. Choice B times the abandonment to the route's rerouting and notes the springs kept flowing afterward, directly favoring trade over water as the cause. Choice A is the trap: clear evidence of a severe drought supports the geographer's water-based account, the very interpretation the student is arguing against, so it cuts the wrong way.",
+      paceSeconds: 90,
+    },
+    {
+      id: "evidence-textual-17",
+      skill: "evidence-textual",
+      domain: "Information and Ideas",
+      difficulty: 5,
+      passage:
+        "A behavioral scientist trained captive crows to drop stones into a tube to raise a water level and reach a floating treat. She concluded that the crows understood that heavier or larger objects would raise the water more, rather than simply repeating any action that had previously been rewarded.",
+      prompt:
+        "Which finding, if true, would most strongly support the scientist's conclusion that the crows understood the effect of object size?",
+      choices: [
+        "The crows solved the task faster on later trials than on their first attempts.",
+        "When offered a mix of large and small stones, the crows preferentially chose the large ones, which raised the water with fewer drops.",
+        "The crows would drop stones into the tube even when no treat was visible.",
+        "Crows that watched other crows perform the task learned it more quickly themselves.",
+      ],
+      correct: 1,
+      rationale:
+        "Her conclusion is that the crows grasped that bigger objects raise water more, not that they merely repeated a rewarded action. Choice B shows the crows selecting the more effective large stones when both sizes were available, the discrimination that mere reward-repetition cannot explain. Choice A is the trap: faster solving over trials is exactly what simple reinforcement learning would produce, so it fails to distinguish understanding from rote repetition.",
+      paceSeconds: 90,
+    },
+    {
+      id: "evidence-textual-18",
+      skill: "evidence-textual",
+      domain: "Information and Ideas",
+      difficulty: 5,
+      passage:
+        "An art historian examined a fresco on a chapel wall and argued that it was painted in two distinct phases years apart, not in a single campaign as had been assumed. She noted that the upper and lower halves of the fresco differ in style.",
+      prompt:
+        "Which finding, if true, would most strongly support the art historian's two-phase claim?",
+      choices: [
+        "The chapel's written records mention that it was repaired after a fire several years before the fresco was thought to be completed.",
+        "Chemical analysis shows that the plaster of the upper half contains a pigment that was not available in the region until years after the lower half's plaster was laid.",
+        "The fresco depicts a religious scene common in chapels of the period.",
+        "The upper and lower halves of the fresco depict figures of roughly the same size.",
+      ],
+      correct: 1,
+      rationale:
+        "Her claim is that the fresco was made in two separate phases years apart. Choice B provides physical dating evidence — a pigment in the upper plaster postdating the lower plaster by years — which can only be explained by the two halves being executed at different times. Choice A is the trap: a fire and repair establish that the wall could have been worked on twice, but it does not show the fresco itself was painted in two phases, leaving the single-campaign assumption intact.",
+      paceSeconds: 90,
+    },
+    {
+      id: "evidence-textual-19",
+      skill: "evidence-textual",
+      domain: "Information and Ideas",
+      difficulty: 5,
+      passage:
+        "A public-health analyst found that a city's residents reported fewer colds in the years after the city expanded its network of bike lanes. He argued that the bike lanes improved health by encouraging residents to cycle and exercise more, rather than by any change in the air they breathed.",
+      prompt:
+        "Which finding, if true, would most strongly support the analyst's exercise-based explanation over an explanation based on cleaner air?",
+      choices: [
+        "Air-quality monitors recorded lower levels of pollutants in the city during the same years.",
+        "Residents who reported cycling more after the lanes opened showed the largest drop in reported colds, while those who did not change their habits showed little change.",
+        "The new bike lanes were concentrated in the busiest parts of the city.",
+        "Neighboring cities without new bike lanes reported roughly steady rates of colds.",
+      ],
+      correct: 1,
+      rationale:
+        "The prompt asks for support of the exercise mechanism over the cleaner-air mechanism. Choice B links the health benefit to the individuals who actually increased cycling, the dose-response pattern that exercise predicts but a city-wide air change does not. Choice A is the trap: lower pollutant levels support the rival clean-air explanation the analyst is arguing against, so it points the wrong way for his claim.",
+      paceSeconds: 90,
+    },
+    {
+      id: "evidence-textual-20",
+      skill: "evidence-textual",
+      domain: "Information and Ideas",
+      difficulty: 5,
+      passage:
+        "A scholar of folklore collected versions of the same tale from villages scattered across a wide region. She argued that the tale spread from a single point of origin, carried by travelers from village to village, rather than arising independently in each place. A colleague countered that the shared elements are so basic that any community might have invented them on its own.",
+      prompt:
+        "Which finding, if true, would most strongly support the scholar's single-origin claim against her colleague's objection?",
+      choices: [
+        "The tale teaches a moral lesson that is valued in every village where it appears.",
+        "Villages closer to one proposed point of origin tell versions more similar to one another, with the tale growing steadily more altered the farther it is told from that point.",
+        "Each village's version of the tale features local landmarks and names familiar to its listeners.",
+        "The tale is told most often during the same season in every village.",
+      ],
+      correct: 1,
+      rationale:
+        "To beat the independent-invention objection, the scholar needs a pattern that diffusion predicts but separate origins do not. Choice B shows similarity decaying with distance from a single source, the geographic gradient expected when a tale spreads outward by travel. Choice C is the trap: local landmarks and names show each village adapted the tale to itself, which is equally consistent with independent invention and so does not favor single origin over the colleague's objection.",
+      paceSeconds: 90,
+    },
   ],
 };

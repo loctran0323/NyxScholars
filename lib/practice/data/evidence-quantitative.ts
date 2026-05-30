@@ -216,5 +216,205 @@ export const DATA: RWSkillData = {
         "The claim ties the biggest reduction to the park that wasted the most before. Choice C shows Linden running longest in 2022 (310 min) and posting the largest drop (70 min) versus Ashby's 40 and Clover's 15, supplying both halves of the claim. B correctly finds the smallest drop but describes the wrong park for this claim. A is a true 2024 ranking with no reduction data, and D ('all fell') ignores which park fell most.",
       paceSeconds: 88,
     },
+    {
+      id: "evidence-quantitative-11",
+      skill: "evidence-quantitative",
+      domain: "Information and Ideas",
+      difficulty: 4,
+      passage:
+        "A student set up a solar panel and recorded its midday power output at four tilt angles on the same clear day. The student concluded that output rose as the tilt increased toward 40 degrees but began to fall once the tilt passed that angle.\n\nPanel tilt and midday power output\nTilt angle (degrees) | Power output (W)\n10 | 145\n25 | 178\n40 | 196\n55 | 171",
+      prompt:
+        "Which choice most effectively uses data from the table to support the student's conclusion?",
+      choices: [
+        "Output climbed from 145 W at 10° to 178 W at 25° and a peak of 196 W at 40°, then dropped to 171 W at 55°.",
+        "The panel produced more power at 25° (178 W) than at 10° (145 W).",
+        "The lowest output, 145 W, occurred at the smallest tilt angle, 10°.",
+        "At 55°, the panel still produced 171 W, more than it produced at 10° (145 W).",
+      ],
+      correct: 0,
+      rationale:
+        "The conclusion is that output rises to a peak at 40° and then falls. Choice A traces the full pattern: 145 to 178 to a peak of 196 at 40°, then down to 171, capturing both the rise and the post-peak decline. Choice B is the strongest trap because its numbers are correct and it shows output rising, but it covers only the low end and is fully consistent with 'more tilt is always better,' so it never establishes the turnaround the claim requires. C cites a true low value but shows no peak, and D is a true comparison that ignores the 40° peak entirely.",
+      paceSeconds: 88,
+    },
+    {
+      id: "evidence-quantitative-12",
+      skill: "evidence-quantitative",
+      domain: "Information and Ideas",
+      difficulty: 5,
+      passage:
+        "A chain compared four of its coffee shops, logging the number of people who walked past each storefront per hour and the shop's average daily sales. A manager argued that daily sales depend on how many passersby actually enter, not on raw foot traffic, since the busiest sidewalk did not yield the highest sales.\n\nFoot traffic, entry rate, and daily sales\nShop | Passersby per hour | Entry rate (%) | Daily sales ($)\nFifth St. | 920 | 4 | 1,180\nPark Ave. | 540 | 11 | 1,640\nWest End | 780 | 6 | 1,260\nDepot Sq. | 490 | 9 | 1,520",
+      prompt:
+        "Which choice most effectively uses data from the table to support the manager's argument?",
+      choices: [
+        "Fifth St. had the most passersby per hour, 920, yet its 4% entry rate was the lowest and its daily sales, $1,180, were the lowest of the four shops.",
+        "Depot Sq. had the fewest passersby per hour, only 490, of the four shops studied.",
+        "West End drew 780 passersby per hour and posted daily sales of $1,260.",
+        "Park Ave. had the highest entry rate, 11%, and the highest daily sales, $1,640, despite the second-lowest foot traffic, 540 passersby per hour.",
+      ],
+      correct: 3,
+      rationale:
+        "The argument is that sales follow entry rate, not raw foot traffic. Choice D ties the top entry rate (11%) to the top sales ($1,640) while noting that this shop had nearly the lowest foot traffic, hitting both halves of the claim. Choice A is the strongest trap: every number is correct and it does undercut a 'foot-traffic drives sales' story, but it works only through the negative case (busiest sidewalk, lowest sales) and never shows that high entry rate produces high sales, so it leaves the entry-rate half of the claim unsupported. B and C cite accurate figures but draw no link between entry rate and sales.",
+      paceSeconds: 95,
+    },
+    {
+      id: "evidence-quantitative-13",
+      skill: "evidence-quantitative",
+      domain: "Information and Ideas",
+      difficulty: 4,
+      passage:
+        "An ornithologist compiled wingspan and one-way migration distance for four songbird species. She claimed that, among these birds, a longer wingspan does not reliably mean a longer migration.\n\nWingspan and one-way migration distance\nSpecies | Wingspan (cm) | Migration distance (km)\nWarbler | 19 | 4,200\nTanager | 28 | 3,100\nThrush | 24 | 5,000\nVireo | 21 | 2,600",
+      prompt:
+        "Which choice most effectively uses data from the table to support the ornithologist's claim?",
+      choices: [
+        "The thrush, with a 24 cm wingspan, migrated the farthest, 5,000 km.",
+        "The tanager had the widest wingspan, 28 cm, yet migrated only 3,100 km, less than both the smaller-winged warbler (19 cm, 4,200 km) and thrush (24 cm, 5,000 km).",
+        "The vireo had a 21 cm wingspan and the shortest migration, 2,600 km.",
+        "Migration distances ranged from 2,600 km to 5,000 km across the four species.",
+      ],
+      correct: 1,
+      rationale:
+        "The claim is that wider wingspan does NOT reliably mean a longer migration. Choice B is a direct counterexample: the widest-winged bird (28 cm) migrates less far than two narrower-winged birds, breaking any wingspan-distance pairing. Choice C is the strongest trap because its numbers are correct, but a relatively small wingspan paired with the shortest migration is consistent with a 'bigger wings travel farther' pattern, so it cuts against the claim rather than supporting it. A reports a single true pairing that, on its own, also fits the opposite trend, and D gives a range that says nothing about wingspan.",
+      paceSeconds: 88,
+    },
+    {
+      id: "evidence-quantitative-14",
+      skill: "evidence-quantitative",
+      domain: "Information and Ideas",
+      difficulty: 5,
+      passage:
+        "A county tracked the share of household waste that residents recycled in four districts before and after a curbside-sorting program launched. Officials concluded that the program raised recycling rates most in the district that had recycled the least beforehand.\n\nShare of household waste recycled (%)\nDistrict | Before | After\nNorthgate | 18 | 41\nRiverside | 34 | 45\nOakhill | 27 | 39\nSummit | 22 | 30",
+      prompt:
+        "Which choice most effectively uses data from the table to support the officials' conclusion?",
+      choices: [
+        "Northgate recycled the smallest share before the program, 18%, and posted the largest gain, 23 points (18% to 41%), versus Riverside's 11, Oakhill's 12, and Summit's 8.",
+        "After the program, Riverside recycled the largest share of its waste, 45%.",
+        "Every district recycled a larger share of its waste after the program than before.",
+        "Summit, which recycled 22% before the program, posted the smallest gain, 8 points (22% to 30%).",
+      ],
+      correct: 0,
+      rationale:
+        "The conclusion links the biggest improvement to the district that recycled least beforehand. Choice A shows Northgate starting lowest at 18% and gaining the most, 23 points, larger than every other district's gain, supplying both halves of the claim. Choice D is the strongest trap: its numbers are right and it does identify a smallest-gain district, but Summit was not the lowest starter (Northgate was), so it describes the wrong end of the comparison the claim needs. B is a true after-only ranking with no gain data, and C ('all rose') ignores which district rose most.",
+      paceSeconds: 95,
+    },
+    {
+      id: "evidence-quantitative-15",
+      skill: "evidence-quantitative",
+      domain: "Information and Ideas",
+      difficulty: 5,
+      passage:
+        "A reviewer tested four rechargeable battery brands, recording each brand's rated capacity and how many hours it ran a flashlight and, separately, a portable speaker. The reviewer argued that higher rated capacity translated into longer runtime in the flashlight but not in the more power-hungry speaker.\n\nCapacity and measured runtime\nBrand | Capacity (mAh) | Flashlight (h) | Speaker (h)\nVolt | 2,000 | 9.0 | 3.1\nNova | 2,400 | 11.2 | 3.0\nPeak | 2,800 | 13.5 | 2.8\nCore | 3,200 | 15.1 | 3.2",
+      prompt:
+        "Which choice most effectively uses data from the table to support the reviewer's argument?",
+      choices: [
+        "Core had the highest capacity, 3,200 mAh, and the longest flashlight runtime, 15.1 hours.",
+        "In the flashlight, runtime rose with capacity, from 9.0 h at 2,000 mAh to 15.1 h at 3,200 mAh; in the speaker, runtime did not, staying near 3 hours (3.1, 3.0, 2.8, 3.2 h) regardless of capacity.",
+        "Peak, with 2,800 mAh, ran the speaker for 2.8 hours, the shortest speaker runtime of the four brands.",
+        "In the flashlight, Nova (2,400 mAh) ran 11.2 hours, longer than Volt's 9.0 hours at 2,000 mAh.",
+      ],
+      correct: 1,
+      rationale:
+        "The argument has two parts: capacity predicts flashlight runtime but not speaker runtime. Only Choice B covers both, showing flashlight runtime climbing steadily with capacity (9.0 to 15.1 h) while speaker runtime stays near 3 hours across all capacities. Choice A is the strongest trap because its numbers are correct and it supports the flashlight half, but it says nothing about the speaker, leaving the 'not in the speaker' half of the claim unsupported. C is a true speaker value with no tie to capacity, and D supports only the flashlight half with a single comparison.",
+      paceSeconds: 95,
+    },
+    {
+      id: "evidence-quantitative-16",
+      skill: "evidence-quantitative",
+      domain: "Information and Ideas",
+      difficulty: 4,
+      passage:
+        "A museum logged annual attendance and gift-shop revenue for four of its galleries. A board member claimed that gift-shop revenue rose and fell with attendance across the galleries.\n\nAnnual attendance and gift-shop revenue\nGallery | Visitors (thousands) | Gift-shop revenue ($ thousands)\nAntiquities | 52 | 88\nModern | 71 | 121\nNatural History | 64 | 110\nPhotography | 39 | 66",
+      prompt:
+        "Which choice most effectively uses data from the table to support the board member's claim?",
+      choices: [
+        "Modern drew the most visitors, 71 thousand, and brought in the most gift-shop revenue, $121 thousand, while Photography drew the fewest visitors, 39 thousand, and the least revenue, $66 thousand.",
+        "Natural History drew 64 thousand visitors and earned $110 thousand in gift-shop revenue.",
+        "Gift-shop revenue across the four galleries totaled $385 thousand.",
+        "Modern's gift-shop revenue, $121 thousand, was nearly double Photography's, $66 thousand.",
+      ],
+      correct: 0,
+      rationale:
+        "The claim is that revenue tracks attendance across galleries. Choice A matches the visitor order to the revenue order at both ends: the most-visited gallery earns the most revenue and the least-visited earns the least, demonstrating the rise-and-fall pairing. Choice D is the strongest trap because its figures are accurate, but a single gap between two galleries shows only that one is bigger than another, not that revenue moves with attendance across the set. B lists one gallery's two figures without comparison, and C is a true total that reveals no relationship.",
+      paceSeconds: 88,
+    },
+    {
+      id: "evidence-quantitative-17",
+      skill: "evidence-quantitative",
+      domain: "Information and Ideas",
+      difficulty: 5,
+      passage:
+        "Agronomists grew the same tomato variety under four irrigation methods on identical plots and recorded each plot's yield and the water it used. They argued that drip irrigation gave the best yield per liter of water, even though it did not give the highest total yield.\n\nIrrigation method, yield, and water use\nMethod | Yield (kg) | Water used (L) | Yield per liter (kg/L)\nFlood | 60 | 1,000 | 0.060\nFurrow | 54 | 720 | 0.075\nSprinkler | 50 | 560 | 0.089\nDrip | 56 | 400 | 0.140",
+      prompt:
+        "Which choice most effectively uses data from the table to support the agronomists' argument?",
+      choices: [
+        "Drip irrigation used the least water, 400 L, of the four methods.",
+        "Flood irrigation produced the highest total yield, 60 kg, using 1,000 L of water.",
+        "Drip irrigation yielded 0.140 kg per liter, the highest yield per liter of the four methods, even though its total yield, 56 kg, trailed flood irrigation's 60 kg.",
+        "Sprinkler irrigation yielded 0.089 kg per liter, more than flood's 0.060 kg per liter.",
+      ],
+      correct: 2,
+      rationale:
+        "The argument has two parts: drip led in yield per liter but not in total yield. Choice C delivers both, citing drip's top efficiency (0.140 kg/L) and conceding its lower total yield (56 kg vs. flood's 60 kg). Choice D is the strongest trap because its numbers are correct and it concerns yield per liter, the right metric, but it compares sprinkler with flood and never shows that drip is the most efficient, so it backs a different point. A is a true water figure that says nothing about efficiency, and B supports only the 'not the highest total yield' half by naming the leader, not drip.",
+      paceSeconds: 95,
+    },
+    {
+      id: "evidence-quantitative-18",
+      skill: "evidence-quantitative",
+      domain: "Information and Ideas",
+      difficulty: 4,
+      passage:
+        "A developer released the same game on four platforms at four different prices and tracked first-week downloads. The developer concluded that, across these platforms, a lower price drew more downloads.\n\nPrice and first-week downloads\nPlatform | Price ($) | Downloads (thousands)\nPlatform W | 3 | 140\nPlatform X | 5 | 96\nPlatform Y | 7 | 71\nPlatform Z | 9 | 48",
+      prompt:
+        "Which choice most effectively uses data from the table to support the developer's conclusion?",
+      choices: [
+        "Platform W, priced lowest at $3, had the most downloads, 140 thousand.",
+        "As price rose from $3 to $5 to $7 to $9, downloads fell steadily from 140 to 96 to 71 to 48 thousand.",
+        "Platform Z, priced highest at $9, had the fewest downloads, 48 thousand.",
+        "Downloads across the four platforms totaled 355 thousand.",
+      ],
+      correct: 1,
+      rationale:
+        "The conclusion is that lower price drew more downloads across the platforms. Choice B shows the full inverse relationship: each step up in price from $3 to $9 is matched by a steady drop in downloads from 140 to 48 thousand, demonstrating the trend across all four points. Choice A is the strongest trap because its numbers are correct and it points the right way, but it reports only the cheapest, highest-download endpoint and leaves the middle of the trend unestablished. C likewise gives only the opposite endpoint, and D is a true total that shows no price relationship.",
+      paceSeconds: 88,
+    },
+    {
+      id: "evidence-quantitative-19",
+      skill: "evidence-quantitative",
+      domain: "Information and Ideas",
+      difficulty: 5,
+      passage:
+        "A running coach reviewed four athletes who followed different plans for the same marathon, noting each plan's average weekly mileage, the longest single run, and the athlete's finish time. The coach argued that finish times improved with higher weekly mileage but were not explained by the length of the longest single run.\n\nTraining volume and marathon finish time\nAthlete | Weekly miles | Longest run (mi) | Finish time (h)\nA | 25 | 20 | 4.5\nB | 35 | 18 | 4.1\nC | 45 | 22 | 3.7\nD | 55 | 16 | 3.4",
+      prompt:
+        "Which choice most effectively uses data from the table to support the coach's argument?",
+      choices: [
+        "Athlete D ran the most weekly miles, 55, and recorded the fastest finish, 3.4 hours.",
+        "As weekly mileage rose from 25 to 55, finish times fell steadily from 4.5 to 3.4 hours, yet the longest single run did not follow that order, ranging from 16 to 22 miles without tracking finish time.",
+        "Athlete C had the longest single run, 22 miles, and finished in 3.7 hours.",
+        "Athlete A, with the fewest weekly miles, 25, had the slowest finish, 4.5 hours.",
+      ],
+      correct: 1,
+      rationale:
+        "The argument has two parts: faster finishes go with higher weekly mileage but not with longer single runs. Only Choice B covers both, showing finish times falling steadily as weekly miles climb (4.5 to 3.4 h) while the longest run jumps around (16 to 22 mi) without matching finish order. Choice A is the strongest trap because its numbers are right and it supports the weekly-mileage half, but it cites a single endpoint and says nothing about the longest run, leaving the 'not explained by longest run' half unsupported. C and D are accurate single-athlete facts that establish neither half of the two-part claim.",
+      paceSeconds: 95,
+    },
+    {
+      id: "evidence-quantitative-20",
+      skill: "evidence-quantitative",
+      domain: "Information and Ideas",
+      difficulty: 5,
+      passage:
+        "A horticulturist grew one shrub variety in soils of four pH levels and measured the average plant height after one season. She proposed that height peaks at a slightly acidic pH rather than rising continuously as the soil grows more alkaline.\n\nSoil pH and average plant height\nSoil pH | Average height (cm)\n5.0 | 34\n6.0 | 52\n7.0 | 45\n8.0 | 28",
+      prompt:
+        "Which choice most effectively uses data from the table to support the horticulturist's proposal?",
+      choices: [
+        "Plants in the most alkaline soil, pH 8.0, were the shortest, averaging 28 cm.",
+        "Plants at pH 6.0 averaged 52 cm, taller than those at pH 5.0, which averaged 34 cm.",
+        "Average height rose from 34 cm at pH 5.0 to a peak of 52 cm at pH 6.0, then fell to 45 cm at pH 7.0 and 28 cm at pH 8.0.",
+        "Plants at pH 5.0 and pH 7.0 averaged 34 cm and 45 cm, respectively.",
+      ],
+      correct: 2,
+      rationale:
+        "The proposal is a slightly-acidic peak, not a steady climb toward alkaline soil. Choice C traces the full pattern: a rise to 52 cm at pH 6.0 followed by declines to 45 and 28 cm, which is exactly a mid-range peak. Choice B is the strongest trap because its numbers are correct and it shows height rising, but it covers only the acidic end and is fully consistent with 'height keeps rising as pH climbs,' so it never demonstrates the turnaround at pH 6.0. A cites a true low value but shows no peak, and D lists two correct heights that reveal no peak.",
+      paceSeconds: 95,
+    },
   ],
 };

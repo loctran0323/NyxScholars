@@ -206,5 +206,195 @@ export const DATA: RWSkillData = {
         "One town shows wave debris while the other shows only gradual silting and no debris, so despite near-simultaneous abandonment the two declines had distinct causes — exactly (C), which the contrast word 'Although' sets up. (A) is the traditional single-earthquake account the cores specifically dismantle for the second town, where there is no sudden-wave layer at all.",
       paceSeconds: 90,
     },
+    {
+      id: "inferences-11",
+      skill: "inferences",
+      domain: "Information and Ideas",
+      difficulty: 4,
+      passage:
+        "Each year a tree adds a ring of new wood, and the width of that ring depends partly on how much the tree grew that season. In a stand of pines, a researcher found that the rings formed during years of known drought were consistently far narrower than those formed in years of normal rainfall. Because all the trees in the stand experienced the same weather, the rings from a single drought year tended to be narrow across every tree sampled. This pattern indicates that, for these pines, the width of a given year's ring ______",
+      prompt: "Which choice most logically completes the text?",
+      choices: [
+        "is determined mainly by the age of the individual tree.",
+        "responds to the growing conditions shared by the whole stand.",
+        "can be used to date any piece of wood from any species.",
+        "matters less to the tree's survival than the ring's color.",
+      ],
+      correct: 1,
+      rationale:
+        "Narrow rings appeared across every tree in the same drought year while normal years produced wider rings, so ring width tracks the weather the stand shared — exactly (B). (A) is the strongest trap: it offers a plausible biological factor, but the data hold the trees' differing ages constant by showing the whole stand narrows together in one year, pinning the variation on shared conditions, not individual age.",
+      paceSeconds: 85,
+    },
+    {
+      id: "inferences-12",
+      skill: "inferences",
+      domain: "Information and Ideas",
+      difficulty: 4,
+      passage:
+        "Roman roads were once marked at regular intervals by inscribed stone milestones recording distances and the emperor who ordered repairs. Archaeologists note that the milestones still standing today are heavily skewed toward stretches of road that later passed through quiet farmland. Along routes that became busy medieval streets, by contrast, the stones were routinely broken up and reused as building material. A historian therefore cautions that the surviving milestones ______",
+      prompt: "Which choice most logically completes the text?",
+      choices: [
+        "prove that rural roads were better built than urban ones.",
+        "were inscribed only during the reigns of the most active emperors.",
+        "over-represent roads that avoided heavily built-up areas.",
+        "record distances that are no longer accurate today.",
+      ],
+      correct: 2,
+      rationale:
+        "Stones along busy routes were scavenged for building while those in quiet farmland survived, so the surviving set leans toward roads that stayed rural — precisely (C). (A) is the strongest trap: it is a true-sounding leap to construction quality, but the passage explains survival by later reuse, not by how well each road was originally built, so nothing here speaks to relative construction.",
+      paceSeconds: 85,
+    },
+    {
+      id: "inferences-13",
+      skill: "inferences",
+      domain: "Information and Ideas",
+      difficulty: 4,
+      passage:
+        "Young male songbirds of certain species do not hatch knowing their species' song; they assemble it by imitating adults they hear nearby. Researchers studying one such species found that birds raised in a valley sang a version with a distinctive trill, while birds of the same species raised over the ridge sang a version lacking it. When eggs from the valley were moved and hatched among the ridge birds, the chicks grew up singing the ridge version, trill and all absent. These results suggest that the trill in a young bird's song ______",
+      prompt: "Which choice most logically completes the text?",
+      choices: [
+        "is inherited from the bird's biological parents.",
+        "depends on which adults the bird grows up hearing.",
+        "appears only in valleys with particular acoustics.",
+        "makes a male more attractive to potential mates.",
+      ],
+      correct: 1,
+      rationale:
+        "Valley eggs raised among ridge birds produced ridge songs without the trill, so the song a bird develops follows the adults it hears, not its parentage — exactly (B). (A) is the strongest trap, the intuitive 'it's genetic' reading, but the cross-fostering result is designed to refute it: birds with valley ancestry sang the ridge version, showing upbringing, not inheritance, fixed the trill.",
+      paceSeconds: 85,
+    },
+    {
+      id: "inferences-14",
+      skill: "inferences",
+      domain: "Information and Ideas",
+      difficulty: 4,
+      passage:
+        "In the short story, Mr. Brell repairs the town's clocks and is famous for the precision of his work; citizens set their watches by the chimes of the instruments he tends. Yet the tall clock in his own front hall has stood silent for years, its hands frozen at a quarter past four. When a customer once remarked on it, Brell only smiled and said he preferred to know the time by the church bell across the square. The contrast between his trade and his hallway suggests that Brell's relationship to his own clock ______",
+      prompt: "Which choice most logically completes the text?",
+      choices: [
+        "differs from the care he devotes to the clocks of others.",
+        "proves he has secretly lost his skill at repairs.",
+        "reflects a town-wide decline in the use of timepieces.",
+        "will change once the church bell falls into disrepair.",
+      ],
+      correct: 0,
+      rationale:
+        "Brell keeps the whole town's clocks running flawlessly yet lets his own stand frozen and shrugs it off, so his stance toward his personal clock departs from the meticulous care he gives others' — exactly (A), the contrast the passage builds. (B) is the strongest trap: it reads the dead clock as failing skill, but his renown for precise work and his casual preference for the church bell show choice, not lost ability.",
+      paceSeconds: 85,
+    },
+    {
+      id: "inferences-15",
+      skill: "inferences",
+      domain: "Information and Ideas",
+      difficulty: 5,
+      passage:
+        "Many marine animals build shells and skeletons from calcium carbonate, a mineral that dissolves more readily as seawater grows more acidic. As the ocean absorbs more carbon dioxide from the atmosphere, its surface waters have become measurably more acidic over recent decades. In tank experiments, young oysters reared in water adjusted to this lower pH grew thinner, more fragile shells than oysters reared in present-day seawater. Although such tanks cannot reproduce the full ocean, the findings imply that continued acidification ______",
+      prompt: "Which choice most logically completes the text?",
+      choices: [
+        "will eliminate oysters from the ocean within a few decades.",
+        "could make it harder for shell-building animals to form sturdy shells.",
+        "affects oysters but leaves other shelled animals unharmed.",
+        "has already become the leading threat to all marine life.",
+      ],
+      correct: 1,
+      rationale:
+        "Lower-pH water yielded thinner, weaker oyster shells, and the passage notes carbonate dissolves more in acid, so further acidification could impede sturdy shell formation in such animals — the hedged (B), matching the tanks' limits. (A) is the strongest trap, inflating 'thinner shells in a tank' into total extinction on a timeline; the qualifier 'cannot reproduce the full ocean' explicitly blocks that certainty.",
+      paceSeconds: 90,
+    },
+    {
+      id: "inferences-16",
+      skill: "inferences",
+      domain: "Information and Ideas",
+      difficulty: 5,
+      passage:
+        "A polling firm mailed a satisfaction survey to every customer of a service and received replies from only a small fraction of them. Follow-up interviews with a random sample of the non-responders revealed that those who had not bothered to reply were, on average, noticeably more content than those who had. The people moved to fill out and return the survey were disproportionately those with a complaint they wanted heard. This pattern suggests that the average rating drawn from the returned surveys alone ______",
+      prompt: "Which choice most logically completes the text?",
+      choices: [
+        "accurately reflects the views of the typical customer.",
+        "would rise if the firm sent the survey a second time.",
+        "likely understates how satisfied customers are overall.",
+        "proves that most customers are dissatisfied with the service.",
+      ],
+      correct: 2,
+      rationale:
+        "Responders skewed toward complainers while the more contented customers stayed silent, so a rating built only from returns tilts negative relative to the whole — it understates true satisfaction, exactly (C). (D) is the strongest trap: it treats the returned surveys at face value as proof of widespread discontent, the very bias the passage exposes, since the silent majority was actually more satisfied.",
+      paceSeconds: 90,
+    },
+    {
+      id: "inferences-17",
+      skill: "inferences",
+      domain: "Information and Ideas",
+      difficulty: 5,
+      passage:
+        "Historians measuring the spread of early printing sometimes count the number of distinct pamphlet titles a town's presses issued in a given year. One scholar warns that a title was often reprinted many times when demand was high, yet each title counts only once in this tally, no matter how many copies circulated. A town that printed a handful of wildly popular works might thus register fewer titles than a town that printed many that almost no one bought. The scholar concludes that a town's title count ______",
+      prompt: "Which choice most logically completes the text?",
+      choices: [
+        "is a more reliable measure than the number of copies printed.",
+        "may not reflect how many printed pages actually reached readers.",
+        "should be ignored in favor of counting the town's presses.",
+        "rises whenever a town's population grows larger.",
+      ],
+      correct: 1,
+      rationale:
+        "Because one hugely reprinted title still counts once, the title tally can miss the true volume of printed matter in circulation — so it may not capture how many pages reached readers, exactly (B). (A) is the strongest trap, a reversal: the passage exposes the title count's blind spot to reprint volume, making it less reliable than a copy-based measure for gauging reach, not more.",
+      paceSeconds: 90,
+    },
+    {
+      id: "inferences-18",
+      skill: "inferences",
+      domain: "Information and Ideas",
+      difficulty: 5,
+      passage:
+        "When a planet passes directly between its star and a distant telescope, it blocks a sliver of the star's light, and the star appears to dim by a tiny, fixed fraction during each pass. The depth of this dimming depends on how large the planet is compared with its star: a bigger planet covers more of the disk and causes a deeper dip. Astronomers monitoring one star recorded two distinct dimming events of clearly different depths, repeating on two different schedules. The simplest reading of these data is that the star ______",
+      prompt: "Which choice most logically completes the text?",
+      choices: [
+        "is itself variable and fluctuating in brightness on its own.",
+        "is orbited by more than one planet, differing in size.",
+        "has a single planet whose size changes as it orbits.",
+        "lies closer to the telescope than astronomers had assumed.",
+      ],
+      correct: 1,
+      rationale:
+        "Two dips of different depths on two schedules mean two transiting bodies of different sizes crossing on separate orbits, so the star most simply hosts more than one planet — exactly (B). (C) is the strongest trap: it keeps a single planet but invents a changing size to explain the two depths, contradicting the premise that a planet's size sets a fixed dip, and a fixed-size planet cannot produce two different depths.",
+      paceSeconds: 90,
+    },
+    {
+      id: "inferences-19",
+      skill: "inferences",
+      domain: "Information and Ideas",
+      difficulty: 5,
+      passage:
+        "When a company automatically enrolls new employees in its retirement savings plan, workers must actively opt out to avoid participating; when enrollment is voluntary, they must actively opt in to join. Surveys find that employees in both arrangements express nearly identical attitudes about the importance of saving for retirement. Yet participation rates are markedly higher under automatic enrollment than under voluntary enrollment. Since the stated attitudes are so similar across the two groups, the gap in participation is best explained by ______",
+      prompt: "Which choice most logically completes the text?",
+      choices: [
+        "a real difference in how much the two groups value saving.",
+        "which action—opting in or opting out—the default requires.",
+        "the higher salaries paid at companies that enroll automatically.",
+        "employees' complete indifference to their own retirement.",
+      ],
+      correct: 1,
+      rationale:
+        "Attitudes toward saving are nearly identical, yet participation diverges with the enrollment rule, so what differs is which choice the default forces workers to make — exactly (B). (A) is the strongest trap: it attributes the gap to differing values, but the passage explicitly states the two groups' attitudes are the same, ruling that explanation out and isolating the default as the operative difference.",
+      paceSeconds: 90,
+    },
+    {
+      id: "inferences-20",
+      skill: "inferences",
+      domain: "Information and Ideas",
+      difficulty: 5,
+      passage:
+        "Linguists can sometimes trace contact between two peoples by examining the words one language borrowed from another. In the language of one inland community, the words for boats, nets, and several saltwater fish are clearly borrowed from a distant coastal language, while the inland community's own words handle farming and herding. The borrowed terms cluster entirely around seafaring, a way of life the inland speakers did not practice themselves. This concentration suggests that the two groups' historical contact ______",
+      prompt: "Which choice most logically completes the text?",
+      choices: [
+        "involved the inland people's own fishing expeditions to the coast.",
+        "centered on matters tied to the sea rather than on farming life.",
+        "proves the inland community originally lived on the coast.",
+        "lasted longer than contact between any other two groups.",
+      ],
+      correct: 1,
+      rationale:
+        "The borrowed words cluster around seafaring while the community kept its own farming and herding terms, so the contact that left this mark concerned sea-related matters, not agriculture — exactly (B). (C) is the strongest trap: borrowing words for an unfamiliar way of life signals outside contact, but it does not 'prove' the inland group once lived on the coast; the kept farming vocabulary actually points to a long inland tradition.",
+      paceSeconds: 90,
+    },
   ],
 };
