@@ -18616,7 +18616,7 @@ export const GENERATED = {
         "Jenner's 1796 method used material from cowpox, a milder related disease, to protect a person against the deadlier smallpox."
       ],
       "correct": 3,
-      "rationale": "Choice B explains the basis of the method: using milder cowpox material to protect against smallpox. Choice A names the subject and exposure but never identifies the cowpox basis, so it does not explain how the method worked.",
+      "rationale": "Choice D explains the basis of the method: using milder cowpox material to protect against smallpox. Choice A names the subject and exposure but never identifies the cowpox basis, so it does not explain how the method worked.",
       "paceSeconds": 75
     },
     {
@@ -18633,7 +18633,7 @@ export const GENERATED = {
         "Symphony Hall in Boston is widely admired by musicians and audiences for its acoustic qualities."
       ],
       "correct": 1,
-      "rationale": "Choice A gives the measured 1.9-second figure for Symphony Hall and ties it to the warmer-blending effect, meeting both parts of the goal. Choice C describes an acoustic effect but for a shorter reverberation, not Symphony Hall's measured feature.",
+      "rationale": "Choice B gives the measured 1.9-second figure for Symphony Hall and ties it to the warmer-blending effect, meeting both parts of the goal. Choice C describes an acoustic effect but for a shorter reverberation, not Symphony Hall's measured feature.",
       "paceSeconds": 80
     },
     {
@@ -18650,7 +18650,7 @@ export const GENERATED = {
         "Tardigrades are microscopic animals that can enter a dormant tun state under drying conditions."
       ],
       "correct": 2,
-      "rationale": "Choice B pairs both measured extremes, -272°C and 151°C, fulfilling the comparison goal. Choice C reports only the cold figure and omits the heat figure, so it states one extreme rather than comparing two.",
+      "rationale": "Choice C pairs both measured extremes, -272°C and 151°C, fulfilling the comparison goal. Choice B reports only the cold figure and omits the heat figure, so it states one extreme rather than comparing two.",
       "paceSeconds": 85
     },
     {
@@ -18667,7 +18667,7 @@ export const GENERATED = {
         "Archivists copy fragile nitrate films onto stable polyester stock, preserving the images even as the originals decay."
       ],
       "correct": 3,
-      "rationale": "Choice D names the preservation action, copying onto stable polyester, and its result, meeting the goal. Choice B identifies the decay problem but never states how archivists protect the films, leaving the goal unaddressed.",
+      "rationale": "Choice D names the preservation action, copying onto stable polyester, and its result, meeting the goal. Choice A identifies the decay problem but never states how archivists protect the films, leaving the goal unaddressed.",
       "paceSeconds": 70
     },
     {
@@ -18684,7 +18684,7 @@ export const GENERATED = {
         "Researchers think that salmon recognize their home stream by its distinctive smell."
       ],
       "correct": 1,
-      "rationale": "Choice C reports the experimental contrast between blocked and unblocked nostrils, providing evidence for smell's role. Choice B states the hypothesis but offers no experimental evidence, so it falls short of the goal.",
+      "rationale": "Choice B reports the experimental contrast between blocked and unblocked nostrils, providing evidence for smell's role. Choice D states the hypothesis but offers no experimental evidence, so it falls short of the goal.",
       "paceSeconds": 82
     },
     {
@@ -18701,7 +18701,7 @@ export const GENERATED = {
         "Surveyors of the 1790s undertook the difficult task of measuring a long arc of meridian across France."
       ],
       "correct": 0,
-      "rationale": "Choice D states both the original definition and its physical realization as a platinum bar, meeting both parts of the goal. Choice B covers only the surveying step and omits the definition and the platinum bar.",
+      "rationale": "Choice A states both the original definition and its physical realization as a platinum bar, meeting both parts of the goal. Choice D covers only the surveying step and omits the definition and the platinum bar.",
       "paceSeconds": 85
     },
     {
@@ -18718,7 +18718,7 @@ export const GENERATED = {
         "Ponds are a familiar feature of landscapes where beavers have been active."
       ],
       "correct": 1,
-      "rationale": "Choice A links the pond and raised water table to the benefit for nearby plants, completing the causal chain in the goal. Choice C stops at the slowing of the stream and never reaches the effect on plants.",
+      "rationale": "Choice B links the pond and raised water table to the benefit for nearby plants, completing the causal chain in the goal. Choice C stops at the slowing of the stream and never reaches the effect on plants.",
       "paceSeconds": 72
     },
     {
@@ -18735,7 +18735,7 @@ export const GENERATED = {
         "Because square sails catch following winds well, ships of the 1500s used them to ride the easterly trade winds westward toward the Americas."
       ],
       "correct": 3,
-      "rationale": "Choice C connects square sails' ability to catch following winds with riding the easterly trade winds westward, explaining the fit. Choice A states only the wind pattern without linking it to the sails' suitability.",
+      "rationale": "Choice D connects square sails' ability to catch following winds with riding the easterly trade winds westward, explaining the fit. Choice C states only the wind pattern without linking it to the sails' suitability.",
       "paceSeconds": 80
     },
     {
@@ -18752,7 +18752,7 @@ export const GENERATED = {
         "In one prairie study, burned plots produced more new shoots than unburned plots did."
       ],
       "correct": 3,
-      "rationale": "Choice C provides the measured comparison, burned plots versus unburned plots, supporting the benefit claim with evidence. Choice D describes a mechanism by which fire could help but reports no comparison, so it does not supply the measured support.",
+      "rationale": "Choice D provides the measured comparison, burned plots versus unburned plots, supporting the benefit claim with evidence. Choice B describes a mechanism by which fire could help but reports no comparison, so it does not supply the measured support.",
       "paceSeconds": 85
     },
     {
@@ -18769,7 +18769,7 @@ export const GENERATED = {
         "Each melodic line in a piece of music can be enjoyed for its own particular qualities."
       ],
       "correct": 0,
-      "rationale": "Choice B gives a clear definition: independent lines, each complete, harmonizing together. Choice A only cites an example by Bach without defining the term, so an unfamiliar reader would still not know what counterpoint is.",
+      "rationale": "Choice A gives a clear definition: independent lines, each complete, harmonizing together. Choice C only cites an example by Bach without defining the term, so an unfamiliar reader would still not know what counterpoint is.",
       "paceSeconds": 70
     },
     {
@@ -18786,7 +18786,7 @@ export const GENERATED = {
         "Spiders produce several kinds of silk, each suited to a different purpose in the web."
       ],
       "correct": 0,
-      "rationale": "Choice D combines strength and stretch and ties them to energy absorption, capturing what makes the silk tough. Choice C mentions only strength and omits the stretch and energy absorption that the goal asks to emphasize.",
+      "rationale": "Choice A combines strength and stretch and ties them to energy absorption, capturing what makes the silk tough. Choice B mentions only strength and omits the stretch and energy absorption that the goal asks to emphasize.",
       "paceSeconds": 80
     },
     {
@@ -18803,7 +18803,7 @@ export const GENERATED = {
         "The earliest eyeglasses appeared in Italy around the late 1200s and used convex lenses."
       ],
       "correct": 0,
-      "rationale": "Choice A contrasts the early convex lenses for close work with the later concave lenses for distance, fulfilling the contrast goal. Choice B describes only the early use and omits the later development needed for the contrast.",
+      "rationale": "Choice A contrasts the early convex lenses for close work with the later concave lenses for distance, fulfilling the contrast goal. Choice D describes only the early use and omits the later development needed for the contrast.",
       "paceSeconds": 85
     },
     {
@@ -18820,7 +18820,7 @@ export const GENERATED = {
         "Because the spin makes one side move faster, the uneven lift curves the boomerang back toward the thrower."
       ],
       "correct": 3,
-      "rationale": "Choice B links the faster-moving side, the uneven lift, and the return curve, explaining the cause. Choice C mentions the spin but stops short of the uneven lift and the return, so it does not explain why the boomerang curves back.",
+      "rationale": "Choice D links the faster-moving side, the uneven lift, and the return curve, explaining the cause. Choice A mentions the spin but stops short of the uneven lift and the return, so it does not explain why the boomerang curves back.",
       "paceSeconds": 72
     },
     {
@@ -18837,7 +18837,7 @@ export const GENERATED = {
         "A 2022 survey measured one rooftop farm yielding 20 kilograms per square meter a year, more than many open-field farms achieve."
       ],
       "correct": 3,
-      "rationale": "Choice B cites the measured 20 kg per square meter yield and states it exceeds open-field farms, highlighting a measured advantage. Choice C names a different benefit, shorter transport, but reports no measured yield comparison.",
+      "rationale": "Choice D cites the measured 20 kg per square meter yield and states it exceeds open-field farms, highlighting a measured advantage. Choice C names a different benefit, shorter transport, but reports no measured yield comparison.",
       "paceSeconds": 80
     },
     {
@@ -18854,7 +18854,7 @@ export const GENERATED = {
         "A global campaign launched in 1967 led to the last natural smallpox case in 1977 and to eradication being declared in 1980."
       ],
       "correct": 3,
-      "rationale": "Choice A reports the outcome, the last case and the eradication declaration, with the specific dates 1977 and 1980. Choice B gives only the campaign's start and its method, not the dated outcome the goal requires.",
+      "rationale": "Choice D reports the outcome, the last case and the eradication declaration, with the specific dates 1977 and 1980. Choice B gives only the campaign's start and its method, not the dated outcome the goal requires.",
       "paceSeconds": 80
     },
     {
@@ -18871,7 +18871,7 @@ export const GENERATED = {
         "By trapping sediment that settles to the bottom, beaver ponds let cleaner water flow downstream."
       ],
       "correct": 3,
-      "rationale": "Choice C describes the mechanism, trapping settling sediment so cleaner water flows on, explaining the water-quality improvement. Choice A merely notes that studies exist without explaining the mechanism.",
+      "rationale": "Choice D describes the mechanism, trapping settling sediment so cleaner water flows on, explaining the water-quality improvement. Choice A merely notes that studies exist without explaining the mechanism.",
       "paceSeconds": 70
     },
     {
@@ -18888,7 +18888,7 @@ export const GENERATED = {
         "Hard, smooth surfaces in a hall reflect sound much more strongly than soft materials do."
       ],
       "correct": 1,
-      "rationale": "Choice A states the design solution, adding absorptive panels, and ties it to preventing harshness, meeting the goal. Choice C names the harsh-sound problem but offers no solution, so it does not explain how designers prevent it.",
+      "rationale": "Choice B states the design solution, adding absorptive panels, and ties it to preventing harshness, meeting the goal. Choice A names the harsh-sound problem but offers no solution, so it does not explain how designers prevent it.",
       "paceSeconds": 83
     },
     {
@@ -18905,7 +18905,7 @@ export const GENERATED = {
         "Young salmon leave their home stream and migrate out toward the open ocean."
       ],
       "correct": 1,
-      "rationale": "Choice D emphasizes scale with the hundreds-of-kilometers distance and the years away, matching the goal. Choice A describes the final scent-guided approach, not the scale of the journey.",
+      "rationale": "Choice B emphasizes scale with the hundreds-of-kilometers distance and the years away, matching the goal. Choice A describes the final scent-guided approach, not the scale of the journey.",
       "paceSeconds": 78
     },
     {
@@ -18922,7 +18922,7 @@ export const GENERATED = {
         "Once water returns to its surroundings, a dried tardigrade rehydrates and becomes active again."
       ],
       "correct": 1,
-      "rationale": "Choice C names trehalose and states its protective role during drying, addressing the goal. Choice A and Choice B describe stages of the process without mentioning trehalose's role at all.",
+      "rationale": "Choice B names trehalose and states its protective role during drying, addressing the goal. Choice C and Choice D describe stages of the process without mentioning trehalose's role at all.",
       "paceSeconds": 83
     },
     {
@@ -19976,7 +19976,7 @@ export const GENERATED = {
         "Between 2010 and 2023, the census recorded a jump in nesting pairs from 1,200 to 2,900."
       ],
       "correct": 3,
-      "rationale": "Only choice A reports both census figures, making the magnitude of the change explicit. Choice C names a cause but gives no numbers, so it fails to emphasize the size of the change.",
+      "rationale": "Only choice D reports both census figures, making the magnitude of the change explicit. Choice C names a cause but gives no numbers, so it fails to emphasize the size of the change.",
       "paceSeconds": 70
     },
     {
@@ -19993,7 +19993,7 @@ export const GENERATED = {
         "Producing the dye required thousands of sea snails per gram, making purple cloth so expensive that only the wealthiest could afford it."
       ],
       "correct": 3,
-      "rationale": "Choice D traces the causal chain from snail-intensive production to high cost to limited buyers, directly explaining why only the wealthy could afford it. Choice C mentions desire but omits the cost-driven cause.",
+      "rationale": "Choice D traces the causal chain from snail-intensive production to high cost to limited buyers, directly explaining why only the wealthy could afford it. Choice A mentions desire but omits the cost-driven cause.",
       "paceSeconds": 80
     },
     {
@@ -20010,7 +20010,7 @@ export const GENERATED = {
         "In the coastal valley, sparrows end their song with a buzz, while just over the ridge they end it with a trill."
       ],
       "correct": 3,
-      "rationale": "Choice C names both populations and states the specific contrasting endings, fulfilling the comparison. Choice D gestures at variation but identifies neither population nor the specific difference.",
+      "rationale": "Choice D names both populations and states the specific contrasting endings, fulfilling the comparison. Choice A gestures at variation but identifies neither population nor the specific difference.",
       "paceSeconds": 85
     },
     {
@@ -20027,7 +20027,7 @@ export const GENERATED = {
         "Letterpress printing has a long and respected history among book lovers."
       ],
       "correct": 2,
-      "rationale": "Choice D names the slight impression and contrasts it with digital printing, identifying the distinguishing physical feature. Choice C mentions appreciation but no physical feature.",
+      "rationale": "Choice C names the slight impression and contrasts it with digital printing, identifying the distinguishing physical feature. Choice A mentions appreciation but no physical feature.",
       "paceSeconds": 70
     },
     {
@@ -20061,7 +20061,7 @@ export const GENERATED = {
         "Dark pavement absorbs sunlight, which is a key cause of the urban heat island effect."
       ],
       "correct": 0,
-      "rationale": "Choice C cites the 6°C midday measurement tied to the painted streets, providing the quantified evidence requested. Choice A names the intervention but provides no measurement.",
+      "rationale": "Choice A cites the 6°C midday measurement tied to the painted streets, providing the quantified evidence requested. Choice C names the intervention but provides no measurement.",
       "paceSeconds": 85
     },
     {
@@ -20078,7 +20078,7 @@ export const GENERATED = {
         "Roman aqueducts relied on a gentle downhill slope to move water by gravity."
       ],
       "correct": 0,
-      "rationale": "Choice C provides the 91-kilometer length, giving a concrete sense of scale. Choice B describes the route but omits the length, so it does not convey scale.",
+      "rationale": "Choice A provides the 91-kilometer length, giving a concrete sense of scale. Choice B describes the route but omits the length, so it does not convey scale.",
       "paceSeconds": 70
     },
     {
@@ -20095,7 +20095,7 @@ export const GENERATED = {
         "Cremona was home to renowned cello makers from Andrea Amati in the 1500s to Stradivari a century later."
       ],
       "correct": 3,
-      "rationale": "Choice A names both Cremona makers and spans the century between them, conveying the city's sustained reputation. Choice C names only one maker and one era, missing the across-centuries point.",
+      "rationale": "Choice D names both Cremona makers and spans the century between them, conveying the city's sustained reputation. Choice A names only one maker and one era, missing the across-centuries point.",
       "paceSeconds": 80
     },
     {
@@ -20112,7 +20112,7 @@ export const GENERATED = {
         "Tidal energy is an emerging renewable source that some engineers find promising."
       ],
       "correct": 1,
-      "rationale": "Choice D states both daily figures side by side, making the comparison explicit. Choice A asserts an advantage but cites no generation hours, so it does not compare the two.",
+      "rationale": "Choice B states both daily figures side by side, making the comparison explicit. Choice A asserts an advantage but cites no generation hours, so it does not compare the two.",
       "paceSeconds": 85
     },
     {
@@ -20129,7 +20129,7 @@ export const GENERATED = {
         "City bees gather nectar from flowers growing in parks and yards."
       ],
       "correct": 1,
-      "rationale": "Choice C reports the 25-kilogram yield, the specific figure requested. Choice D claims productivity but offers no figure, so it does not emphasize it specifically.",
+      "rationale": "Choice B reports the 25-kilogram yield, the specific figure requested. Choice C claims productivity but offers no figure, so it does not emphasize it specifically.",
       "paceSeconds": 70
     },
     {
@@ -20146,7 +20146,7 @@ export const GENERATED = {
         "Desert plants must endure long dry spells with little or no rainfall."
       ],
       "correct": 0,
-      "rationale": "Choice B links the expanding pleated stem to the hundreds of liters stored, explaining how the structure enables storage. Choice C states the outcome but not how the stem makes it possible.",
+      "rationale": "Choice A links the expanding pleated stem to the hundreds of liters stored, explaining how the structure enables storage. Choice B states the outcome but not how the stem makes it possible.",
       "paceSeconds": 80
     },
     {
@@ -20163,7 +20163,7 @@ export const GENERATED = {
         "Astronomers may build a single large dish, like the 76-meter Lovell Telescope, or combine many smaller dishes into one instrument."
       ],
       "correct": 3,
-      "rationale": "Choice C sets the single-large-dish approach against the combined-array approach, drawing the requested contrast. Choice B describes only one approach and omits the array alternative.",
+      "rationale": "Choice D sets the single-large-dish approach against the combined-array approach, drawing the requested contrast. Choice B describes only one approach and omits the array alternative.",
       "paceSeconds": 85
     },
     {
@@ -20180,7 +20180,7 @@ export const GENERATED = {
         "DDT once caused serious harm to many peregrine falcons and their eggs."
       ],
       "correct": 0,
-      "rationale": "Choice B names the 1972 DDT ban as the action preceding recovery, fulfilling the goal. Choice A reports the recovery but omits the specific action that preceded it.",
+      "rationale": "Choice A names the 1972 DDT ban as the action preceding recovery, fulfilling the goal. Choice C reports the recovery but omits the specific action that preceded it.",
       "paceSeconds": 70
     },
     {
@@ -20197,7 +20197,7 @@ export const GENERATED = {
         "Over roughly the period from 1916 to 1970, about six million Black Americans moved north and west."
       ],
       "correct": 3,
-      "rationale": "Choice B gives both the time span and the figure of six million people, conveying overall scale. Choice A describes the movement but supplies no numbers, so it does not show scale.",
+      "rationale": "Choice D gives both the time span and the figure of six million people, conveying overall scale. Choice A describes the movement but supplies no numbers, so it does not show scale.",
       "paceSeconds": 80
     },
     {
@@ -20214,7 +20214,7 @@ export const GENERATED = {
         "Mallards and coots are two of the species recorded in the lake's bird census."
       ],
       "correct": 1,
-      "rationale": "Choice A gives the rising and falling figures for both species, drawing the contrast directly. Choice B says both changed but does not specify the opposite directions, so it fails to contrast them.",
+      "rationale": "Choice B gives the rising and falling figures for both species, drawing the contrast directly. Choice A says both changed but does not specify the opposite directions, so it fails to contrast them.",
       "paceSeconds": 85
     },
     {
@@ -20231,7 +20231,7 @@ export const GENERATED = {
         "Indigo was a valuable trade good during the 1700s in many parts of the world."
       ],
       "correct": 1,
-      "rationale": "Choice A contrasts the traditional plant-based source with today's synthetic source, highlighting the difference. Choice C explains only the old method, omitting the modern one.",
+      "rationale": "Choice B contrasts the traditional plant-based source with today's synthetic source, highlighting the difference. Choice A explains only the old method, omitting the modern one.",
       "paceSeconds": 70
     },
     {
@@ -20248,7 +20248,7 @@ export const GENERATED = {
         "The sparrow population's song had clearly changed over the four decades studied."
       ],
       "correct": 1,
-      "rationale": "Choice D states the specific changes, slower and fewer notes, between the two recordings. Choice C says the song changed but does not specify how, so it fails the goal.",
+      "rationale": "Choice B states the specific changes, slower and fewer notes, between the two recordings. Choice D says the song changed but does not specify how, so it fails the goal.",
       "paceSeconds": 80
     },
     {
@@ -20265,7 +20265,7 @@ export const GENERATED = {
         "The Linotype machine, introduced in 1886, changed the way type was set in printing shops."
       ],
       "correct": 1,
-      "rationale": "Choice C pairs the two rates, 1,000 versus 6,000 per hour, making the speed increase vivid. Choice A names the machine and its date but gives no rates, so the magnitude is lost.",
+      "rationale": "Choice B pairs the two rates, 1,000 versus 6,000 per hour, making the speed increase vivid. Choice D names the machine and its date but gives no rates, so the magnitude is lost.",
       "paceSeconds": 85
     },
     {
@@ -20299,7 +20299,7 @@ export const GENERATED = {
         "Public fountains were a common feature of daily life in ancient Roman cities."
       ],
       "correct": 1,
-      "rationale": "Choice A contrasts wealthy households' private connections with ordinary residents' reliance on public fountains, meeting the goal. Choice C describes only the private connections, omitting the contrast.",
+      "rationale": "Choice B contrasts wealthy households' private connections with ordinary residents' reliance on public fountains, meeting the goal. Choice C describes only the private connections, omitting the contrast.",
       "paceSeconds": 80
     },
     {

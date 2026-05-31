@@ -60,7 +60,20 @@ function shuffleChoices(choices: string[], correct: number, seed: number) {
   }
   const newChoices = idx.map((i) => choices[i]);
   const newCorrect = idx.indexOf(correct);
-  return { newChoices, newCorrect };
+  return { newChoices, newCorrect, idx };
+}
+
+/**
+ * After choices are shuffled, rationales that cite a choice LETTER ("choice A",
+ * "option C") would point at the wrong option. Remap those letters through the
+ * same permutation so they keep pointing at the same TEXT.
+ */
+function remapLetters(text: string, idx: number[]): string {
+  return text.replace(/\b([Cc]hoice|[Oo]ption)\s+([A-D])\b/g, (m, word, L) => {
+    const oldPos = (L as string).charCodeAt(0) - 65;
+    const newPos = idx.indexOf(oldPos);
+    return newPos < 0 ? m : `${word} ${String.fromCharCode(65 + newPos)}`;
+  });
 }
 
 // Existing passage+prompt fingerprints (dedupe target).
@@ -134,7 +147,7 @@ for (const file of files.sort()) {
     // Balance: shuffle choices so the key position distribution is even.
     counters[skill] = (counters[skill] ?? 0) + 1;
     const n = counters[skill];
-    const { newChoices, newCorrect } = shuffleChoices(choices, correct, hash(`${skill}-${n}-${prompt}`));
+    const { newChoices, newCorrect, idx } = shuffleChoices(choices, correct, hash(`${skill}-${n}-${prompt}`));
 
     (bySkill[skill] ??= []).push({
       id: `${skill}-g${n}`,
@@ -145,7 +158,8 @@ for (const file of files.sort()) {
       prompt,
       choices: newChoices,
       correct: newCorrect,
-      rationale,
+      // Keep any "choice A/option B" references in the rationale pointing at the same text.
+      rationale: remapLetters(rationale, idx),
       paceSeconds: pace,
     });
     kept++;
