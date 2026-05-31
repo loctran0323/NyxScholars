@@ -2,8 +2,9 @@ import Link from "next/link";
 import { format, formatDistanceToNow, formatDistanceToNowStrict, differenceInMinutes } from "date-fns";
 import {
   CalendarPlus, BookOpen, MessageSquare, Calendar, ChevronRight, Clock,
-  Sparkles, Target, CheckCircle2, PlayCircle,
+  Sparkles, Target, CheckCircle2, PlayCircle, Infinity as InfinityIcon,
 } from "lucide-react";
+import { FEATURES } from "@/lib/features";
 import { PortalHero } from "@/components/portal/PortalHero";
 import { PortalSection } from "@/components/portal/PortalSection";
 import { OnboardingChecklist } from "@/components/portal/OnboardingChecklist";
@@ -303,9 +304,13 @@ export default async function PortalDashboard() {
 
       <PortalSection label="Jump to">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          <QuickLink href="/portal/adaptive"   icon={InfinityIcon} label="Endless practice" />
           <QuickLink href="/portal/diagnostic" icon={Sparkles}   label="Adaptive intake" />
-          <QuickLink href="/portal/lessons"    icon={PlayCircle} label="Video lessons" />
-          <QuickLink href="/portal/mock-tests" icon={Target}     label="Mock tests" />
+          {FEATURES.lessons ? (
+            <QuickLink href="/portal/lessons"  icon={PlayCircle} label="Video lessons" />
+          ) : (
+            <QuickLink href="/portal/mock-tests" icon={Target}   label="Mock tests" />
+          )}
           <QuickLink href="/portal/materials"  icon={BookOpen}   label="Practice library" />
         </div>
       </PortalSection>

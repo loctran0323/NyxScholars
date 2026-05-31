@@ -21,8 +21,10 @@ import {
   ClipboardList,
   PlayCircle,
   Timer,
+  Infinity as InfinityIcon,
 } from "lucide-react";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
+import { FEATURES } from "@/lib/features";
 import { NyxLockup } from "@/components/system";
 import { NotificationsBell } from "@/components/portal/NotificationsBell";
 import { NavBadge } from "@/components/portal/NavBadge";
@@ -48,6 +50,7 @@ const studentNavGroups: NavGroup[] = [
     label: "Today",
     items: [
       { href: "/portal",            label: "Dashboard",   icon: LayoutDashboard, exact: true },
+      { href: "/portal/adaptive",   label: "Endless practice", icon: InfinityIcon },
       { href: "/portal/practice",   label: "Daily review", icon: Sparkles },
       { href: "/portal/sessions",   label: "Sessions",    icon: Calendar },
       { href: "/portal/schedule",   label: "Schedule",    icon: CalendarPlus },
@@ -99,6 +102,16 @@ const teacherNavGroups: NavGroup[] = [
     ],
   },
 ];
+
+/** Drop nav items whose feature is gated off in this environment (and any now-empty groups). */
+function gateGroups(groups: NavGroup[]): NavGroup[] {
+  return groups
+    .map((g) => ({
+      ...g,
+      items: g.items.filter((i) => i.href !== "/portal/lessons" || FEATURES.lessons),
+    }))
+    .filter((g) => g.items.length > 0);
+}
 
 function planLabel(plan: PlanType | null, role?: string | null): string {
   if (role === "teacher") return "Tutor";
@@ -157,7 +170,7 @@ function SidebarContent({
 }: PortalSidebarProps & { onNavClick?: () => void }) {
   const router = useRouter();
   const role = profile?.role ?? null;
-  const groups = role === "teacher" ? teacherNavGroups : studentNavGroups;
+  const groups = gateGroups(role === "teacher" ? teacherNavGroups : studentNavGroups);
 
   const handleSignOut = async () => {
     const supabase = getSupabaseBrowserClient();
