@@ -83,21 +83,31 @@ export function initInfiniteState(section: SectionFilter = "Mixed"): InfiniteSta
   };
 }
 
-/** Normalize a state that may be missing fields (forward-compat for older clients). */
+/** Coerce to a finite number in [lo, hi], else the fallback — rejects NaN/Infinity. */
+function finite(v: unknown, fallback: number, lo = -Infinity, hi = Infinity): number {
+  return typeof v === "number" && Number.isFinite(v) ? Math.max(lo, Math.min(hi, v)) : fallback;
+}
+
+/** Normalize a state that may be missing/malformed fields (the client carries it, so it is untrusted). */
 export function hydrateState(raw: Partial<InfiniteState> | null | undefined, section: SectionFilter): InfiniteState {
   const fresh = initInfiniteState(section);
   if (!raw || typeof raw !== "object") return fresh;
   const skills: Record<string, SkillPost> = { ...fresh.skills };
   if (raw.skills) {
     for (const [id, p] of Object.entries(raw.skills)) {
-      if (skills[id] && p && typeof p.mean === "number" && typeof p.sd === "number") {
-        skills[id] = { mean: p.mean, sd: Math.max(0.05, p.sd), attempts: Math.max(0, p.attempts | 0) };
+      if (skills[id] && p && typeof p === "object") {
+        skills[id] = {
+          // Reject NaN/Infinity (typeof NaN === "number") and clamp to the θ range.
+          mean: finite(p.mean, PRIOR_MEAN, -4, 4),
+          sd: Math.max(0.05, finite(p.sd, PRIOR_SD, 0.05, 4)),
+          attempts: Math.max(0, (p.attempts as number) | 0),
+        };
       }
     }
   }
   return {
     skills,
-    theta: typeof raw.theta === "number" ? raw.theta : 0,
+    theta: finite(raw.theta, 0, -4, 4),
     constellationAttempts: { ...fresh.constellationAttempts, ...(raw.constellationAttempts ?? {}) },
     totalAnswered: Math.max(0, raw.totalAnswered ?? 0),
     totalCorrect: Math.max(0, raw.totalCorrect ?? 0),
@@ -139,11 +149,13 @@ export function pickSkill(state: InfiniteState, servableSkillIds: string[]): str
     const weakness = pCorrect(-post.mean, 0); // high when mean is low
     // Uncertainty: wide posterior → worth sampling.
     const uncertainty = post.sd;
-    // Variety: penalize very recently practiced skills.
-    const recencyPenalty = state.recentSkills.includes(id)
-      ? 0.35 - 0.1 * state.recentSkills.lastIndexOf(id)
-      : 0;
-    const score = 1.0 * coverage + 0.5 * weakness + 0.4 * uncertainty - recencyPenalty + 0.001 * hashSeed(id + state.totalAnswered);
+    // Variety: penalize recently practiced skills, MOST-recent the hardest.
+    // recentSkills is chronological (oldest first), so the last index is most recent.
+    const pos = state.recentSkills.lastIndexOf(id);
+    const recencyPenalty = pos < 0 ? 0 : 0.35 - 0.1 * (state.recentSkills.length - 1 - pos);
+    // Small BOUNDED jitter to break ties without swamping the real signals above.
+    const jitter = 0.05 * ((hashSeed(id + state.totalAnswered) % 1000) / 1000);
+    const score = 1.0 * coverage + 0.5 * weakness + 0.4 * uncertainty - recencyPenalty + jitter;
     if (score > bestScore) {
       bestScore = score;
       best = id;
@@ -182,12 +194,16 @@ function updatePost(post: SkillPost, b: number, correct: boolean): SkillPost {
   const min = -3.5;
   const max = 3.5;
   const step = (max - min) / (grid - 1);
+  // Clamp the prior's center into the grid so a stray out-of-range mean can't
+  // underflow every node's weight to 0 (which would freeze the skill forever).
+  const pmean = Math.max(min + step, Math.min(max - step, Number.isFinite(post.mean) ? post.mean : PRIOR_MEAN));
+  const psd = Math.max(0.05, Number.isFinite(post.sd) ? post.sd : PRIOR_SD);
   let total = 0;
   let totalTheta = 0;
   let totalSq = 0;
   for (let i = 0; i < grid; i++) {
     const theta = min + i * step;
-    const prior = Math.exp(-((theta - post.mean) ** 2) / (2 * post.sd ** 2));
+    const prior = Math.exp(-((theta - pmean) ** 2) / (2 * psd ** 2));
     const p = pCorrect(theta, b);
     const lik = correct ? p : 1 - p;
     const w = prior * lik;
@@ -319,7 +335,14 @@ export function decodeToken(s: string): ItemToken | null {
       ? decodeURIComponent(escape(atob(s)))
       : Buffer.from(s, "base64").toString("utf8");
     const t = JSON.parse(json) as ItemToken;
-    if (t && (t.kind === "gen" || t.kind === "pool") && typeof t.skillId === "string") return t;
+    if (!t || typeof t.skillId !== "string") return null;
+    // Validate per-kind fields so a forged/garbage token can't inject a NaN item.
+    if (t.kind === "gen") {
+      return Number.isFinite(t.seed) && Number.isFinite(t.difficulty) ? t : null;
+    }
+    if (t.kind === "pool") {
+      return typeof t.qid === "string" && t.qid.length > 0 ? t : null;
+    }
     return null;
   } catch {
     return null;

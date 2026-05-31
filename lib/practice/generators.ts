@@ -226,7 +226,7 @@ const genLinearEq: RichGenerator = (seed, difficulty) => {
     const rhs = (a - e) * x + b;
     const { choices, correct } = choices4(x, [x + 1, x - 1, x + 2, -x], r);
     return { ...base("lin-eq", seed, d), prompt: `If ${a}x + ${b} = ${e === 1 ? "" : e}x + ${ns(rhs)}, what is the value of x?`, choices, correct,
-      rationale: `(${a} − ${e})x = ${ns(rhs)} − ${b} → ${a - e}x = ${ns(rhs - b)} → x = ${ns(x)}.` };
+      rationale: `(${a} − ${e})x = ${ns(rhs)} − ${b} → ${leadTerm(a - e, "x")} = ${ns(rhs - b)} → x = ${ns(x)}.` };
   }
   // d >= 4: distribute
   const k = pint(r, 2, 6), m = pint(r, 1, 7), p = pint(r, 1, 9);
@@ -250,8 +250,13 @@ const genSystem: RichGenerator = (seed, difficulty) => {
     return { ...base("lin-sys", seed, d), prompt: `If x + y = ${ns(S)} and x − y = ${ns(D)}, what is the value of ${ask}?`, choices, correct,
       rationale: `Adding the equations: 2x = ${ns(S + D)} → x = ${x}, y = ${y}.` };
   }
-  // general 2x2 with coefficients
-  const a = nonzero(r, 2, 5), b = nonzero(r, 1, 4), c = nonzero(r, 1, 5), e = nonzero(r, 2, 6);
+  // general 2x2 with coefficients — must be non-degenerate (det = a·e − c·b ≠ 0)
+  // so the system has a UNIQUE solution and the keyed answer is the only one.
+  const a = nonzero(r, 2, 5), b = nonzero(r, 1, 4);
+  let c = nonzero(r, 1, 5), e = nonzero(r, 2, 6);
+  let guard = 0;
+  while (a * e - c * b === 0 && guard++ < 24) { c = nonzero(r, 1, 5); e = nonzero(r, 2, 6); }
+  if (a * e - c * b === 0) e += 1; // a·(e+1) − c·b = a ≠ 0, so this always succeeds
   const m = a * x + b * y, n = c * x + e * y;
   const askVar = pick(r, ["x", "y"] as const);
   const ans = askVar === "x" ? x : y;
@@ -291,7 +296,7 @@ const genLinFn: RichGenerator = (seed, difficulty) => {
     // ask for slope
     const { choices, correct } = choices4(a, [a + 1, a - 1, b, -a], r);
     return { ...base("lin-fn", seed, d), prompt: `A linear function f satisfies f(${p}) = ${ns(fp)} and f(${s}) = ${ns(fs)}. What is the slope of f?`, choices, correct,
-      rationale: `slope = (${ns(fs)} − ${ns(fp)}) / (${s} − ${p}) = ${ns(fs - fp)}/${s - p} = ${ns(a)}.` };
+      rationale: `slope = (${ns(fs)} − ${fp < 0 ? `(${ns(fp)})` : ns(fp)}) / (${s} − ${p}) = ${ns(fs - fp)}/${s - p} = ${ns(a)}.` };
   }
   const { choices, correct } = choices4(fu, [fu + a, fu - a, fu + 2, fp], r);
   return { ...base("lin-fn", seed, d), prompt: `A linear function f satisfies f(${p}) = ${ns(fp)} and f(${s}) = ${ns(fs)}. What is the value of f(${u})?`, choices, correct,
@@ -325,7 +330,12 @@ const genAbsVal: RichGenerator = (seed, difficulty) => {
 const genQuadratic: RichGenerator = (seed, difficulty) => {
   const r = rng(seed);
   const d = clampDiff(difficulty);
-  const r1 = pint(r, 1, 4 + d), r2 = pint(r, 1, 5 + d);
+  const r1 = pint(r, 1, 4 + d);
+  // Force two DISTINCT roots so "the smaller solution" is well-posed (no double root).
+  let r2 = pint(r, 1, 5 + d);
+  let guard = 0;
+  while (r2 === r1 && guard++ < 16) r2 = pint(r, 1, 5 + d);
+  if (r2 === r1) r2 = r1 + 1;
   const b = r1 + r2, c = r1 * r2;
   if (d >= 4 && r() < 0.5) {
     // sum of roots for x² − bx + c
@@ -335,7 +345,7 @@ const genQuadratic: RichGenerator = (seed, difficulty) => {
       rationale: `For x² − ${b}x + ${c}, the sum of roots is ${b} (−b/a).` };
   }
   const ans = Math.min(r1, r2);
-  const { choices, correct } = choices4(ans, [Math.max(r1, r2), ans + 1, b - ans, c], r);
+  const { choices, correct } = choices4(ans, [Math.max(r1, r2), ans + 1, ans - 1, c], r);
   return { ...base("quad", seed, d), prompt: `What is the smaller solution of x² − ${b}x + ${c} = 0?`, choices, correct,
     rationale: `Factors as (x − ${r1})(x − ${r2}) = 0; the smaller root is ${ans}.` };
 };

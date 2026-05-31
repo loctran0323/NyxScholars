@@ -60,18 +60,19 @@ function readout(state: InfiniteState) {
   };
 }
 
-/** Pick a skill + difficulty and serve the next item. Tries a few skills before giving up. */
+/** Pick a skill + difficulty and serve the next item. Excludes skills that fail to serve so the loop actually rotates. */
 function nextItem(state: InfiniteState, step: number): PublicItem | null {
   const servable = servableSkillIds();
-  let working = state;
-  for (let attempt = 0; attempt < 6; attempt++) {
-    const skillId = pickSkill(working, servable);
-    if (!skillId) return null;
-    const difficulty = targetDifficulty(working, skillId);
+  const tried = new Set<string>();
+  for (let attempt = 0; attempt < 8; attempt++) {
+    const candidates = servable.filter((id) => !tried.has(id));
+    if (candidates.length === 0) break;
+    const skillId = pickSkill(state, candidates);
+    if (!skillId) break;
+    tried.add(skillId);
+    const difficulty = targetDifficulty(state, skillId);
     const served = serveItem(skillId, difficulty, { recentAsked: state.recentAsked, step: step + attempt });
     if (served) return toPublicItem(served.item, encodeToken(served.token));
-    // Nudge the rotation so we don't re-pick the same dead skill.
-    working = { ...working, recentSkills: [...working.recentSkills, skillId].slice(-3) };
   }
   return null;
 }

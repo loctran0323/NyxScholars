@@ -17,7 +17,6 @@
 import "server-only";
 
 import type { BankQuestion } from "@/lib/diagnostic/bank";
-import { POOL } from "@/lib/diagnostic";
 import { SKILL_BY_ID } from "@/lib/diagnostic/skills";
 import { RW_QUESTIONS } from "@/lib/practice/rw-bank";
 import type { RWQuestion, RWSkillKey } from "@/lib/practice/types";
@@ -31,8 +30,8 @@ const RW_TO_STAR: Record<RWSkillKey, string> = {
   "text-structure": "wing-r",         // Text structure
   "cross-text": "foot",               // Cross-text synthesis
   "central-ideas": "eye-l",           // Main idea
-  "evidence-textual": "beak",         // Command of evidence
-  "evidence-quantitative": "beak",    // Command of evidence (quantitative)
+  "evidence-textual": "beak",         // Evidence (textual)
+  "evidence-quantitative": "beak-q",  // Evidence (data) — its own star so the signal isn't blended
   inferences: "eye-r",                // Inference
   transitions: "shaft2",              // Transitions
   "rhetorical-synthesis": "plume",    // Rhetorical synthesis
@@ -60,12 +59,14 @@ function rwToBank(q: RWQuestion): BankQuestion {
 
 /* ─── Reading & Writing pool, indexed by constellation skill ─────────────── */
 
+// Only the authored R&W bank (server-only, answers never bundled) feeds the engine.
+// We deliberately DON'T mix in the diagnostic POOL's R&W items: those ids are also
+// shipped to the browser via the diagnostic page, so serving them here through an
+// (opaque but unsigned) token would let a client map the id back to the answer key.
+// The authored bank is ~1,860 items, so there is no coverage cost to excluding them.
 const RW_BRIDGED: BankQuestion[] = RW_QUESTIONS.map(rwToBank);
 
-/** Static Reading & Writing items already in the diagnostic bank. */
-const RW_STATIC: BankQuestion[] = POOL.filter((q) => q.section === "Reading & Writing");
-
-const RW_POOL: BankQuestion[] = [...RW_BRIDGED, ...RW_STATIC];
+const RW_POOL: BankQuestion[] = [...RW_BRIDGED];
 
 /** R&W items grouped by skill id. */
 const RW_BY_SKILL: Record<string, BankQuestion[]> = (() => {
@@ -179,7 +180,6 @@ export function infiniteBankStats() {
     mathSupply: "unbounded (generated)",
     rwPool: RW_POOL.length,
     rwAuthored: RW_BRIDGED.length,
-    rwStatic: RW_STATIC.length,
     rwBySkill,
     servableSkills: servableSkillIds().length,
   };
