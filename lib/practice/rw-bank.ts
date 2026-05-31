@@ -33,9 +33,10 @@ import { DATA as transitions } from "./data/transitions";
 import { DATA as rhetoricalSynthesis } from "./data/rhetorical-synthesis";
 import { DATA as boundaries } from "./data/boundaries";
 import { DATA as formStructureSense } from "./data/form-structure-sense";
+import { GENERATED } from "./data/_generated";
 
-/** All skill data, keyed for lookup. Order follows the SAT R&W domain order. */
-const SKILL_DATA: Record<RWSkillKey, RWSkillData> = {
+/** Hand-authored skill data, keyed for lookup. Order follows the SAT R&W domain order. */
+const RAW_SKILL_DATA: Record<RWSkillKey, RWSkillData> = {
   "words-in-context": wordsInContext,
   "text-structure": textStructure,
   "cross-text": crossText,
@@ -48,6 +49,21 @@ const SKILL_DATA: Record<RWSkillKey, RWSkillData> = {
   transitions,
   "rhetorical-synthesis": rhetoricalSynthesis,
 };
+
+/**
+ * Live skill data = hand-authored questions + workflow-authored questions
+ * (`GENERATED`). The two pools share the exact same `RWQuestion` shape and are
+ * validated together by `scripts/validate-rw-bank.ts`.
+ */
+const SKILL_DATA: Record<RWSkillKey, RWSkillData> = Object.fromEntries(
+  SKILL_META.map((s) => [
+    s.key,
+    {
+      concept: RAW_SKILL_DATA[s.key].concept,
+      questions: [...RAW_SKILL_DATA[s.key].questions, ...(GENERATED[s.key] ?? [])],
+    },
+  ]),
+) as Record<RWSkillKey, RWSkillData>;
 
 export const RW_QUESTIONS: RWQuestion[] = SKILL_META.flatMap(
   (s) => SKILL_DATA[s.key].questions,

@@ -4,7 +4,8 @@ import { createMockServerClient } from "@/lib/supabase/mock";
 
 export async function getSupabaseServerClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  // Accept either the classic anon-key name or Supabase's newer "publishable key" name.
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
   const cookieStore = await cookies();
 

@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { ArrowLeft, Clock, PlayCircle, CheckCircle2 } from "lucide-react";
 import { PortalHero } from "@/components/portal/PortalHero";
 import { Badge } from "@/components/ui/badge";
+import { FEATURES } from "@/lib/features";
 import { LESSONS } from "../content";
 
 export const metadata = { title: "Video lesson · Nyx" };
@@ -25,6 +26,7 @@ export default async function LessonDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  if (!FEATURES.lessons) redirect("/portal");
   const { id } = await params;
   const lesson = LESSONS.find((l) => l.id === id);
   if (!lesson) notFound();

@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { PlayCircle, Clock, ChevronRight } from "lucide-react";
 import { PortalHero } from "@/components/portal/PortalHero";
 import { Badge } from "@/components/ui/badge";
+import { FEATURES } from "@/lib/features";
 import { LESSONS } from "./content";
 
 export const metadata = {
@@ -19,6 +21,8 @@ const levelVariant = (l: "Beginner" | "Intermediate" | "Advanced"): "green" | "g
   l === "Beginner" ? "green" : l === "Advanced" ? "red" : "gold";
 
 export default function LessonsPage() {
+  // No videos are published yet — keep this tab out of production.
+  if (!FEATURES.lessons) redirect("/portal");
   return (
     <div className="space-y-8">
       <PortalHero

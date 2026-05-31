@@ -25,6 +25,12 @@ export interface BankQuestion {
   origin?: "static" | "generated";
   /** Optional one-line rationale shown after answering. */
   rationale?: string;
+  /**
+   * Optional stimulus text rendered above the prompt (Reading & Writing items
+   * bridged from the practice bank carry their passage here). Supports the bank
+   * passage conventions (** ** marked text, pipe-delimited tables).
+   */
+  passage?: string;
 }
 
 /* ─── Algebra · The Lyre ───────────────────────────────────────────────── */
