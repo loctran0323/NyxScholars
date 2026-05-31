@@ -90,12 +90,17 @@ function fail(msg: string): never {
 type ProfileLike = { notif_prefs?: Record<string, unknown> | null } | null;
 
 function buildProfileRow(userId: string, existing: ProfileLike) {
+  const isArush = EMAIL === ARUSH_EMAIL;
   const existingPrefs = (existing?.notif_prefs ?? {}) as Record<string, unknown>;
-  const notif_prefs =
-    EMAIL === ARUSH_EMAIL
-      ? { ...existingPrefs, diagnostic_summary: { ...ARUSH_DIAGNOSTIC, completed_at: new Date().toISOString() } }
-      : existingPrefs;
-  return { id: userId, full_name: FULL_NAME, grade: GRADE, role: ROLE, target_test: "SAT", target_score: TARGET_SCORE, notif_prefs };
+  const notif_prefs = isArush
+    ? { ...existingPrefs, diagnostic_summary: { ...ARUSH_DIAGNOSTIC, completed_at: new Date().toISOString() } }
+    : existingPrefs;
+  // Basic tutoring access: the "session" (pay-as-you-go) plan is what unlocks the
+  // Sessions + Schedule tabs. Active so it isn't gated behind the upgrade wall.
+  const plan = isArush
+    ? { plan: "session", plan_status: "active", plan_subject: "SAT", plan_addons: [] }
+    : {};
+  return { id: userId, full_name: FULL_NAME, grade: GRADE, role: ROLE, target_test: "SAT", target_score: TARGET_SCORE, notif_prefs, ...plan };
 }
 
 /* ── Admin path: service_role key (reliable, pre-confirmed, full baseline) ── */
@@ -116,14 +121,19 @@ async function adminPath(serviceKey: string) {
   let userId: string;
   const existing = await findUserByEmail(EMAIL);
   if (existing) {
-    console.log("  • Auth user exists — resetting password & confirming email.");
-    const { data, error } = await admin.auth.admin.updateUserById(existing.id, {
-      password: PASSWORD, email_confirm: true,
+    // Password is only reset when CLIENT_PASSWORD is supplied — so you can safely
+    // re-run to update the profile/plan without re-stating the password.
+    console.log(`  • Auth user exists — confirming email${PASSWORD ? " & resetting password" : ""}.`);
+    const updateArgs: Record<string, unknown> = {
+      email_confirm: true,
       user_metadata: { ...(existing.user_metadata ?? {}), full_name: FULL_NAME, role: ROLE },
-    });
+    };
+    if (PASSWORD) updateArgs.password = PASSWORD;
+    const { data, error } = await admin.auth.admin.updateUserById(existing.id, updateArgs);
     if (error) fail(`Failed to update existing user: ${error.message}`);
     userId = data.user.id;
   } else {
+    if (!PASSWORD) fail("Set CLIENT_PASSWORD to create a new account (it is intentionally not stored in source).");
     console.log("  • Creating new auth user (email pre-confirmed).");
     const { data, error } = await admin.auth.admin.createUser({
       email: EMAIL, password: PASSWORD, email_confirm: true,
@@ -142,6 +152,7 @@ async function adminPath(serviceKey: string) {
 
 /* ── Signup path: publishable/anon key only ── */
 async function signupPath(anonKey: string) {
+  if (!PASSWORD) fail("Set CLIENT_PASSWORD in .env (or inline) — the signup flow needs the client's password.");
   const pub = createClient(URL!, anonKey, { auth: { autoRefreshToken: false, persistSession: false } });
   console.log("  • No service_role key — using the public signup flow (publishable key).");
 
@@ -204,9 +215,8 @@ async function main() {
       ].join("\n"),
     );
   }
-  if (!PASSWORD) {
-    fail("Set CLIENT_PASSWORD (the client's password) in .env or inline — it is intentionally not stored in source.");
-  }
+  // Password is required only to create a new account or via the signup path; the
+  // admin path can update an existing account's profile/plan without it.
   console.log(`\nProvisioning client login: ${EMAIL}`);
   if (SERVICE_KEY) await adminPath(SERVICE_KEY);
   else if (ANON_KEY) await signupPath(ANON_KEY);
