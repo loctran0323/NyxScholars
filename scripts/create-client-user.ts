@@ -48,7 +48,9 @@ const ANON_KEY =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
 const EMAIL = (process.env.CLIENT_EMAIL ?? "royarush08@gmail.com").toLowerCase().trim();
-const PASSWORD = process.env.CLIENT_PASSWORD ?? "Rushi2008$";
+// The password is a secret — never hardcode it in committed source. Supply it via
+// CLIENT_PASSWORD in your (gitignored) .env, or inline when you run the script.
+const PASSWORD = process.env.CLIENT_PASSWORD ?? "";
 const FULL_NAME = process.env.CLIENT_NAME ?? "Arush Roy";
 const GRADE = process.env.CLIENT_GRADE ?? "11";
 const TARGET_SCORE = process.env.CLIENT_TARGET_SCORE ?? "1550"; // stretch goal above his 1490 — editable in-app
@@ -201,6 +203,9 @@ async function main() {
         "then re-run: npx tsx scripts/create-client-user.ts",
       ].join("\n"),
     );
+  }
+  if (!PASSWORD) {
+    fail("Set CLIENT_PASSWORD (the client's password) in .env or inline — it is intentionally not stored in source.");
   }
   console.log(`\nProvisioning client login: ${EMAIL}`);
   if (SERVICE_KEY) await adminPath(SERVICE_KEY);
