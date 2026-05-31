@@ -166,8 +166,8 @@ export type Player = {
 };
 
 export const PLAYER: Player = {
-  name: "Avery Chen",
-  initials: "AC",
+  name: "Arush Roy",
+  initials: "AR",
   level: 7,
   xpInLevel: 420,
   xpToLevel: 600,

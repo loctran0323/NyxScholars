@@ -21,12 +21,12 @@ export type ConsultationDashboardData = {
 
 export const mockDashboard: ConsultationDashboardData = {
   student: {
-    name: "Avery Chen",
+    name: "Arush Roy",
     plan: "Scholar",
     nextSessionAt: "2026-05-05T17:00:00-04:00",
   },
   kpis: {
-    diagnosticScore: { value: 1310, outOf: 1600, deltaFromLast: 40 },
+    diagnosticScore: { value: 1490, outOf: 1600, deltaFromLast: 40 },
     practiceHours: { value: 6.5, window: "7d" },
     streakDays: 12,
     targetScore: 1480,

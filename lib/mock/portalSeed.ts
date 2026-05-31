@@ -14,11 +14,11 @@ export const DEMO_USER = {
   id: "00000000-0000-4000-8000-000000000001",
   aud: "authenticated",
   role: "authenticated",
-  email: "avery@nyxscholars.com",
+  email: "royarush08@gmail.com",
   email_confirmed_at: new Date("2026-01-12T10:00:00Z").toISOString(),
   phone: "",
   app_metadata: { provider: "email", providers: ["email"] },
-  user_metadata: { full_name: "Avery Chen" },
+  user_metadata: { full_name: "Arush Roy" },
   created_at: new Date("2026-01-12T10:00:00Z").toISOString(),
   updated_at: new Date("2026-01-12T10:00:00Z").toISOString(),
 } as const;
@@ -30,10 +30,30 @@ const iso = (msFromNow: number) => new Date(now + msFromNow).toISOString();
 const DAY = 24 * 60 * 60 * 1000;
 const HOUR = 60 * 60 * 1000;
 
-/** Per-skill mastery for the Sky, derived from the constellation defaults so
- *  the demo student's sky looks coherent and "earned." */
+/**
+ * Per-skill mastery for the Sky — Arush Roy's baseline, mapped from his official
+ * College Board SAT report (Mar 14 2026: 1490 total; Math 800; R&W 690 with the
+ * weakest domains being Expression of Ideas 550–600 and Information and Ideas
+ * 610–670). Strong math + Craft/Conventions; the two R&W focus areas read low.
+ * Any star not listed falls back to the constellation default.
+ */
+const ARUSH_PER_SKILL: Record<string, number> = {
+  // Math — 800 (all four domains 680–800)
+  "lin-eq": 0.96, "lin-sys": 0.94, "lin-ineq": 0.93, "lin-fn": 0.95, "abs-val": 0.9,
+  quad: 0.92, poly: 0.9, exp: 0.91, rat: 0.88,
+  fulcrum: 0.93, "beam-l": 0.95, "beam-r": 0.92, "pan-l": 0.9, "pan-r": 0.92,
+  apex: 0.92, "b-l": 0.9, "b-r": 0.89, cent: 0.88,
+  // R&W · Information and Ideas — 610–670 (focus)
+  "eye-l": 0.66, "eye-r": 0.62, beak: 0.6, "beak-q": 0.58,
+  // R&W · Craft and Structure — 680–800 (strong)
+  "wing-l": 0.86, "wing-r": 0.84, foot: 0.82,
+  // R&W · Expression of Ideas — 550–600 (weakest, primary focus)
+  shaft2: 0.55, plume: 0.5,
+  // R&W · Standard English Conventions — 680–800 (strong)
+  tip: 0.87, shaft1: 0.85, barb: 0.84,
+};
 const perSkill: Record<string, number> = Object.fromEntries(
-  ALL_SKILLS.map((s) => [s.id, s.mastery]),
+  ALL_SKILLS.map((s) => [s.id, ARUSH_PER_SKILL[s.id] ?? s.mastery]),
 );
 
 type Row = Record<string, unknown>;
@@ -42,10 +62,10 @@ export const MOCK_DB: Record<string, Row[]> = {
   profiles: [
     {
       id: DEMO_USER.id,
-      full_name: "Avery Chen",
+      full_name: "Arush Roy",
       grade: "11",
-      school: "Westview High",
-      target_score: "1500",
+      school: null,
+      target_score: "1550",
       target_test: "SAT",
       phone: null,
       created_at: DEMO_USER.created_at,
@@ -56,8 +76,12 @@ export const MOCK_DB: Record<string, Row[]> = {
       plan_addons: [],
       notif_prefs: {
         diagnostic_summary: {
+          source: "College Board SAT report, 2026-03-14 (imported baseline)",
           completed_at: iso(-9 * DAY),
-          predicted_score: 1420,
+          theta: 2.2,
+          ci: 0.3,
+          questions: 98,
+          predicted_score: 1490,
           per_skill: perSkill,
         },
         welcome_sent_at: iso(-30 * DAY),
@@ -172,7 +196,7 @@ export const MOCK_DB: Record<string, Row[]> = {
       id: "00000000-0000-4000-8000-0000000000d3",
       student_id: DEMO_USER.id,
       sender: "nyx",
-      content: "Welcome to Nyx, Avery. Your sky is built from your intake — tap any star to drill that skill.",
+      content: "Welcome to Nyx, Arush. Your sky is built from your March SAT — strong across Math, with Expression of Ideas and Information & Ideas as your two focus areas. Tap any star to drill that skill.",
       read: true,
       created_at: iso(-9 * DAY),
     },
