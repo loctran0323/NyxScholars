@@ -30,6 +30,9 @@ const KIND_ICON: Record<string, string> = {
   "diagnostic.complete":"✦",
   "homework.assigned":  "◇",
   "review.requested":   "★",
+  "staff.message":      "✉",
+  "staff.session_request":"📅",
+  "staff.diagnostic":   "✦",
   "system.announcement":"·",
 };
 

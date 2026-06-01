@@ -24,6 +24,9 @@ export interface NotificationInput {
     | "diagnostic.complete"
     | "homework.assigned"
     | "review.requested"
+    | "staff.message"
+    | "staff.session_request"
+    | "staff.diagnostic"
     | "system.announcement";
   title: string;
   body?: string;
@@ -58,4 +61,34 @@ export async function notifyMany(notifications: NotificationInput[]): Promise<vo
   }));
   const { error } = await sb.from("notifications").insert(rows);
   if (error) console.warn("[notifications] bulk insert failed", error.message);
+}
+
+/**
+ * Notify the staff responsible for a student about an inbound event (a new
+ * message to the Nyx team, a scheduling request, etc.). Targets the student's
+ * active assigned tutor(s); if none are assigned yet, falls back to every
+ * teacher so nothing slips through. Best-effort — never throws into the caller.
+ */
+export async function notifyStudentTutors(
+  studentId: string,
+  n: Omit<NotificationInput, "userId">,
+): Promise<void> {
+  try {
+    const sb = getServiceRoleClient();
+    if (!sb) return;
+    const { data: assigns } = await sb
+      .from("assignments")
+      .select("teacher_id")
+      .eq("student_id", studentId)
+      .eq("active", true);
+    let ids = [...new Set((assigns ?? []).map((a) => a.teacher_id as string).filter(Boolean))];
+    if (ids.length === 0) {
+      const { data: teachers } = await sb.from("profiles").select("id").eq("role", "teacher");
+      ids = (teachers ?? []).map((t) => t.id as string);
+    }
+    if (ids.length === 0) return;
+    await notifyMany(ids.map((id) => ({ ...n, userId: id })));
+  } catch (e) {
+    console.warn("[notifications] notifyStudentTutors failed", (e as Error).message);
+  }
 }

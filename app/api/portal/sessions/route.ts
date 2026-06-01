@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getPortalApi, readJson } from "@/lib/portal-auth";
+import { notifyStudentTutors } from "@/lib/notifications";
 
 const Create = z.object({
   subject:           z.string().trim().min(1).max(120),
@@ -52,6 +53,19 @@ export async function POST(request: Request) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  // Alert the student's tutor(s) that a session was requested.
+  const { data: prof } = await auth.supabase
+    .from("profiles").select("full_name").eq("id", auth.user.id).maybeSingle();
+  const name = (prof as { full_name?: string } | null)?.full_name || "A student";
+  const whenLabel = new Date(parsed.data.scheduled_at).toUTCString();
+  await notifyStudentTutors(auth.user.id, {
+    kind: "staff.session_request",
+    title: `Session request from ${name}`,
+    body: `${parsed.data.subject} · ${whenLabel}`,
+    href: `/portal/teacher/students/${auth.user.id}`,
+  });
+
   return NextResponse.json({ session: data }, { status: 201 });
 }
 

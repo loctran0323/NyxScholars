@@ -91,16 +91,18 @@ type ProfileLike = { notif_prefs?: Record<string, unknown> | null } | null;
 
 function buildProfileRow(userId: string, existing: ProfileLike) {
   const isArush = EMAIL === ARUSH_EMAIL;
+  const isStudent = ROLE === "student";
   const existingPrefs = (existing?.notif_prefs ?? {}) as Record<string, unknown>;
   const notif_prefs = isArush
     ? { ...existingPrefs, diagnostic_summary: { ...ARUSH_DIAGNOSTIC, completed_at: new Date().toISOString() } }
     : existingPrefs;
-  // Basic tutoring access: the "session" (pay-as-you-go) plan is what unlocks the
-  // Sessions + Schedule tabs. Active so it isn't gated behind the upgrade wall.
+  // Student-only fields (teachers don't carry a grade/target/plan).
+  const studentFields = isStudent ? { grade: GRADE, target_test: "SAT", target_score: TARGET_SCORE } : {};
+  // Basic tutoring access: the "session" (pay-as-you-go) plan unlocks Sessions + Schedule.
   const plan = isArush
     ? { plan: "session", plan_status: "active", plan_subject: "SAT", plan_addons: [] }
     : {};
-  return { id: userId, full_name: FULL_NAME, grade: GRADE, role: ROLE, target_test: "SAT", target_score: TARGET_SCORE, notif_prefs, ...plan };
+  return { id: userId, full_name: FULL_NAME, role: ROLE, notif_prefs, ...studentFields, ...plan };
 }
 
 /* ── Admin path: service_role key (reliable, pre-confirmed, full baseline) ── */
